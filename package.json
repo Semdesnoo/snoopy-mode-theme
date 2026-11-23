@@ -1,0 +1,7 @@
+{
+  "name": "snoopy-mode-theme",
+  "private": true,
+  "type": "module",
+  "scripts": { "preview": "node preview/build.mjs" },
+  "devDependencies": { "liquidjs": "10.30.1" }
+}

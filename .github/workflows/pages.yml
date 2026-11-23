@@ -1,0 +1,26 @@
+name: Preview + Shopify zip
+on:
+  push: { branches: [main] }
+  workflow_dispatch:
+permissions: { contents: write, pages: write, id-token: write }
+concurrency: { group: pages, cancel-in-progress: true }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: '${{ steps.deploy.outputs.page_url }}' }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --no-audit --no-fund
+      - run: node preview/build.mjs "/${{ github.event.repository.name }}/"
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: _site }
+      - id: deploy
+        uses: actions/deploy-pages@v4
+      - name: Shopify zip -> release "latest"
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          git archive -o snoopy-mode-theme.zip HEAD assets config layout locales sections snippets templates
+          gh release view latest >/dev/null 2>&1 || gh release create latest --title "Shopify theme (latest)" --notes "Automatisch gebouwd bij elke push naar main. Upload deze zip in Shopify: Online Store > Thema's > Thema toevoegen > Zip-bestand uploaden."
+          gh release upload latest snoopy-mode-theme.zip --clobber

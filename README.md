@@ -14,7 +14,13 @@ Kop-trucje: zet een woord tussen [ ] voor schuine letters, bijv. "De nieuwste [f
 *In v8.8: retourvoorwaarden aangepast (14 dagen bedenktijd, kosten voor eigen rekening, Sale uitgesloten) en "Voor 17:00 besteld, morgen in huis".*
 *In v6.1: drie pop-ups (nieuwsbrief, actie en cookiemelding) en standaardfoto's die in het thema zelf zitten.*
 
-📦 Uploadbestand: **`snoopy-mode-shopify-theme-v10.0.zip`** (staat in de hoofdmap van het project).
+📦 Uploadbestand: **`snoopy-mode-theme.zip`** uit de release hierboven.
+
+
+🌐 **Live preview:** https://semdesnoo.github.io/snoopy-mode-theme/ (winkelmand en afrekenen werken alleen in Shopify).
+📦 **Nieuwste zip:** https://github.com/Semdesnoo/snoopy-mode-theme/releases/latest . Wordt automatisch opnieuw gebouwd bij elke wijziging.
+
+Preview lokaal bouwen: `npm install` en dan `node preview/build.mjs` (schrijft naar `_site/`).
 
 ---
 
@@ -23,7 +29,7 @@ Kop-trucje: zet een woord tussen [ ] voor schuine letters, bijv. "De nieuwste [f
 1. Log in op je **Shopify-admin**.
 2. Ga naar **Online Store → Thema's**.
 3. Klik bij *Themabibliotheek* op **Toevoegen → Zip-bestand uploaden**.
-4. Kies **`snoopy-mode-shopify-theme-v10.0.zip`**.
+4. Kies **`snoopy-mode-theme.zip`**.
 5. Klik op **Voorbeeld**. Tevreden? Klik op **Publiceren**.
 
 > **Tip:** verwijder oude versies uit je themabibliotheek, zodat je nooit per ongeluk een oude versie bewerkt.
