@@ -115,7 +115,7 @@ engine.registerFilter('default_pagination', () => '');
 engine.registerFilter('default_errors', () => '');
 engine.registerFilter('format_address', (a) => String(a || ''));
 engine.registerFilter('handle', (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''));
-engine.registerFilter('payment_type_svg_tag', () => '');
+engine.registerFilter('payment_type_svg_tag', (k) => { const f = path.join(HERE, 'pay', k + '.svg'); return fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : ''; });
 engine.registerFilter('url_param_escape', (s) => encodeURIComponent(s));
 engine.registerFilter('pluralize', (n, a, b) => (n === 1 ? a : b));
 
@@ -142,7 +142,7 @@ engine.registerTag('section', class extends Tag { constructor(t, r, l) { super(t
 const cart = { item_count: 0, items: [], total_price: 0, items_subtotal_price: 0, requires_shipping: true, currency: { iso_code: 'EUR', symbol: '€' } };
 async function page(template, extra = {}) {
   SCOPE = {
-    settings, collections, linklists, pages: pageObjs, cart, shop: { name: 'Snoopy Mode', url: 'https://snoopy-mode.nl', email: 'info@snoopy-mode.nl', money_format: '€{{amount_with_comma_separator}}' },
+    settings, collections, linklists, pages: pageObjs, cart, shop: { name: 'Snoopy Mode', url: 'https://snoopy-mode.nl', enabled_payment_types: ['ideal', 'klarna', 'apple_pay', 'master', 'visa', 'paypal'], email: 'info@snoopy-mode.nl', money_format: '€{{amount_with_comma_separator}}' },
     routes: { root_url: '/', cart_url: '/cart', cart_add_url: '/cart/add', cart_change_url: '/cart/change', search_url: '/search', account_url: '/account', all_products_collection_url: '/collections/all' },
     request: { locale: { iso_code: 'nl' }, page_type: template.split('.')[0], path: '/', design_mode: false }, canonical_url: 'https://snoopy-mode.nl/', page_title: 'Snoopy Mode', page_description: '', current_page: 1, template: { name: template.split('.')[0] }, ...extra,
   };

@@ -280,8 +280,8 @@
         "type": "checkbox",
         "id": "card_image_contain",
         "label": "Foto's altijd volledig tonen",
-        "info": "Aan = de hele foto is te zien en er blijft wat rustige achtergrond over. Uit = de foto vult het hele vlak en de randen vallen buiten beeld. Zet dit aan als je foto's niet allemaal even hoog zijn.",
-        "default": false
+        "info": "Aan (aanbevolen) = de hele foto is te zien, iets kleiner op een zachte achtergrond. Ideaal voor staande telefoonfoto's. Uit = de foto vult het vak en de randen vallen weg.",
+        "default": true
       },
       {
         "type": "checkbox",

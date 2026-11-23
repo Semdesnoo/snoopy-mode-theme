@@ -273,22 +273,9 @@
         Liquid/Shopify geregeld (productformulier {% form 'product' %} en
         {{ cart.item_count }}). De demo-logica is hier daarom verwijderd. */
 
-  /* ------------------------------------------------------------------
-     9) NIEUWSBRIEF: preventDefault -> bedankboodschap
-     ------------------------------------------------------------------ */
-  document.querySelectorAll(".newsletter-form").forEach(function (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var thanks = form.parentElement.querySelector(".newsletter__thanks");
-      form.hidden = true;
-      var disclaimer = form.parentElement.querySelector(".newsletter__disclaimer");
-      if (disclaimer) disclaimer.hidden = true;
-      if (thanks) {
-        thanks.hidden = false;
-        thanks.setAttribute("role", "status");
-      }
-    });
-  });
+  /* 9) NIEUWSBRIEF: geen JS meer. Het formulier ({% form 'customer' %}) gaat naar
+        Shopify, dat de inschrijving opslaat en de bedankt-tekst toont. Een
+        preventDefault hier hield eerder alle aanmeldingen tegen. */
 
   /* ------------------------------------------------------------------
      10) REVEAL-ON-SCROLL via IntersectionObserver

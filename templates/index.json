@@ -118,8 +118,9 @@
         "columns_mobile": "2",
         "mobile_slider": true,
         "mobile_autoslide": false,
-        "image_ratio": "portrait",
-        "bg": "default"
+        "image_ratio": "tall",
+        "bg": "default",
+        "image_contain": true
       }
     },
     "tiktok": {
@@ -226,7 +227,8 @@
         "field_placeholder": "Je e-mailadres",
         "button_label": "Aanmelden",
         "disclaimer": "Je kunt je op elk moment uitschrijven."
-      }
+      },
+      "disabled": true
     },
     "product_tabs": {
       "type": "product-tabs",

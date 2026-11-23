@@ -56,12 +56,16 @@ h1 em, h2 em, .section-head__title em, .hero__title em { font-style: italic; }
 /* ---------- 3. Aankondigingsbalk ---------- */
 .announcement { font-size: 10.5px; letter-spacing: .22em; font-weight: 400; padding-block: 11px; }
 
-/* ---------- 4. Header: menu links, logo midden, iconen rechts ---------- */
+/* ---------- 4. Header: logo links, menu in het midden, iconen rechts ---------- */
 .site-header { border-bottom: 1px solid var(--hair); }
-.header-inner { min-height: 68px; grid-template-columns: 1fr auto 1fr; grid-template-areas: "left brand right"; gap: 16px; }
-.menu-toggle, .main-nav { grid-area: left; justify-self: start; }
-.brand { grid-area: brand; justify-self: center; font-size: 15px; letter-spacing: .38em; font-weight: 500; margin-right: -.38em; }
-.header-actions { grid-area: right; justify-self: end; }
+.header-inner { min-height: 68px; gap: 24px; }
+@media (min-width: 901px) {
+  .header-inner { grid-template-columns: auto 1fr auto; }
+  .brand { grid-column: 1; grid-row: 1; justify-self: start; }
+  .main-nav { grid-column: 2; grid-row: 1; justify-self: center; }
+  .header-actions { grid-column: 3; grid-row: 1; justify-self: end; }
+}
+.brand { font-size: 15px; letter-spacing: .34em; font-weight: 500; }
 .main-nav ul { gap: clamp(18px, 2vw, 30px); white-space: nowrap; }
 .main-nav a, .nav-dropdown-toggle { font-size: 11.5px; letter-spacing: .14em; font-weight: 500; }
 .main-nav > ul > li > a::after, .nav-dropdown-toggle::after {
@@ -70,12 +74,9 @@ h1 em, h2 em, .section-head__title em, .hero__title em { font-style: italic; }
 }
 .nav-dropdown-toggle { position: relative; }
 .main-nav > ul > li > a:hover::after, .main-nav > ul > li > a.is-active::after, .nav-dropdown-toggle:hover::after { transform: scaleX(1); }
-.nav-dropdown { border-radius: 0; border: 1px solid var(--hair); box-shadow: 0 18px 44px rgba(28, 26, 23, .08); }
+.nav-dropdown { border-radius: 14px; border: 1px solid var(--hair); box-shadow: 0 18px 44px rgba(28, 26, 23, .08); }
 .icon-btn svg { width: 21px; height: 21px; }
 .cart-count { background: var(--ink); color: var(--bg); font-weight: 600; }
-@media (max-width: 1100px) {
-  .brand { font-size: 13px; letter-spacing: .3em; margin-right: -.3em; }
-}
 
 /* ---------- 5. Hero: groot beeld, kop met schuine accent, langzame zoom ---------- */
 .hero .hero__title { font-size: clamp(38px, 5vw, 76px); line-height: 1.04; letter-spacing: -.02em; max-width: none; }
@@ -316,3 +317,68 @@ a:hover .card-v10 .media > img { transform: none; }
 
 /* ---------- 18. Geen dunne zwarte randen meer om foto's ---------- */
 .product-gallery__main.sm-fit-contain, .product-gallery__thumb img { border: 0 !important; }
+
+/* ==========================================================================
+   v10.2 Zachter, minder blokkerig: ronde foto's en knoppen, geen harde
+   kleurbanden tussen secties, foto's volledig zichtbaar (niet bijgesneden).
+   ========================================================================== */
+:root { --r-media: 14px; --r-panel: 22px; }
+.btn, .btn--sm, .size-btn, .template-product .size-btn, .template-product .qty, .template-product .wishlist-heart,
+.ptabs__arrow, .newsletter-form .btn, .sort-select select, .search-form input, .filter-toggle { border-radius: 999px !important; }
+.template-product .size-btn { border-radius: 10px !important; }
+.template-product .qty { overflow: hidden; }
+.badge, .card-v10 .badge, .category-tile__label h3 { border-radius: 999px !important; }
+.media, .card-v10 .media, .pdp-gallery__slide, .category-tile, .editorial__media .media, .cart-item__media img,
+.sticky-atc__thumb, .tt-tile__media { border-radius: var(--r-media); overflow: hidden; }
+.card-v10__quick { border-radius: 999px; }
+.nav-dropdown, .cart-drawer, .search-overlay__inner { border-radius: 0; }
+
+/* Eén achtergrond: geen beige blokken meer om secties heen */
+.sm-bg-alt, .usp-bar, .newsletter { background: transparent !important; }
+.usp-bar .container { background: var(--bg-alt); border-radius: var(--r-panel); }
+.usp { border-left: 0 !important; }
+.newsletter .container { max-width: var(--container-wide); }
+.newsletter__inner { background: var(--bg-alt); border-radius: var(--r-panel); padding: clamp(40px, 6vw, 80px) 24px; }
+.editorial__media .media img { border-radius: var(--r-media); }
+@media (max-width: 749px) {
+  .usp-bar .container { border-radius: 16px; margin-inline: var(--container-pad); width: auto; padding-inline: 0; overflow: hidden; }
+}
+
+/* Foto's volledig tonen: de hele (staande) telefoonfoto past in het vak, op een zachte achtergrond */
+.sm-fit-contain { background: var(--bg-alt) !important; }
+.sm-fit-contain > img, .sm-fit-contain > picture > img { object-fit: contain !important; object-position: 50% 50% !important; padding: 6%; }
+.card-v10:hover .sm-fit-contain > img { transform: scale(1.02); }
+.pdp-gallery__slide.sm-fit-contain > img { padding: 4%; }
+
+/* ---------- Footer v10 (Rano-opbouw) ---------- */
+.footer-v10 { --fl: color-mix(in srgb, var(--bg) 16%, transparent); border-radius: var(--r-panel) var(--r-panel) 0 0; margin-top: clamp(32px, 4vw, 56px); }
+.footer-v10__top { display: grid; grid-template-columns: 1fr minmax(0, 460px); gap: clamp(32px, 6vw, 120px); padding-bottom: clamp(36px, 4vw, 56px); border-bottom: 1px solid var(--fl); }
+.footer-v10__brand .brand { color: var(--bg); font-size: 16px; letter-spacing: .34em; }
+.footer-v10__brand p { margin: 16px 0 20px; max-width: 42ch; font-size: 14.5px; line-height: 1.7; color: color-mix(in srgb, var(--bg) 72%, transparent); }
+.footer-v10 .footer-social a { border-radius: 999px; }
+.footer-v10__h { font-family: var(--font-display); color: var(--bg); font-size: clamp(24px, 2.2vw, 32px); line-height: 1.15; }
+.footer-v10__news p { margin: 8px 0 16px; font-size: 14px; color: color-mix(in srgb, var(--bg) 72%, transparent); }
+.footer-v10 .newsletter-form { margin: 0; max-width: none; border-bottom-color: color-mix(in srgb, var(--bg) 60%, transparent); }
+.footer-v10 .newsletter-form input { color: var(--bg); }
+.footer-v10 .newsletter-form input::placeholder { color: color-mix(in srgb, var(--bg) 55%, transparent); }
+.footer-v10 .newsletter-form .btn, .footer-v10 .newsletter-form .btn:hover { color: var(--bg); background: none; }
+.footer-v10 .newsletter__thanks { color: var(--bg); }
+.footer-v10__cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; padding-block: clamp(36px, 4vw, 56px); }
+.footer-v10 .footer-col h3 { color: var(--bg); border-bottom-color: var(--fl); }
+.footer-v10 .footer-col ul { gap: 10px; }
+.footer-v10__store { font-style: normal; display: grid; gap: 8px; font-size: 14px; color: color-mix(in srgb, var(--bg) 78%, transparent); }
+.footer-v10__store a:hover { color: var(--bg); }
+.footer-v10__route { margin-top: 6px; color: var(--bg) !important; text-decoration: underline; text-underline-offset: 4px; }
+.footer-v10__bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--fl); }
+.footer-v10__pay { display: flex; flex-wrap: wrap; gap: 6px; }
+.footer-v10__pay li { background: #fff; border-radius: 6px; padding: 3px 5px; display: grid; place-items: center; }
+.footer-v10__pay svg { width: 34px; height: 22px; }
+@media (max-width: 989px) { .footer-v10__top { grid-template-columns: 1fr; } .footer-v10__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .footer-v10__cols { gap: 28px 18px; } .footer-v10__bottom { flex-direction: column; align-items: flex-start; } }
+/* Hero blijft randloos; minder lege rand om volledig getoonde foto's; lange Shop-kolom in twee rijtjes */
+.hero .media, .hero .media img { border-radius: 0 !important; }
+.sm-fit-contain > img, .sm-fit-contain > picture > img { padding: 3%; }
+.pdp-gallery__slide.sm-fit-contain > img { padding: 2%; }
+@media (min-width: 990px) { .footer-v10__cols .footer-col:first-child ul { columns: 2; column-gap: 24px; display: block; } .footer-v10__cols .footer-col:first-child li { margin-bottom: 10px; break-inside: avoid; } }
+.media > img, .media > picture > img { height: 100% !important; aspect-ratio: auto !important; }
+@media (max-width: 900px) { .header-inner { grid-template-columns: auto 1fr auto; gap: 10px; } .brand { grid-column: 2; justify-self: start; letter-spacing: .28em; } }

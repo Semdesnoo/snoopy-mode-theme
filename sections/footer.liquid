@@ -1,158 +1,127 @@
 {%- comment -%}
-  Footer — logo/naam, korte tekst, sociale links, drie linkkolommen en de onderbalk.
-  Alle teksten, links en het logo zijn instelbaar in de Thema-editor.
+  Footer (v10, Rano-opbouw): bovenin merk + nieuwsbrief, daaronder vier linkkolommen
+  (Shop, Klantenservice, Snoopy Mode, Bezoek de winkel), onderin betaalmethoden en juridische links.
+  Gekoppelde Shopify-menu's winnen; zonder menu tonen we alleen links die echt bestaan.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
   assign brand_name = s.brand_text | default: shop.name
   assign footer_email = s.email | default: settings.company_email | default: shop.email
-
+  assign footer_phone = s.phone | default: settings.company_phone
+  assign wa_phone = footer_phone | remove: ' ' | remove: '-' | remove_first: '0'
   assign ig_url = s.social_instagram | default: settings.social_instagram
   assign tt_url = s.social_tiktok | default: settings.social_tiktok
   assign fb_url = s.social_facebook | default: settings.social_facebook
   assign pi_url = s.social_pinterest | default: settings.social_pinterest
+  assign addr_lines = settings.company_address | newline_to_br | split: '<br />'
+  assign maps_q = settings.company_address | strip_newlines | replace: 'Snoopy Mode V.O.F.', 'Snoopy Mode' | url_encode
+  assign year = 'now' | date: '%Y'
+  assign copyright = s.copyright_text | default: '© {jaar} Snoopy Mode'
+  assign copyright = copyright | replace: '{jaar}', year | replace: '{winkel}', shop.name
 -%}
 
-{%- style -%}
-  #shopify-section-{{ section.id }} .footer-brand .brand__logo {
-    --sm-footer-logo-w: {{ s.logo_width | default: 160 }}px;
-  }
-{%- endstyle -%}
-
-<footer class="site-footer">
+<footer class="site-footer footer-v10">
   <div class="container container--wide">
-    <div class="footer-main">
-      <!-- Brand-kolom -->
-      <div class="footer-brand">
-        {%- if s.logo != blank -%}
-          <span class="brand">
-            {%- render 'sm-picture',
-              image: s.logo,
-              image_mobile: s.logo_mobile,
-              alt: brand_name,
-              class: 'brand__logo',
-              loading: 'lazy',
-              widths: '120, 180, 240, 360',
-              sizes: '160px' -%}
-          </span>
-        {%- else -%}
-          <span class="brand">{{ brand_name }}</span>
-        {%- endif -%}
-
-        {% if s.brand_description != blank %}
-          <p>{{ s.brand_description }}</p>
-        {% endif %}
-
-        {% if footer_email != blank %}
-          <a class="footer-email" href="mailto:{{ footer_email }}">{{ footer_email }}</a>
-        {% endif %}
-
-        {% if s.phone != blank %}
-          <a class="footer-email" href="tel:{{ s.phone | remove: ' ' }}">{{ s.phone }}</a>
-        {% endif %}
-
+    <div class="footer-v10__top">
+      <div class="footer-v10__brand">
+        <span class="brand">{{ brand_name }}</span>
+        {%- if s.brand_description != blank -%}<p>{{ s.brand_description }}</p>{%- endif -%}
         <div class="footer-social">
-          {% if ig_url != blank %}
-            <a href="{{ ig_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ brand_name }} op Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
-            </a>
-          {% endif %}
-          {% if tt_url != blank %}
-            <a href="{{ tt_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ brand_name }} op TikTok">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M14 4v9.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 7a4 4 0 0 0 4 3"/></svg>
-            </a>
-          {% endif %}
-          {% if fb_url != blank %}
-            <a href="{{ fb_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ brand_name }} op Facebook">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M14 8h2V5h-2a3 3 0 0 0-3 3v2H9v3h2v6h3v-6h2.2l.4-3H14V8.5c0-.3.2-.5.5-.5z"/></svg>
-            </a>
-          {% endif %}
-          {% if pi_url != blank %}
-            <a href="{{ pi_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ brand_name }} op Pinterest">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 18l1.4-5.4M9.6 10.4a2.6 2.6 0 1 1 4.8 1.5c-.4 1.6-2.3 2-3 .8"/></svg>
-            </a>
-          {% endif %}
+          {%- if ig_url != blank -%}<a href="{{ ig_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ brand_name }} op Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg></a>{%- endif -%}
+          {%- if tt_url != blank -%}<a href="{{ tt_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ brand_name }} op TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M14 4v9.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 7a4 4 0 0 0 4 3"/></svg></a>{%- endif -%}
+          {%- if fb_url != blank -%}<a href="{{ fb_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ brand_name }} op Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M14 8h2V5h-2a3 3 0 0 0-3 3v2H9v3h2v6h3v-6h2.2l.4-3H14V8.5c0-.3.2-.5.5-.5z"/></svg></a>{%- endif -%}
+          {%- if pi_url != blank -%}<a href="{{ pi_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ brand_name }} op Pinterest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 18l1.4-5.4M9.6 10.4a2.6 2.6 0 1 1 4.8 1.5c-.4 1.6-2.3 2-3 .8"/></svg></a>{%- endif -%}
         </div>
       </div>
+      {%- if s.show_newsletter -%}
+        <div class="footer-v10__news">
+          <h2 class="footer-v10__h">{{ s.news_heading }}</h2>
+          {%- if s.news_text != blank -%}<p>{{ s.news_text }}</p>{%- endif -%}
+          {%- form 'customer', id: 'footer-newsletter', class: 'newsletter-form' -%}
+            {%- if form.posted_successfully? -%}
+              <p class="newsletter__thanks" role="status">Bedankt voor je aanmelding!</p>
+            {%- else -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <label class="visually-hidden" for="footer-news-email">Je e-mailadres</label>
+              <input id="footer-news-email" type="email" name="contact[email]" placeholder="Je e-mailadres" autocomplete="email" required>
+              <button class="btn" type="submit">Aanmelden</button>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      {%- endif -%}
+    </div>
 
-      {% assign footer_menus = '1,2,3' | split: ',' %}
-      {% for n in footer_menus %}
-        {% liquid
+    <nav class="footer-v10__cols" aria-label="Footer">
+      {%- for n in (1..3) -%}
+        {%- liquid
           assign heading_key = 'footer_heading_' | append: n
           assign menu_key = 'footer_menu_' | append: n
           assign col_heading = s[heading_key]
           assign col_menu = s[menu_key]
-        %}
+        -%}
         <div class="footer-col">
-          {% if col_heading != blank %}
-            <h3>{{ col_heading }}</h3>
-          {% endif %}
-          {% if linklists[col_menu].links.size > 0 %}
-            <ul>
-              {% for link in linklists[col_menu].links %}
-                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-              {% endfor %}
-            </ul>
-          {% else %}
-            {%- comment -%} Nog geen eigen menu gekoppeld: dit staat er zolang alvast in. {%- endcomment -%}
-            <ul>
-              {% case n %}
-                {% when '1' %}
-                  {%- assign shown = 0 -%}
-                  {%- for collection in collections limit: 8 -%}
-                    {%- unless collection.handle == 'frontpage' or collection.handle == 'home-page' -%}
-                      {%- if shown < 6 -%}
-                        <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
-                        {%- assign shown = shown | plus: 1 -%}
-                      {%- endif -%}
-                    {%- endunless -%}
+          <h3>{{ col_heading }}</h3>
+          <ul>
+            {%- if linklists[col_menu].links.size > 0 -%}
+              {%- for link in linklists[col_menu].links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+            {%- else -%}
+              {%- case n -%}
+                {%- when 1 -%}
+                  {%- assign shop_handles = 'nieuw-binnen,onze-bestseller,sale,jassen-blazers,blazers,truien-vesten,blouses-tops,tops,broeken,broeken-1,rokken,jurken,tassen,schoenen' | split: ',' -%}
+                  {%- for h in shop_handles -%}
+                    {%- assign c = collections[h] -%}
+                    {%- if c != blank and c.products_count > 0 -%}<li><a href="{{ c.url }}">{{ c.title }}</a></li>{%- endif -%}
                   {%- endfor -%}
-                {% when '2' %}
-                  {%- comment -%}
-                    Alleen tonen wat écht bestaat: zo staat er nooit een link in
-                    de footer die op een "pagina niet gevonden" uitkomt.
-                  {%- endcomment -%}
-                  {%- assign service_handles = 'verzending-retour,maattabel,veelgestelde-vragen,contact,betaalmethoden' | split: ',' -%}
-                  {%- for handle in service_handles -%}
-                    {%- assign service_page = pages[handle] -%}
-                    {%- if service_page != blank -%}
-                      <li><a href="{{ service_page.url }}">{{ service_page.title }}</a></li>
-                    {%- endif -%}
+                  <li><a href="{{ routes.all_products_collection_url }}">Alles bekijken</a></li>
+                {%- when 2 -%}
+                  {%- assign service_handles = 'contact,veelgestelde-vragen,verzending-retour,maattabel,betaalmethoden' | split: ',' -%}
+                  {%- for h in service_handles -%}
+                    {%- assign sp = pages[h] -%}
+                    {%- if sp != blank -%}<li><a href="{{ sp.url }}">{{ sp.title }}</a></li>{%- endif -%}
                   {%- endfor -%}
-                {% when '3' %}
+                  <li><a href="{{ routes.account_url }}">Mijn account &amp; bestellingen</a></li>
+                {%- when 3 -%}
                   {%- assign about_page = pages['over-ons'] -%}
-                  {%- if about_page != blank -%}
-                    <li><a href="{{ about_page.url }}">{{ about_page.title }}</a></li>
-                  {%- endif -%}
-              {% endcase %}
-            </ul>
-          {% endif %}
+                  {%- if about_page != blank -%}<li><a href="{{ about_page.url }}">Ons verhaal</a></li>{%- endif -%}
+                  {%- if ig_url != blank -%}<li><a href="{{ ig_url }}" target="_blank" rel="noopener noreferrer">Instagram</a></li>{%- endif -%}
+                  {%- if tt_url != blank -%}<li><a href="{{ tt_url }}" target="_blank" rel="noopener noreferrer">TikTok</a></li>{%- endif -%}
+                  {%- if fb_url != blank -%}<li><a href="{{ fb_url }}" target="_blank" rel="noopener noreferrer">Facebook</a></li>{%- endif -%}
+                  {%- if wa_phone != blank -%}<li><a href="https://wa.me/31{{ wa_phone }}" target="_blank" rel="noopener noreferrer">Bestellen via WhatsApp</a></li>{%- endif -%}
+              {%- endcase -%}
+            {%- endif -%}
+          </ul>
         </div>
-      {% endfor %}
-    </div>
+      {%- endfor -%}
+      {%- if s.show_store -%}
+        <div class="footer-col">
+          <h3>{{ s.store_heading }}</h3>
+          <address class="footer-v10__store">
+            {%- for line in addr_lines offset: 1 -%}<span>{{ line | strip }}</span>{%- endfor -%}
+            {%- if footer_phone != blank -%}<a href="tel:{{ footer_phone | remove: ' ' }}">{{ footer_phone }}</a>{%- endif -%}
+            {%- if footer_email != blank -%}<a href="mailto:{{ footer_email }}">{{ footer_email }}</a>{%- endif -%}
+            <a class="footer-v10__route" href="https://www.google.com/maps/search/?api=1&amp;query={{ maps_q }}" target="_blank" rel="noopener noreferrer">Plan je route</a>
+          </address>
+        </div>
+      {%- endif -%}
+    </nav>
 
-    <!-- Onderbalk -->
-    <div class="footer-bottom">
-      {%- liquid
-        assign year = 'now' | date: '%Y'
-        assign copyright = s.copyright_text | default: '© {jaar} Snoopy Mode'
-        assign copyright = copyright | replace: '{jaar}', year | replace: '{winkel}', shop.name
-      -%}
-      <span>{{ copyright }}</span>
+    <div class="footer-bottom footer-v10__bottom">
+      <span>{{ copyright }}{% if settings.company_kvk != blank %} &middot; KVK {{ settings.company_kvk }}{% endif %}</span>
+      {%- if s.show_payments and shop.enabled_payment_types.size > 0 -%}
+        <ul class="footer-v10__pay" aria-label="Betaalmethoden">
+          {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
       <div class="legal-links">
-        {% if linklists[s.footer_legal_menu].links.size > 0 %}
-          {% for link in linklists[s.footer_legal_menu].links %}
-            <a href="{{ link.url }}">{{ link.title }}</a>
-          {% endfor %}
-        {% else %}
+        {%- if linklists[s.footer_legal_menu].links.size > 0 -%}
+          {%- for link in linklists[s.footer_legal_menu].links -%}<a href="{{ link.url }}">{{ link.title }}</a>{%- endfor -%}
+        {%- else -%}
           {%- assign legal_handles = 'algemene-voorwaarden,privacybeleid,cookies' | split: ',' -%}
           {%- for handle in legal_handles -%}
             {%- assign legal_page = pages[handle] -%}
-            {%- if legal_page != blank -%}
-              <a href="{{ legal_page.url }}">{{ legal_page.title }}</a>
-            {%- endif -%}
+            {%- if legal_page != blank -%}<a href="{{ legal_page.url }}">{{ legal_page.title }}</a>{%- endif -%}
           {%- endfor -%}
-        {% endif %}
+        {%- endif -%}
       </div>
     </div>
   </div>
@@ -196,7 +165,7 @@
       "type": "textarea",
       "id": "brand_description",
       "label": "Korte tekst eronder",
-      "default": "Tijdloze mode voor de vrouw van nu — met zorg voor je uitgekozen."
+      "default": "Damesmode boetiek in Rotterdam sinds 2002. Elke week nieuwe collectie, met zorg uitgekozen door Marjolein en Monique."
     },
     {
       "type": "text",
@@ -254,7 +223,7 @@
       "type": "text",
       "id": "footer_heading_3",
       "label": "Kop",
-      "default": "Over Snoopy Mode"
+      "default": "Snoopy Mode"
     },
     {
       "type": "link_list",
@@ -276,7 +245,15 @@
       "id": "footer_legal_menu",
       "label": "Juridische links",
       "info": "Leeg = voorwaarden, privacybeleid en cookies."
-    }
+    },
+    { "type": "header", "content": "Nieuwsbrief in de footer" },
+    { "type": "checkbox", "id": "show_newsletter", "label": "Nieuwsbrief tonen", "default": true },
+    { "type": "text", "id": "news_heading", "label": "Kop", "default": "Blijf op de hoogte" },
+    { "type": "text", "id": "news_text", "label": "Tekst", "default": "Als eerste weten wat er nieuw binnen is, plus stijltips en acties." },
+    { "type": "header", "content": "Bezoek de winkel" },
+    { "type": "checkbox", "id": "show_store", "label": "Kolom met adres en route tonen", "info": "Adres, telefoon en e-mail komen uit Thema-instellingen > Bedrijfsgegevens.", "default": true },
+    { "type": "text", "id": "store_heading", "label": "Kop", "default": "Bezoek de winkel" },
+    { "type": "checkbox", "id": "show_payments", "label": "Betaalmethoden tonen", "default": true }
   ]
 }
 {% endschema %}
