@@ -20,7 +20,7 @@ const cents = (s) => Math.round(parseFloat(s || 0) * 100);
 const raw = data('products.json').products;
 const products = raw.map((p) => {
   const images = p.images.map((i) => ({ id: i.id, src: i.src, alt: '', width: i.width, height: i.height, aspect_ratio: i.width / i.height, media_type: 'image', presentation: { focal_point: null } }));
-  const variants = p.variants.map((v) => ({ id: v.id, title: v.title, price: cents(v.price), compare_at_price: v.compare_at_price ? cents(v.compare_at_price) : null, available: v.available, options: [v.option1, v.option2, v.option3].filter(Boolean) }));
+  const variants = p.variants.map((v) => ({ id: v.id, title: v.title, price: cents(v.price), compare_at_price: v.compare_at_price ? cents(v.compare_at_price) : null, available: v.available, sku: v.sku, options: [v.option1, v.option2, v.option3].filter(Boolean) }));
   const v0 = variants.find((v) => v.available) || variants[0];
   const options = p.options.map((o, i) => ({ name: o.name, position: i + 1, values: o.values, selected_value: v0.options[i] }));
   return {
@@ -106,6 +106,7 @@ engine.registerFilter('image_tag', function (src, ...a) {
 });
 engine.registerFilter('money', money);
 engine.registerFilter('money_with_currency', (c) => money(c) + ' EUR');
+engine.registerFilter('money_without_trailing_zeros', (c) => money(c).replace(',00', ''));
 engine.registerFilter('stylesheet_tag', (u) => `<link rel="stylesheet" href="${u}">`);
 engine.registerFilter('preload_tag', (u) => `<link rel="preload" href="${u}" as="font" crossorigin>`);
 engine.registerFilter('placeholder_svg_tag', (n, cls) => `<svg class="${cls || ''}" style="background:#ddd"></svg>`);
@@ -141,11 +142,13 @@ engine.registerTag('section', class extends Tag { constructor(t, r, l) { super(t
 const cart = { item_count: 0, items: [], total_price: 0, items_subtotal_price: 0, requires_shipping: true, currency: { iso_code: 'EUR', symbol: '€' } };
 async function page(template, extra = {}) {
   SCOPE = {
-    settings, collections, linklists, pages: pageObjs, cart, shop: { name: 'Snoopy Mode', email: 'info@snoopy-mode.nl', money_format: '€{{amount_with_comma_separator}}' },
+    settings, collections, linklists, pages: pageObjs, cart, shop: { name: 'Snoopy Mode', url: 'https://snoopy-mode.nl', email: 'info@snoopy-mode.nl', money_format: '€{{amount_with_comma_separator}}' },
     routes: { root_url: '/', cart_url: '/cart', cart_add_url: '/cart/add', cart_change_url: '/cart/change', search_url: '/search', account_url: '/account', all_products_collection_url: '/collections/all' },
-    request: { locale: { iso_code: 'nl' }, page_type: template.split('.')[0], design_mode: false }, canonical_url: '/', page_title: 'Snoopy Mode', current_page: 1, ...extra,
+    request: { locale: { iso_code: 'nl' }, page_type: template.split('.')[0], path: '/', design_mode: false }, canonical_url: 'https://snoopy-mode.nl/', page_title: 'Snoopy Mode', page_description: '', current_page: 1, template: { name: template.split('.')[0] }, ...extra,
   };
-  Object.assign(engine.options.globals, { settings, collections, linklists, pages: pageObjs, cart, routes: SCOPE.routes, shop: SCOPE.shop, request: SCOPE.request });
+  // Shopify template globals are visible inside render-snippets too.
+  for (const k of ['product', 'collection', 'canonical_url', 'page_title', 'page_description', 'current_page', 'current_tags', 'template', 'page', 'page_image']) delete engine.options.globals[k];
+  Object.assign(engine.options.globals, { settings, collections, linklists, pages: pageObjs, cart, routes: SCOPE.routes, shop: SCOPE.shop, request: SCOPE.request, product: SCOPE.product, collection: SCOPE.collection, canonical_url: SCOPE.canonical_url, page_title: SCOPE.page_title, page_description: SCOPE.page_description, current_page: SCOPE.current_page, template: SCOPE.template, page: SCOPE.page });
   let body;
   if (fs.existsSync(path.join(THEME, `templates/${template}.json`))) {
     const t = JSON.parse(read(`templates/${template}.json`));
@@ -167,8 +170,8 @@ const routes = {
   'pages/verzending-retour': () => page('page.levering', { page: pageObjs['verzending-retour'] }),
   'pages/maattabel': () => page('page.maattabel', { page: pageObjs.maattabel }),
   'pages/veelgestelde-vragen': () => page('page.vragen', { page: pageObjs['veelgestelde-vragen'] }),
-  ...Object.fromEntries(products.slice(0, 40).map((p) => [`products/${p.handle}`, () => page('product', { product: p, page_title: p.title })])),
-  ...Object.fromEntries(Object.values(collections).map((c) => [`collections/${c.handle}`, () => page(c.handle === 'sale' ? 'collection.sale' : 'collection', { collection: c, page_title: c.title })])),
+  ...Object.fromEntries(products.slice(0, 40).map((p) => [`products/${p.handle}`, () => page('product', { product: p, page_title: p.title, canonical_url: `https://snoopy-mode.nl/products/${p.handle}` })])),
+  ...Object.fromEntries(Object.values(collections).map((c) => [`collections/${c.handle}`, () => page(c.handle === 'sale' ? 'collection.sale' : 'collection', { collection: c, page_title: c.title, canonical_url: `https://snoopy-mode.nl/collections/${c.handle}` })])),
 };
 const only = process.argv[3];
 if (!only && fs.existsSync(OUT)) for (const f of fs.readdirSync(OUT)) fs.rmSync(path.join(OUT, f), { recursive: true, force: true });

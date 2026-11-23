@@ -14,11 +14,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231C1A17'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='18' fill='%23FAF8F4' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
   {%- endif -%}
 
-  <title>{{ page_title }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; Pagina {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
-
-  {%- if page_description -%}
-    <meta name="description" content="{{ page_description | escape }}">
-  {%- endif -%}
+  {%- render 'seo-head' -%}
 
   {%- comment -%}
     Lettertypes: de eigenaar kiest een combinatie in Thema-instellingen → Lettertypes.

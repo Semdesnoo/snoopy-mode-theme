@@ -386,6 +386,9 @@
     <h1 class="display-2 reveal" data-delay="1">{{ collection.title }}</h1>
     {%- if collection.description != blank -%}
       <div class="collection-hero__intro lead reveal" data-delay="2">{{ collection.description }}</div>
+    {%- elsif collection.handle != 'all' -%}
+      {%- comment -%} Nog geen eigen omschrijving in Shopify: een korte, kloppende intro zodat de pagina niet leeg is voor Google. {%- endcomment -%}
+      <p class="collection-hero__intro lead reveal" data-delay="2">{{ collection.title }} voor dames, met zorg uitgekozen door Marjolein en Monique van Snoopy Mode in {{ settings.seo_city | default: 'Rotterdam' }}. Elke week komen er nieuwe items bij. Vragen over maat of pasvorm? We denken graag met je mee.</p>
     {%- endif -%}
   </div>
 </section>

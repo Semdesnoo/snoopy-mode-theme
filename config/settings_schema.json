@@ -391,6 +391,48 @@
     ]
   },
   {
+    "name": "SEO & delen",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Zo vinden Google en AI-zoekmachines (ChatGPT, Perplexity) Snoopy Mode. Titel en beschrijving per product of collectie stel je in Shopify in bij 'Zoekmachinevermelding'; die winnen altijd."
+      },
+      {
+        "type": "text",
+        "id": "seo_tagline",
+        "label": "Titel-toevoeging homepage",
+        "default": "Damesmode boetiek in Rotterdam",
+        "info": "Homepage-titel wordt: Snoopy Mode | (deze tekst). Max ~45 tekens."
+      },
+      {
+        "type": "textarea",
+        "id": "seo_home_description",
+        "label": "Beschrijving homepage (Google)",
+        "default": "Damesmode boetiek van Marjolein en Monique in Rotterdam (Groene Hilledijk). Elke week nieuwe collectie, ook online. Gratis verzending vanaf 75 euro.",
+        "info": "150-160 tekens is ideaal."
+      },
+      {
+        "type": "text",
+        "id": "seo_city",
+        "label": "Plaats",
+        "default": "Rotterdam"
+      },
+      {
+        "type": "text",
+        "id": "seo_founding_year",
+        "label": "Sinds (jaartal)",
+        "default": "2002",
+        "info": "Jaar dat jullie de winkel overnamen. Leeg laten = niet tonen."
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Afbeelding bij delen (WhatsApp, Facebook)",
+        "info": "1200 x 630 pixels. Leeg = de grote winkelfoto."
+      }
+    ]
+  },
+  {
     "name": "Bedrijfsgegevens",
     "settings": [
       {
