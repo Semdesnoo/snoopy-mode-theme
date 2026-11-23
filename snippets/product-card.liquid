@@ -33,6 +33,7 @@
   assign img = product.featured_media
   assign img2 = product.media[1]
   assign alt_text = img.alt | default: product.title
+  assign alt_text2 = img2.alt | default: product.title | append: ' - tweede foto'
 -%}
 <article class="product-card card-v10 reveal" data-card>
   <div class="card-v10__media">
@@ -41,7 +42,7 @@
       <div class="media sm-ratio-{{ ratio }}{{ fit_class }}{% if settings.card_hover_image and img2 %} has-alt{% endif %}">
         {{ img | image_url: width: 900 | image_tag: loading: 'lazy', alt: alt_text, widths: '300, 400, 600, 800, 900', sizes: card_sizes, class: 'card-v10__img' }}
         {%- if settings.card_hover_image and img2 -%}
-          {{ img2 | image_url: width: 900 | image_tag: loading: 'lazy', alt: '', widths: '300, 400, 600, 800, 900', sizes: card_sizes, class: 'card-v10__img card-v10__img--alt' }}
+          {{ img2 | image_url: width: 900 | image_tag: loading: 'lazy', alt: alt_text2, widths: '300, 400, 600, 800, 900', sizes: card_sizes, class: 'card-v10__img card-v10__img--alt' }}
         {%- endif -%}
       </div>
     {%- else -%}
