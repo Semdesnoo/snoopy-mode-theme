@@ -18,11 +18,12 @@
   class="hero sm-hero-{{ s.height | default: 'tall' }} sm-hero-mobile-{{ s.height_mobile | default: 'tall' }} {{ sm_class }}"
   style="--sm-hero-overlay: {{ overlay }}; --sm-hero-overlay-mobile: {{ overlay_mobile }};"
 >
+  {%- assign _alt_image_alt = s.image_alt | default: s.heading -%}
   {%- render 'sm-photo',
     image: s.image,
     image_mobile: s.image_mobile,
     key: 'hero',
-    alt: s.image_alt | default: s.heading,
+    alt: _alt_image_alt,
     label: s.placeholder_label,
     wrapper_class: 'media media--wide',
     img_class: 'hero__img',
@@ -41,10 +42,10 @@
 
       {%- if s.heading != blank or heading_mobile != blank -%}
         {%- if s.heading == heading_mobile -%}
-          <h1 class="display-1 hero__title reveal" data-delay="1">{{ s.heading }}</h1>
+          <h1 class="display-1 hero__title reveal" data-delay="1">{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h1>
         {%- else -%}
-          <h1 class="display-1 hero__title reveal sm-only-desktop" data-delay="1">{{ s.heading }}</h1>
-          <h1 class="display-1 hero__title reveal sm-only-mobile" data-delay="1">{{ heading_mobile }}</h1>
+          <h1 class="display-1 hero__title reveal sm-only-desktop" data-delay="1">{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h1>
+          <h1 class="display-1 hero__title reveal sm-only-mobile" data-delay="1">{{ heading_mobile | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h1>
         {%- endif -%}
       {%- endif -%}
 

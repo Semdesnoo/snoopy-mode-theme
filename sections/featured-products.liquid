@@ -31,7 +31,7 @@
       <div class="section-head section-head--between reveal">
         <div>
           {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
-          {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading }}</h2>{%- endif -%}
+          {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h2>{%- endif -%}
         </div>
         {%- if s.link_label != blank -%}
           <a class="btn--ghost" href="{{ s.link_url | default: routes.all_products_collection_url }}">{{ s.link_label }}</a>
@@ -40,7 +40,7 @@
     {%- else -%}
       <div class="section-head section-head--center reveal">
         {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
-        {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h2>{%- endif -%}
         {%- if s.subtext != blank -%}<p>{{ s.subtext }}</p>{%- endif -%}
       </div>
     {%- endif -%}

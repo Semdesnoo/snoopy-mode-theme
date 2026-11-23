@@ -32,70 +32,52 @@
 <!-- PRODUCTDETAIL: tweekoloms (galerij + info) -->
 <section class="container container--wide product">
 
-  <!-- LINKS: productgalerij. Loopt product.media; valt terug op .media-placeholder als er geen media is. -->
-  <div class="product-gallery reveal">
-    <figure>
-      {%- comment -%}
-        De foto's op de productpagina volgen dezelfde vorm-instelling als de
-        productkaarten (Themainstellingen → Productkaarten), zodat een staande
-        telefoonfoto overal dezelfde vorm heeft.
-      {%- endcomment -%}
-      {%- liquid
-        assign gallery_ratio = settings.card_image_ratio | default: 'phonefull'
-        assign gallery_fit = ''
-        if settings.card_image_contain
-          assign gallery_fit = ' sm-fit-contain'
-        endif
-        comment
-          De alt-tekst vooraf bepalen. Een pipe binnen een filter-argument
-          sluit de argumentenlijst af, dus 'alt: x | default: y' zou de rest
-          van de argumenten (waaronder class:) laten vervallen.
-        endcomment
-        assign main_alt = product.featured_media.alt | default: product.title
-      -%}
-      {%- if product.featured_media != blank -%}
-        <div class="product-gallery__main sm-ratio-{{ gallery_ratio }}{{ gallery_fit }}" data-gallery-main>
-          {{ product.featured_media | image_url: width: 1000 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '400, 600, 800, 1000, 1200', sizes: '(max-width: 900px) 100vw, 50vw', alt: main_alt, class: 'product-gallery__main-img' }}
-        </div>
-      {%- else -%}
-        <div class="media product-gallery__main sm-ratio-{{ gallery_ratio }}" data-gallery-main data-label="{{ product.title | escape }}"
-             role="img" aria-label="{{ product.title | escape }}"></div>
-      {%- endif -%}
-      <figcaption class="visually-hidden">{{ product.title }}</figcaption>
-    </figure>
-
-    {%- if product.media.size > 1 -%}
-      <div class="product-gallery__thumbs">
+  <!-- LINKS: productgalerij (v10). Desktop: twee kolommen. Mobiel: swipen met stipjes.
+       Tik op een foto = de hele foto, zonder uitsnede, in een vergroot venster. -->
+  {%- liquid
+    assign gallery_ratio = settings.card_image_ratio | default: 'tall'
+    assign gallery_fit = ''
+    if settings.card_image_contain
+      assign gallery_fit = ' sm-fit-contain'
+    endif
+    assign media_count = product.media.size
+  -%}
+  <div class="product-gallery pdp-gallery reveal" data-pdp-gallery>
+    {%- if media_count > 0 -%}
+      <div class="pdp-gallery__track{% if media_count == 1 %} is-single{% endif %}" data-pdp-track>
         {%- for media in product.media -%}
-          {%- assign thumb_alt = media.alt | default: product.title -%}
-          <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }}{{ gallery_fit }}{% if forloop.first %} is-active{% endif %}" data-gallery-thumb
-                  data-media-id="{{ media.id }}"
-                  data-full="{{ media | image_url: width: 1200 }}"
-                  aria-label="Toon afbeelding {{ forloop.index }}">
-            {{ media | image_url: width: 300 | image_tag: loading: 'lazy', alt: thumb_alt, widths: '150, 200, 300', sizes: '(max-width: 900px) 22vw, 11vw' }}
+          {%- liquid
+            assign m_alt = media.alt | default: product.title
+            assign m_load = 'lazy'
+            assign m_prio = 'auto'
+            if forloop.first
+              assign m_load = 'eager'
+              assign m_prio = 'high'
+            endif
+          -%}
+          <button type="button" class="pdp-gallery__slide media sm-ratio-{{ gallery_ratio }}{{ gallery_fit }}" data-zoom="{{ forloop.index0 }}" aria-label="Foto {{ forloop.index }} van {{ media_count }} vergroten">
+            {{ media | image_url: width: 1200 | image_tag: loading: m_load, fetchpriority: m_prio, widths: '400, 600, 800, 1000, 1200', sizes: '(max-width: 989px) 84vw, 29vw', alt: m_alt }}
           </button>
         {%- endfor -%}
       </div>
-    {%- elsif product.media.size == 0 -%}
-      {%- comment -%} Fallback-thumbs in de stijl van de blauwdruk wanneer er nog geen foto's zijn {%- endcomment -%}
-      <div class="product-gallery__thumbs">
-        <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }} is-active" data-gallery-thumb
-                data-label="{{ product.title | escape }} · vooraanzicht" aria-label="Toon vooraanzicht">
-          <div class="media" data-label="Voor"></div>
+      {%- if media_count > 1 -%}
+        <div class="pdp-gallery__dots" aria-hidden="true">
+          {%- for media in product.media -%}<span{% if forloop.first %} class="is-active"{% endif %}></span>{%- endfor -%}
+        </div>
+      {%- endif -%}
+      <dialog class="pdp-zoom" data-pdp-zoom aria-label="Foto's van {{ product.title | escape }}">
+        <button type="button" class="pdp-zoom__close" data-zoom-close aria-label="Sluiten">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
         </button>
-        <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }}" data-gallery-thumb
-                data-label="{{ product.title | escape }} · achteraanzicht" aria-label="Toon achteraanzicht">
-          <div class="media" data-label="Achter"></div>
-        </button>
-        <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }}" data-gallery-thumb
-                data-label="{{ product.title | escape }} · detail" aria-label="Toon detail">
-          <div class="media" data-label="Detail"></div>
-        </button>
-        <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }}" data-gallery-thumb
-                data-label="{{ product.title | escape }} · gedragen" aria-label="Toon gedragen">
-          <div class="media" data-label="Gedragen"></div>
-        </button>
-      </div>
+        <div class="pdp-zoom__track" data-zoom-track>
+          {%- for media in product.media -%}
+            {%- assign z_alt = media.alt | default: product.title -%}
+            <figure class="pdp-zoom__slide">{{ media | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '800, 1200, 1600', sizes: '100vw', alt: z_alt }}</figure>
+          {%- endfor -%}
+        </div>
+      </dialog>
+    {%- else -%}
+      <div class="media sm-ratio-{{ gallery_ratio }}" data-label="{{ product.title | escape }}" role="img" aria-label="{{ product.title | escape }}"></div>
     {%- endif -%}
   </div>
 

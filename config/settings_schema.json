@@ -1,8 +1,8 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Snoopy Mode v9.4",
-    "theme_version": "9.4.0",
+    "theme_name": "Snoopy Mode v10.0",
+    "theme_version": "10.0.0",
     "theme_author": "Snoopy Mode",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://help.shopify.com/"
@@ -18,7 +18,7 @@
         "type": "image_picker",
         "id": "favicon",
         "label": "Favicon",
-        "info": "Het kleine icoontje in het tabblad van de browser. Vierkant, minimaal 96 Ã— 96 pixels."
+        "info": "Het kleine icoontje in het tabblad van de browser. Vierkant, minimaal 96 × 96 pixels."
       }
     ]
   },
@@ -29,7 +29,10 @@
         "type": "paragraph",
         "content": "Pas hier het hele kleurenpalet van de winkel aan. Wijzigingen zie je meteen in het voorbeeld."
       },
-      { "type": "header", "content": "Achtergronden" },
+      {
+        "type": "header",
+        "content": "Achtergronden"
+      },
       {
         "type": "color",
         "id": "color_bg",
@@ -49,7 +52,10 @@
         "label": "Kaarten & vlakken",
         "default": "#FFFFFF"
       },
-      { "type": "header", "content": "Tekst" },
+      {
+        "type": "header",
+        "content": "Tekst"
+      },
       {
         "type": "color",
         "id": "color_ink",
@@ -68,7 +74,10 @@
         "label": "Bijschriften & labels",
         "default": "#837B70"
       },
-      { "type": "header", "content": "Accenten & lijnen" },
+      {
+        "type": "header",
+        "content": "Accenten & lijnen"
+      },
       {
         "type": "color",
         "id": "color_accent",
@@ -105,14 +114,36 @@
         "label": "Lettertype-combinatie",
         "info": "Het eerste lettertype is voor koppen, het tweede voor de lopende tekst.",
         "options": [
-          { "value": "fraunces_jost", "label": "Fraunces + Jost (huidig ontwerp)" },
-          { "value": "cormorant_jost", "label": "Cormorant Garamond + Jost (klassiek)" },
-          { "value": "playfair_inter", "label": "Playfair Display + Inter (modern)" },
-          { "value": "marcellus_karla", "label": "Marcellus + Karla (rustig)" },
-          { "value": "dmserif_dmsans", "label": "DM Serif + DM Sans (eigentijds)" },
-          { "value": "jost_only", "label": "Alleen Jost (strak, zonder schreef)" }
+          {
+            "value": "bodoni_geist",
+            "label": "Bodoni Moda + Geist (v10, scherp en chic)"
+          },
+          {
+            "value": "fraunces_jost",
+            "label": "Fraunces + Jost (oude ontwerp)"
+          },
+          {
+            "value": "cormorant_jost",
+            "label": "Cormorant Garamond + Jost (klassiek)"
+          },
+          {
+            "value": "playfair_inter",
+            "label": "Playfair Display + Inter (modern)"
+          },
+          {
+            "value": "marcellus_karla",
+            "label": "Marcellus + Karla (rustig)"
+          },
+          {
+            "value": "dmserif_dmsans",
+            "label": "DM Serif + DM Sans (eigentijds)"
+          },
+          {
+            "value": "jost_only",
+            "label": "Alleen Jost (strak, zonder schreef)"
+          }
         ],
-        "default": "fraunces_jost"
+        "default": "bodoni_geist"
       }
     ]
   },
@@ -123,7 +154,10 @@
         "type": "paragraph",
         "content": "Je stelt de laptop- en de mobiele weergave apart in."
       },
-      { "type": "header", "content": "Laptop & tablet" },
+      {
+        "type": "header",
+        "content": "Laptop & tablet"
+      },
       {
         "type": "range",
         "id": "font_size_base",
@@ -145,7 +179,10 @@
         "unit": "%",
         "default": 100
       },
-      { "type": "header", "content": "Mobiel" },
+      {
+        "type": "header",
+        "content": "Mobiel"
+      },
       {
         "type": "range",
         "id": "font_size_base_mobile",
@@ -166,7 +203,10 @@
         "unit": "%",
         "default": 100
       },
-      { "type": "header", "content": "Ruimte tussen secties" },
+      {
+        "type": "header",
+        "content": "Ruimte tussen secties"
+      },
       {
         "type": "range",
         "id": "section_spacing",
@@ -187,12 +227,12 @@
         "type": "range",
         "id": "corner_radius",
         "label": "Ronde hoeken",
-        "info": "0 = strakke, rechte hoeken (past bij het huidige ontwerp).",
+        "info": "0 = strakke, rechte hoeken (past bij het v10-ontwerp).",
         "min": 0,
         "max": 24,
         "step": 1,
         "unit": "px",
-        "default": 2
+        "default": 0
       }
     ]
   },
@@ -201,22 +241,40 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "Geldt voor alle plekken waar producten staan: homepage, collecties, zoekresultaten Ã©n de grote foto op de productpagina."
+        "content": "Geldt voor alle plekken waar producten staan: homepage, collecties, zoekresultaten én de grote foto op de productpagina."
       },
       {
         "type": "select",
         "id": "card_image_ratio",
         "label": "Vorm van de productfoto's",
-        "info": "Kies de vorm die bij je eigen foto's past. Maak je ze staand met je telefoon over het hele scherm, kies dan 'Telefoon volledig scherm'. Van foto's met een andere vorm valt altijd iets weg aan de randen â€” wil je dat nooit, zet dan de optie hieronder aan.",
+        "info": "Staande telefoonfoto's (ook schermvullend) passen het mooist in 'Extra staand (2:3)': de kaart is compacter en het model staat netjes in beeld. Valt er iets weg dat je wel wilt zien? Stel per foto een focuspunt in (Producten > foto > Focuspunt), dan schuift de uitsnede mee.",
         "options": [
-          { "value": "phonefull", "label": "Telefoon volledig scherm (9:19,5)" },
-          { "value": "phone", "label": "Telefoonfoto staand (9:16)" },
-          { "value": "tall", "label": "Extra staand (2:3)" },
-          { "value": "portrait", "label": "Staand (3:4)" },
-          { "value": "square", "label": "Vierkant" },
-          { "value": "landscape", "label": "Liggend (4:3)" }
+          {
+            "value": "tall",
+            "label": "Extra staand (2:3) - aanbevolen"
+          },
+          {
+            "value": "portrait",
+            "label": "Staand (3:4)"
+          },
+          {
+            "value": "phone",
+            "label": "Telefoonfoto staand (9:16)"
+          },
+          {
+            "value": "phonefull",
+            "label": "Telefoon volledig scherm (9:19,5)"
+          },
+          {
+            "value": "square",
+            "label": "Vierkant"
+          },
+          {
+            "value": "landscape",
+            "label": "Liggend (4:3)"
+          }
         ],
-        "default": "phonefull"
+        "default": "tall"
       },
       {
         "type": "checkbox",
@@ -227,9 +285,15 @@
       },
       {
         "type": "checkbox",
+        "id": "card_hover_image",
+        "label": "Tweede foto tonen als je met de muis over een product gaat",
+        "default": true
+      },
+      {
+        "type": "checkbox",
         "id": "show_product_type",
         "label": "Categorie boven de productnaam tonen",
-        "default": true
+        "default": false
       },
       {
         "type": "checkbox",
@@ -237,7 +301,10 @@
         "label": "Prijs tonen",
         "default": true
       },
-      { "type": "header", "content": "Labels op de foto" },
+      {
+        "type": "header",
+        "content": "Labels op de foto"
+      },
       {
         "type": "text",
         "id": "badge_new_label",
@@ -252,7 +319,10 @@
         "info": "Verschijnt zodra je een 'vergelijk-prijs' invult. Leeg laten = geen label.",
         "default": "Aanbieding"
       },
-      { "type": "header", "content": "Knop op de foto" },
+      {
+        "type": "header",
+        "content": "Knop op de foto"
+      },
       {
         "type": "checkbox",
         "id": "show_quick_view",
@@ -272,7 +342,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "Deze bedragen worden gebruikt in de winkelmand-lade Ã©n op de winkelmandpagina, zodat ze altijd gelijk zijn. Let op: de Ã©chte verzendkosten stel je in bij Instellingen â†’ Verzending en bezorging; die gelden bij het afrekenen."
+        "content": "Deze bedragen worden gebruikt in de winkelmand-lade én op de winkelmandpagina, zodat ze altijd gelijk zijn. Let op: de échte verzendkosten stel je in bij Instellingen → Verzending en bezorging; die gelden bij het afrekenen."
       },
       {
         "type": "checkbox",
@@ -350,4 +420,3 @@
     ]
   }
 ]
-

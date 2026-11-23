@@ -1,0 +1,318 @@
+/* ==========================================================================
+   SNOOPY MODE v10 — ontwerplaag in Rano-stijl
+   Laadt NA base.css. Kleuren blijven die van Snoopy (variabelen uit de
+   thema-instellingen); hier zitten typografie, knoppen, layout en foto-vormen.
+   Hoeksysteem: alles recht (0px), behalve ronde icoonknoppen.
+   ========================================================================== */
+@font-face { font-family: "Bodoni Moda"; src: url(bodoni-moda.woff2) format("woff2"); font-weight: 400 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Bodoni Moda"; src: url(bodoni-moda-italic.woff2) format("woff2"); font-weight: 400 900; font-style: italic; font-display: swap; }
+@font-face { font-family: "Geist"; src: url(geist-variable.woff2) format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+
+:root {
+  --lux: cubic-bezier(.19, 1, .22, 1);
+  --hair: color-mix(in srgb, var(--ink) 11%, transparent);
+  --gap-v10: clamp(10px, 1.1vw, 18px);
+}
+
+/* ---------- 1. Basis & typografie ---------- */
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; letter-spacing: .005em; }
+h1, h2, h3, .display-1, .display-2, .section-head__title {
+  font-family: var(--font-display); font-weight: 400; letter-spacing: -.012em; text-wrap: balance;
+}
+h1, h2, h3, .usp__title, .product-card__price { font-variant-numeric: lining-nums; }
+h1 em, h2 em, .section-head__title em, .hero__title em { font-style: italic; }
+.section-head__title { font-size: clamp(30px, 3.1vw, 46px); line-height: 1.08; }
+.section-head { gap: 12px; margin-bottom: clamp(26px, 3vw, 44px); }
+.section-head p { font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
+.eyebrow { font-size: 11px; letter-spacing: .24em; font-weight: 500; color: var(--accent); }
+.lead { line-height: 1.6; }
+::selection { background: var(--ink); color: var(--bg); }
+
+.section { padding-block: clamp(56px, 6.5vw, 104px); }
+.section--tight { padding-block: clamp(44px, 5vw, 76px); }
+
+/* ---------- 2. Knoppen (Rano: recht, kapitalen, inkt vult van onder) ---------- */
+.btn {
+  min-height: 52px; padding: 0 34px; border-radius: 0;
+  font-size: 11.5px; letter-spacing: .18em; font-weight: 500; white-space: nowrap;
+  background: linear-gradient(var(--accent-deep), var(--accent-deep)) 0 100% / 100% 0 no-repeat, var(--ink);
+  transition: background-size .6s var(--lux), color .3s, border-color .3s, transform .15s;
+}
+.btn:hover { background: linear-gradient(var(--accent-deep), var(--accent-deep)) 0 100% / 100% 100% no-repeat, var(--ink); border-color: var(--accent-deep); }
+.btn:active { transform: scale(.985); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn--sm { min-height: 40px; padding: 0 18px; font-size: 10.5px; }
+.btn--outline { background: linear-gradient(var(--ink), var(--ink)) 0 100% / 100% 0 no-repeat, transparent; color: var(--ink); border-color: var(--ink); }
+.btn--outline:hover { background: linear-gradient(var(--ink), var(--ink)) 0 100% / 100% 100% no-repeat, transparent; color: var(--bg); border-color: var(--ink); }
+.btn--light { background: linear-gradient(var(--ink), var(--ink)) 0 100% / 100% 0 no-repeat, var(--bg); color: var(--ink); border-color: var(--bg); }
+.btn--light:hover { background: linear-gradient(var(--ink), var(--ink)) 0 100% / 100% 100% no-repeat, var(--bg); color: var(--bg); border-color: var(--ink); }
+.btn--outline-light { background: linear-gradient(var(--bg), var(--bg)) 0 100% / 100% 0 no-repeat, transparent; color: var(--bg); border-color: color-mix(in srgb, var(--bg) 75%, transparent); }
+.btn--outline-light:hover { background: linear-gradient(var(--bg), var(--bg)) 0 100% / 100% 100% no-repeat, transparent; color: var(--ink); border-color: var(--bg); }
+.btn--ghost { font-size: 11.5px; letter-spacing: .18em; text-transform: uppercase; font-weight: 500; }
+.btn--ghost::after { transform: scaleX(1); transform-origin: left; transition: transform .6s var(--lux); }
+.btn--ghost:hover { color: var(--ink); }
+.btn--ghost:hover::after { transform: scaleX(.35); }
+
+/* ---------- 3. Aankondigingsbalk ---------- */
+.announcement { font-size: 10.5px; letter-spacing: .22em; font-weight: 400; padding-block: 11px; }
+
+/* ---------- 4. Header: menu links, logo midden, iconen rechts ---------- */
+.site-header { border-bottom: 1px solid var(--hair); }
+.header-inner { min-height: 68px; grid-template-columns: 1fr auto 1fr; grid-template-areas: "left brand right"; gap: 16px; }
+.menu-toggle, .main-nav { grid-area: left; justify-self: start; }
+.brand { grid-area: brand; justify-self: center; font-size: 15px; letter-spacing: .38em; font-weight: 500; margin-right: -.38em; }
+.header-actions { grid-area: right; justify-self: end; }
+.main-nav ul { gap: clamp(18px, 2vw, 30px); white-space: nowrap; }
+.main-nav a, .nav-dropdown-toggle { font-size: 11.5px; letter-spacing: .14em; font-weight: 500; }
+.main-nav > ul > li > a::after, .nav-dropdown-toggle::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: left; transition: transform .45s var(--lux);
+}
+.nav-dropdown-toggle { position: relative; }
+.main-nav > ul > li > a:hover::after, .main-nav > ul > li > a.is-active::after, .nav-dropdown-toggle:hover::after { transform: scaleX(1); }
+.nav-dropdown { border-radius: 0; border: 1px solid var(--hair); box-shadow: 0 18px 44px rgba(28, 26, 23, .08); }
+.icon-btn svg { width: 21px; height: 21px; }
+.cart-count { background: var(--ink); color: var(--bg); font-weight: 600; }
+@media (max-width: 1100px) {
+  .brand { font-size: 13px; letter-spacing: .3em; margin-right: -.3em; }
+}
+
+/* ---------- 5. Hero: groot beeld, kop met schuine accent, langzame zoom ---------- */
+.hero .hero__title { font-size: clamp(38px, 5vw, 76px); line-height: 1.04; letter-spacing: -.02em; max-width: none; }
+.sm-align-center .hero__title, .hero .sm-align-center .hero__title { margin-inline: auto; }
+.hero .hero__title em { display: block; }
+.hero .eyebrow { color: currentColor; opacity: .9; letter-spacing: .3em; margin-bottom: 18px; }
+.hero__text { font-size: clamp(15px, 1.2vw, 18px); max-width: 44ch; opacity: .92; }
+.sm-align-center .hero__text { margin-inline: auto; }
+.hero__actions { gap: 12px; margin-top: 30px; }
+.sm-align-center .hero__actions { justify-content: center; }
+.hero__overlay { background: linear-gradient(180deg, rgba(20, 18, 15, 0) 35%, rgba(20, 18, 15, calc(var(--sm-hero-overlay, .3) + .3)) 100%) !important; opacity: 1 !important; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero .media > img, .hero .media > picture > img { animation: v10-kenburns 9s cubic-bezier(.25, .1, .25, 1) both; }
+  .hero__content .reveal { transition: opacity 1.4s var(--lux), transform 1.6s var(--lux); }
+}
+@keyframes v10-kenburns { from { transform: scale(1.1); } to { transform: scale(1); } }
+@media (max-width: 749px) {
+  .hero .hero__title { font-size: clamp(32px, 9vw, 44px); }
+  .hero__actions { flex-wrap: wrap; justify-content: center; }
+  .hero__actions .btn { min-height: 48px; padding-inline: 22px; }
+}
+
+/* ---------- 6. Productkaarten: 2:3, tweede foto bij hover, rustige typografie ---------- */
+.card-v10 { position: relative; }
+.card-v10 .product-card__media-wrap { margin-bottom: 0; }
+.card-v10 .media { background: var(--bg-alt); }
+.card-v10 .media::before, .card-v10 .media::after { content: none; }
+.card-v10 .media > img { border: 0 !important; transition: opacity .9s ease, transform 1.8s var(--lux); }
+/* Telefoonfoto's: meestal hoofd boven en veel vloer onder, dus uitsnede iets naar boven.
+   Een focuspunt in Shopify zet een inline object-position en wint altijd. */
+.card-v10 .media > img:not([style*="object-position"]), .pdp-gallery__slide > img:not([style*="object-position"]) { object-position: 50% 28%; }
+.js .card-v10 .media > img.card-v10__img--alt, .js .card-v10 .media > img.card-v10__img--alt.is-loaded { opacity: 0; }
+@media (hover: hover) {
+  .js .card-v10:hover .media.has-alt > img.card-v10__img--alt.is-loaded { opacity: 1; }
+  .card-v10:hover .media > img { transform: scale(1.03); }
+}
+a:hover .card-v10 .media > img { transform: none; }
+.card-v10 .badge { top: 10px; left: 10px; z-index: 2; font-size: 10px; letter-spacing: .16em; padding: 5px 9px; border-radius: 0; }
+.card-v10 .badge--sale { background: var(--sale); color: #fff; }
+.card-v10 .badge--soft { background: color-mix(in srgb, var(--surface) 92%, transparent); border: 0; color: var(--ink); }
+.card-v10__media { position: relative; }
+.card-v10__quick { display: none; }
+@media (hover: hover) and (min-width: 990px) {
+  .card-v10__quick {
+    position: absolute; z-index: 3; right: 10px; bottom: 10px; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 999px;
+    opacity: 0; transform: translateY(6px); background: rgba(255, 255, 255, .94); color: var(--ink);
+    box-shadow: 0 2px 12px rgba(28, 26, 23, .1); transition: opacity .35s var(--lux), transform .35s var(--lux);
+  }
+  .card-v10:hover .card-v10__quick, .card-v10__quick:focus-visible { opacity: 1; transform: none; }
+}
+.card-v10__info { padding: 12px 2px 0; display: grid; gap: 4px; }
+.card-v10 .product-card__name { font-family: var(--font-body); font-size: 12.5px; letter-spacing: .07em; text-transform: uppercase; font-weight: 500; line-height: 1.4; }
+.card-v10 .product-card__name a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.card-v10 .product-card__cat { font-size: 12.5px; letter-spacing: .02em; text-transform: none; margin: 0; }
+.card-v10 .product-card__price { margin: 0; font-size: 13.5px; letter-spacing: .02em; gap: 8px; }
+.card-v10 .price-old { font-size: 12.5px; }
+
+/* Collectiegrids: iets meer lucht, kleinere kaarten op brede schermen */
+.sm-products, .collection-grid, .product-grid { row-gap: clamp(28px, 3vw, 44px) !important; column-gap: var(--gap-v10) !important; }
+
+/* ---------- 7. Producttabs (nieuwe sectie) ---------- */
+.ptabs .section-head { margin-bottom: 18px; }
+.ptabs__bar { display: flex; align-items: center; justify-content: center; gap: 20px; position: relative; margin-bottom: clamp(22px, 2.4vw, 34px); border-bottom: 1px solid var(--hair); }
+.ptabs__tabs { display: flex; gap: clamp(18px, 2.4vw, 34px); overflow-x: auto; scrollbar-width: none; }
+.ptabs__tabs::-webkit-scrollbar { display: none; }
+.ptabs__tab {
+  font-size: 11.5px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; padding: 12px 0 14px; white-space: nowrap;
+  color: color-mix(in srgb, var(--ink) 50%, transparent); border-bottom: 1px solid transparent; margin-bottom: -1px; transition: color .25s, border-color .25s;
+}
+.ptabs__tab.is-active, .ptabs__tab:hover { color: var(--ink); border-color: var(--ink); }
+.ptabs__arrows { position: absolute; right: 0; bottom: 8px; display: flex; gap: 6px; }
+.ptabs__arrow { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--hair); border-radius: 999px; color: var(--ink); transition: background .25s, border-color .25s; }
+.ptabs__arrow:hover:not(:disabled) { border-color: var(--ink); }
+.ptabs__arrow:disabled { opacity: .3; cursor: default; }
+.ptabs__track {
+  display: grid; grid-auto-flow: column; gap: var(--gap-v10); overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+  grid-auto-columns: calc((100% - 2 * var(--container-pad) - 3 * var(--gap-v10)) / 4);
+  padding: 2px var(--container-pad) 4px; scroll-padding-inline: var(--container-pad); scrollbar-width: none;
+  max-width: var(--container-wide); margin-inline: auto; overscroll-behavior-x: contain;
+}
+.ptabs__track::-webkit-scrollbar { display: none; }
+.ptabs__item { scroll-snap-align: start; min-width: 0; }
+.js .ptabs__track .reveal { transform: none; }
+.ptabs__panel:not([hidden]) .ptabs__track { animation: v10-fade .6s var(--lux); }
+.ptabs__empty { padding-inline: var(--container-pad); color: var(--muted); }
+.ptabs__more { text-align: center; margin-top: clamp(28px, 3vw, 44px); }
+@keyframes v10-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (max-width: 989px) { .ptabs__track { grid-auto-columns: calc((100% - 2 * var(--container-pad) - 2 * var(--gap-v10)) / 2.6); } }
+@media (max-width: 749px) {
+  .ptabs__bar { justify-content: flex-start; margin-inline: calc(-1 * var(--container-pad)); padding-inline: var(--container-pad); }
+  .ptabs__arrows { display: none; }
+  .ptabs__track { grid-auto-columns: 44%; }
+}
+
+/* ---------- 8. Categorie-tegels: Rano-label linksonder ---------- */
+.category-tile .media::before, .category-tile .media::after { content: none; }
+.category-tile__label { background: none; padding: 12px; justify-content: flex-start; align-items: flex-end; inset: auto 0 0 0; }
+.category-tile__label h3 {
+  font-family: var(--font-body); font-size: 11px !important; letter-spacing: .18em; text-transform: uppercase; font-weight: 500;
+  background: color-mix(in srgb, var(--surface) 94%, transparent); color: var(--ink) !important; padding: 7px 11px; line-height: 1.2;
+}
+.category-tile__label span { display: none; }
+.category-tile .media > img, .category-tile .media > picture > img { transition: transform 1.8s var(--lux), opacity .5s; }
+.category-tile:hover .media > img, .category-tile:hover .media > picture > img { transform: scale(1.03); }
+@media (max-width: 749px) {
+  .category-tile__label { padding: 8px; flex-direction: row; }
+  .category-tile__label h3 { font-size: 10px !important; padding: 6px 8px; }
+}
+
+/* ---------- 9. USP-balk: Rano-stijl, gecentreerd met serif-titel ---------- */
+.usp-bar { background: var(--bg-alt); border-block: 0; }
+.usp { flex-direction: column; text-align: center; gap: 10px; padding: clamp(26px, 3vw, 40px) 18px; border-left-color: var(--hair); }
+.usp svg { width: 24px; height: 24px; color: var(--ink); opacity: .75; }
+.usp__title { font-family: var(--font-display); font-size: 19px; letter-spacing: 0; text-transform: none; line-height: 1.2; }
+.usp__sub { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+@media (max-width: 749px) {
+  .usp { padding: 20px 14px; flex-direction: row; text-align: left; gap: 12px; }
+  .usp__title { font-size: 16px; }
+  .usp__sub { font-size: 12px; margin-top: 2px; }
+}
+
+/* ---------- 10. Verhaal (foto + tekst) ---------- */
+.editorial { gap: clamp(28px, 6vw, 96px); align-items: center; }
+.editorial__media .media::before, .editorial__media .media::after { content: none; }
+.editorial__media .media { aspect-ratio: 4 / 5 !important; }
+.editorial__media .media img { object-position: 50% 30%; }
+@media (max-width: 749px) { .editorial__media .media { aspect-ratio: 1 / 1 !important; } }
+.editorial__body h2 { font-size: clamp(32px, 3.6vw, 54px); line-height: 1.06; margin-bottom: 4px; }
+.editorial__body p { font-size: 15.5px; line-height: 1.7; }
+.editorial__body .btn { margin-top: 10px; }
+
+/* ---------- 11. Tekstblok (statement) ---------- */
+.sm-richtext__inner .section-head__title { font-size: clamp(32px, 3.8vw, 58px); line-height: 1.08; max-width: 20ch; margin-inline: auto; }
+.sm-richtext__inner p { font-size: 15.5px; line-height: 1.7; color: var(--ink-soft); max-width: 56ch; margin-inline: auto; }
+.sm-richtext__inner .sm-banner__actions { margin-top: 26px; justify-content: center; }
+.sm-align-left .sm-richtext__inner .sm-banner__actions { justify-content: flex-start; }
+
+/* ---------- 12. Nieuwsbrief: lijn-invoerveld met tekstknop ---------- */
+.newsletter { background: var(--bg-alt); }
+.newsletter h2 { font-size: clamp(32px, 3.4vw, 50px); line-height: 1.08; }
+.newsletter-form, .newsletter-form:is(*) { flex-direction: row !important; max-width: 460px; margin-inline: auto; gap: 0; border-bottom: 1px solid var(--ink); align-items: stretch; }
+.newsletter-form input { border: 0 !important; background: none !important; padding: 14px 0 !important; font-size: 15px; min-width: 0; flex: 1; border-radius: 0; }
+.newsletter-form input:focus-visible { outline: none; }
+.newsletter-form:focus-within { border-bottom-width: 2px; }
+.newsletter-form .btn { background: none; color: var(--ink); border: 0; min-height: 0; padding: 0 0 0 16px; width: auto !important; }
+.newsletter-form .btn:hover { background: none; color: var(--accent-deep); }
+.newsletter__disclaimer { font-size: 12px; color: var(--muted); }
+
+/* ---------- 13. Footer: Rano-kolommen op donker ---------- */
+.site-footer { padding-top: clamp(48px, 5vw, 72px) !important; }
+.footer-brand .brand { font-size: 15px; letter-spacing: .38em; }
+.footer-col h3 { font-family: var(--font-body); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px solid color-mix(in srgb, var(--bg) 18%, transparent); }
+.footer-col h3::after { content: none; }
+.footer-col a { font-size: 14px; }
+.footer-bottom { font-size: 12px; letter-spacing: .04em; }
+
+/* ---------- 14. Reveal: langzaam en zacht (Rano/Loro Piana-gevoel) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal { transition: opacity 1.1s var(--lux), transform 1.3s var(--lux); }
+}
+
+/* ---------- 15. Collectiepagina ---------- */
+.template-collection h1, .collection-hero h1, .collection-header h1 { font-size: clamp(34px, 4vw, 60px); line-height: 1.05; }
+.breadcrumb { font-size: 11px; letter-spacing: .14em; }
+
+/* ---------- 16. Productpagina ---------- */
+.template-product .product { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 4.5vw, 80px); padding-top: 12px; }
+.pdp-gallery { min-width: 0; }
+.pdp-gallery__track { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pdp-gallery__track.is-single { grid-template-columns: minmax(0, 560px); }
+.pdp-gallery__slide { display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in; background: var(--bg-alt); }
+.pdp-gallery__slide::before, .pdp-gallery__slide::after { content: none !important; }
+.pdp-gallery__slide > img { border: 0 !important; }
+.js .pdp-gallery__slide:first-child > img { opacity: 1; }
+.pdp-gallery__dots { display: none; }
+
+.template-product .product-info { top: calc(68px + 24px); }
+.template-product .product-info__eyebrow { font-size: 10.5px; letter-spacing: .24em; color: var(--muted); }
+.template-product .product-info__title { font-size: clamp(30px, 2.8vw, 44px); line-height: 1.06; letter-spacing: -.012em; margin: 10px 0 14px; }
+.template-product .product-info__price { font-size: 17px; letter-spacing: .02em; }
+.template-product .product-info__desc { font-size: 14.5px; line-height: 1.7; }
+.template-product .option-label { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; font-weight: 500; }
+.template-product .size-btn {
+  min-width: 52px; min-height: 46px; padding: 0 14px; border-radius: 0; border: 1px solid var(--hair);
+  font-size: 13px; letter-spacing: .04em; background: transparent; transition: border-color .2s, background .2s, color .2s;
+}
+.template-product .size-btn:hover:not(:disabled) { border-color: var(--ink); }
+.template-product .size-btn.is-selected { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.template-product .size-btn:disabled { opacity: .35; text-decoration: line-through; }
+.template-product .product-actions { gap: 8px; }
+.template-product .product-actions .btn { min-height: 56px; flex: 1; }
+.template-product .qty { border-radius: 0; border-color: var(--hair); }
+.template-product .wishlist-heart { border-radius: 0; border: 1px solid var(--hair); width: 56px; height: 56px; }
+.template-product [data-buy-now] { min-height: 52px; margin-top: 8px; }
+.template-product .product-usps { border-block: 1px solid var(--hair); padding-block: 16px; gap: 10px; }
+.template-product .product-usps li { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.template-product .accordion { border-bottom: 1px solid var(--hair); }
+.template-product .accordion summary { font-size: 11.5px; letter-spacing: .18em; text-transform: uppercase; font-weight: 500; padding-block: 18px; }
+.sticky-atc .btn { min-height: 46px; }
+
+/* Vergroot-venster: hele foto zonder uitsnede, swipen tussen foto's */
+.pdp-zoom { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(20, 18, 15, .96); }
+.pdp-zoom::backdrop { background: rgba(20, 18, 15, .6); }
+.pdp-zoom__track { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.pdp-zoom__track::-webkit-scrollbar { display: none; }
+.pdp-zoom__slide { flex: 0 0 100%; height: 100%; margin: 0; display: grid; place-items: center; padding: 56px 12px 24px; scroll-snap-align: center; }
+.pdp-zoom__slide img { max-width: 100%; max-height: calc(100dvh - 80px); width: auto; height: auto; object-fit: contain; }
+.pdp-zoom__close { position: fixed; top: 10px; right: 10px; z-index: 2; width: 46px; height: 46px; display: grid; place-items: center; color: #fff; }
+
+@media (max-width: 989px) {
+  .template-product .product { grid-template-columns: 1fr; gap: 22px; }
+  .pdp-gallery { margin-inline: calc(-1 * var(--container-pad)); }
+  .pdp-gallery__track, .pdp-gallery__track.is-single {
+    display: grid; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 78%;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-inline: var(--container-pad); scroll-padding-inline: var(--container-pad);
+  }
+  .pdp-gallery__track.is-single { grid-auto-columns: 84%; justify-content: center; }
+  .pdp-gallery__track::-webkit-scrollbar { display: none; }
+  .pdp-gallery__slide { scroll-snap-align: start; }
+  .pdp-gallery__dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
+  .pdp-gallery__dots span { width: 18px; height: 2px; background: var(--hair); transition: background .3s; }
+  .pdp-gallery__dots span.is-active { background: var(--ink); }
+  .template-product .product-info { position: static; }
+  .template-product .product-actions { flex-wrap: nowrap; }
+  .template-product .product-actions .btn[type="submit"] { min-width: 0; padding-inline: 12px; }
+  .template-product .wishlist-heart { width: 52px; height: auto; flex: none; }
+  .template-product .qty button { width: 36px; }
+  .template-product .qty input { width: 30px; }
+}
+@media (min-width: 750px) and (max-width: 989px) { .pdp-gallery__track { grid-auto-columns: 46%; } }
+
+/* ---------- 17. Mobiel algemeen ---------- */
+@media (max-width: 749px) {
+  .section-head__title { font-size: clamp(28px, 8vw, 36px); }
+  .header-inner { min-height: 58px; }
+  .btn { min-height: 50px; padding-inline: 24px; }
+}
+
+/* ---------- 18. Geen dunne zwarte randen meer om foto's ---------- */
+.product-gallery__main.sm-fit-contain, .product-gallery__thumb img { border: 0 !important; }

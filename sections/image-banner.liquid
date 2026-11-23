@@ -20,11 +20,12 @@
 <section class="{% unless s.full_width %}container container--wide{% endunless %} {{ sm_class }}" style="--sm-banner-overlay: {{ overlay }};">
   <div class="sm-banner reveal">
     {%- assign banner_wrapper = 'sm-banner__media media sm-ratio-' | append: ratio -%}
+    {%- assign _alt_image_alt = s.image_alt | default: s.heading -%}
     {%- render 'sm-photo',
       image: s.image,
       image_mobile: s.image_mobile,
       key: 'banner',
-      alt: s.image_alt | default: s.heading,
+      alt: _alt_image_alt,
       label: s.placeholder_label,
       wrapper_class: banner_wrapper,
       loading: 'lazy',
@@ -35,7 +36,7 @@
 
     <div class="sm-banner__content sm-banner--{{ s.text_position | default: 'center' }} sm-align-{{ s.align | default: 'left' }} sm-align-mobile-{{ s.align_mobile | default: 'center' }}">
       {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
-      {%- if s.heading != blank -%}<h2>{{ s.heading }}</h2>{%- endif -%}
+      {%- if s.heading != blank -%}<h2>{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h2>{%- endif -%}
       {%- if s.text != blank -%}<p>{{ s.text }}</p>{%- endif -%}
       {%- if s.button_1_label != blank or s.button_2_label != blank -%}
         <div class="sm-banner__actions">

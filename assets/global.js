@@ -1436,3 +1436,42 @@
     }, editor ? 0 : 800);
   }
 })();
+
+/* ==========================================================================
+   v10 PRODUCTTABS: tab wisselt de rij, pijlen scrollen de zichtbare rij
+   ========================================================================== */
+(function () {
+  document.querySelectorAll("[data-tabs]").forEach(function (root) {
+    var tabs = root.querySelectorAll("[data-tab]");
+    var panels = root.querySelectorAll("[data-panel]");
+    function track() {
+      var open = Array.prototype.find.call(panels, function (p) { return !p.hidden; });
+      return open && open.querySelector("[data-carousel]");
+    }
+    function arrows() {
+      var t = track(); if (!t) return;
+      var prev = root.querySelector("[data-carousel-prev]"), next = root.querySelector("[data-carousel-next]");
+      if (prev) prev.disabled = t.scrollLeft < 4;
+      if (next) next.disabled = t.scrollLeft + t.clientWidth >= t.scrollWidth - 4;
+    }
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener("click", function () {
+        tabs.forEach(function (x, j) { x.classList.toggle("is-active", i === j); x.setAttribute("aria-selected", i === j ? "true" : "false"); });
+        panels.forEach(function (p, j) { p.hidden = i !== j; });
+        var t = track(); if (t) t.scrollLeft = 0;
+        /* kaarten in een eerder verborgen tab alsnog zichtbaar maken */
+        root.querySelectorAll(".reveal:not(.is-visible)").forEach(function (el) { el.classList.add("is-visible"); });
+        arrows();
+      });
+    });
+    root.querySelectorAll("[data-carousel-prev],[data-carousel-next]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var t = track(); if (!t) return;
+        var dir = btn.hasAttribute("data-carousel-next") ? 1 : -1;
+        t.scrollBy({ left: dir * t.clientWidth * 0.85, behavior: "smooth" });
+      });
+    });
+    panels.forEach(function (p) { var t = p.querySelector("[data-carousel]"); if (t) t.addEventListener("scroll", arrows, { passive: true }); });
+    arrows();
+  });
+})();

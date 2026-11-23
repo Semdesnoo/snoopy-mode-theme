@@ -6,13 +6,6 @@
   <meta name="theme-color" content="#1C1A17">
   <script>document.documentElement.classList.add('js');</script>
 
-  {%- comment -%}
-    Eén verbinding vooraf openen: die naar de lettertypebestanden. Shopify opent
-    de verbinding met zijn eigen CDN al zelf, en meer dan een paar van deze regels
-    maakt een pagina juist trager (dat meldt de snelheidstest ook).
-  {%- endcomment -%}
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link rel="canonical" href="{{ canonical_url }}">
 
   {%- if settings.favicon != blank -%}
@@ -32,8 +25,12 @@
     We bouwen hier de juiste Google-Fonts-link en de bijbehorende font-families.
   {%- endcomment -%}
   {%- liquid
-    assign font_choice = settings.font_pair | default: 'fraunces_jost'
+    assign font_choice = settings.font_pair | default: 'bodoni_geist'
     case font_choice
+      when 'bodoni_geist'
+        assign font_families = ''
+        assign font_display_stack = '"Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif'
+        assign font_body_stack = '"Geist", system-ui, -apple-system, "Segoe UI", sans-serif'
       when 'cormorant_jost'
         assign font_families = 'family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500'
         assign font_display_stack = '"Cormorant Garamond", Georgia, serif'
@@ -62,14 +59,24 @@
     assign google_fonts_url = 'https://fonts.googleapis.com/css2?' | append: font_families | append: '&display=swap'
   -%}
 
-  {%- comment -%} Fonts niet render-blocking laden, met font-display: swap (geen onzichtbare tekst) {%- endcomment -%}
-  <link rel="preload" as="style" href="{{ google_fonts_url }}">
-  <link rel="stylesheet" href="{{ google_fonts_url }}" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="{{ google_fonts_url }}"></noscript>
+  {%- comment -%}
+    v10: standaard Bodoni Moda + Geist, in het thema zelf (geen Google Fonts nodig, sneller en scherper).
+    Kies je een andere combinatie, dan laden we die via Google Fonts.
+  {%- endcomment -%}
+  {%- if font_families != blank -%}
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="{{ google_fonts_url }}">
+    <link rel="stylesheet" href="{{ google_fonts_url }}" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{{ google_fonts_url }}"></noscript>
+  {%- else -%}
+    {{ 'bodoni-moda.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {{ 'geist-variable.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {%- endif -%}
 
   {%- comment -%} Hoofd-CSS: vroeg laten ophalen en niet-blokkerend renderen {%- endcomment -%}
   <link rel="preload" as="style" href="{{ 'base.css' | asset_url }}">
   {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'snoopy-v10.css' | asset_url | stylesheet_tag }}
 
   {%- comment -%}
     Kleuren, lettergroottes en vormgeving uit de Thema-instellingen.
@@ -81,7 +88,7 @@
     assign heading_scale = settings.heading_scale | default: 100
     assign heading_scale_mobile = settings.heading_scale_mobile | default: 100
     assign space_scale = settings.section_spacing | default: 100 | times: 0.01
-    assign radius = settings.corner_radius | default: 2
+    assign radius = settings.corner_radius | default: 0
   -%}
   {%- style -%}
     :root {

@@ -37,7 +37,7 @@
     {%- if s.heading != blank or s.eyebrow != blank or s.text != blank -%}
       <div class="section-head section-head--center reveal">
         {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
-        {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h2>{%- endif -%}
         {%- if s.text != blank -%}<p>{{ s.text }}</p>{%- endif -%}
       </div>
     {%- endif -%}

@@ -3,18 +3,22 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "heading": "Jouw favoriete winkel, nu online",
-        "text": "Met wekelijks de nieuwste collectie.",
-        "button_1_label": "Shop de collectie",
+        "heading": "Jouw favoriete winkel, [nu online]",
+        "text": "Elke week nieuwe collectie, met zorg uitgekozen en doorgepast.",
+        "button_1_label": "Shop nieuw binnen",
         "height": "tall",
         "height_mobile": "tall",
         "text_position": "bottom",
         "text_position_mobile": "bottom",
-        "align": "left",
-        "align_mobile": "left",
-        "overlay_strength": 30,
-        "overlay_strength_mobile": 35,
-        "show_overlay": true
+        "align": "center",
+        "align_mobile": "center",
+        "overlay_strength": 25,
+        "overlay_strength_mobile": 30,
+        "show_overlay": true,
+        "eyebrow": "Boetiek in Rotterdam sinds 2002",
+        "button_1_link": "shopify://collections/nieuw-binnen",
+        "button_2_label": "Sale",
+        "button_2_link": "shopify://collections/sale"
       }
     },
     "usp_bar": {
@@ -74,25 +78,29 @@
         "tile_1": {
           "type": "tile",
           "settings": {
-            "label": "Jurken"
+            "label": "Jassen",
+            "collection": "jassen-blazers"
           }
         },
         "tile_2": {
           "type": "tile",
           "settings": {
-            "label": "Tops & blouses"
+            "label": "Blouses",
+            "collection": "blouses-tops"
           }
         },
         "tile_3": {
           "type": "tile",
           "settings": {
-            "label": "Broeken & rokken"
+            "label": "Jeans",
+            "collection": "broeken"
           }
         },
         "tile_4": {
           "type": "tile",
           "settings": {
-            "label": "Accessoires"
+            "label": "Truien",
+            "collection": "truien-vesten"
           }
         }
       },
@@ -103,43 +111,15 @@
         "tile_4"
       ],
       "settings": {
-        "eyebrow": "Ontdek per categorie",
-        "heading": "Vind jouw stijl",
+        "eyebrow": "",
+        "heading": "Shop per [categorie]",
         "tile_cta": "Shop nu",
         "columns": "4",
         "columns_mobile": "2",
         "mobile_slider": true,
-        "mobile_autoslide": true,
-        "image_ratio": "phonefull",
+        "mobile_autoslide": false,
+        "image_ratio": "portrait",
         "bg": "default"
-      }
-    },
-    "productrij_nieuw": {
-      "type": "featured-products",
-      "settings": {
-        "head_layout": "between",
-        "eyebrow": "Net binnen",
-        "heading": "Nieuw binnen",
-        "link_label": "Bekijk alles",
-        "products_limit": 8,
-        "products_limit_mobile": 4,
-        "columns": "4",
-        "columns_mobile": "2",
-        "bg": "alt"
-      }
-    },
-    "productrij_bestsellers": {
-      "type": "featured-products",
-      "settings": {
-        "head_layout": "center",
-        "eyebrow": "Geliefd door velen",
-        "heading": "Onze bestsellers",
-        "subtext": "De stukken waar onze klanten keer op keer naar teruggrijpen.",
-        "products_limit": 4,
-        "products_limit_mobile": 2,
-        "columns": "4",
-        "columns_mobile": "2",
-        "bg": "alt"
       }
     },
     "tiktok": {
@@ -191,7 +171,8 @@
         "columns": 5,
         "mobile_width": 62,
         "bg": "default"
-      }
+      },
+      "disabled": true
     },
     "beoordelingen": {
       "type": "testimonials",
@@ -233,28 +214,102 @@
         "mobile_slider": true,
         "mobile_autoslide": true,
         "bg": "default"
-      }
+      },
+      "disabled": true
     },
     "nieuwsbrief": {
       "type": "newsletter",
       "settings": {
-        "eyebrow": "Blijf op de hoogte",
-        "heading": "Word lid van de Snoopy Mode-club",
-        "text": "Ontvang als eerste nieuwe collecties, stijltips en exclusieve aanbiedingen.",
+        "eyebrow": "",
+        "heading": "Word lid van de [Snoopy-club]",
+        "text": "Als eerste weten wat er nieuw binnen is, plus stijltips en acties.",
         "field_placeholder": "Je e-mailadres",
-        "button_label": "Inschrijven",
+        "button_label": "Aanmelden",
         "disclaimer": "Je kunt je op elk moment uitschrijven."
+      }
+    },
+    "product_tabs": {
+      "type": "product-tabs",
+      "blocks": {
+        "t1": {
+          "type": "tab",
+          "settings": {
+            "title": "Nieuw binnen",
+            "collection": "nieuw-binnen"
+          }
+        },
+        "t2": {
+          "type": "tab",
+          "settings": {
+            "title": "Bestsellers",
+            "collection": "onze-bestseller"
+          }
+        },
+        "t3": {
+          "type": "tab",
+          "settings": {
+            "title": "Truien",
+            "collection": "truien-vesten"
+          }
+        },
+        "t4": {
+          "type": "tab",
+          "settings": {
+            "title": "Sale",
+            "collection": "sale"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
+      "settings": {
+        "heading": "De nieuwste [favorieten]",
+        "subtext": "Iedere week nieuwe stukken van Only en unieke items uit Parijs.",
+        "limit": 10,
+        "link_label": "Bekijk alles",
+        "link_url": "shopify://collections/all"
+      }
+    },
+    "verhaal": {
+      "type": "editorial",
+      "settings": {
+        "eyebrow": "Ons verhaal",
+        "heading": "Al 30 jaar [beste vriendinnen]",
+        "text": "<p>Wij zijn Marjolein en Monique. In 2002 namen we de winkel over waar we zelf werkten, een droom die werkelijkheid werd.</p><p>Onze grootste passie? Dat je met een mooie outfit en een goed gevoel de deur uitgaat. In de winkel en nu ook online.</p>",
+        "button_label": "Lees ons verhaal",
+        "button_link": "shopify://pages/over-ons",
+        "image_alt": "Marjolein en Monique van Snoopy Mode",
+        "image_position": "left",
+        "image_ratio": "portrait",
+        "bg": "alt"
+      }
+    },
+    "statement": {
+      "type": "rich-text",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Persoonlijk advies, [in de winkel en online]",
+        "text": "<p>Twijfel je over een maat of een combinatie? Kom langs aan de Groene Hilledijk of stuur ons een berichtje, we denken graag met je mee.</p>",
+        "button_1_label": "Shop de collectie",
+        "button_1_link": "shopify://collections/all",
+        "align": "center",
+        "align_mobile": "center"
       }
     }
   },
   "order": [
     "hero",
-    "usp_bar",
+    "product_tabs",
     "categorie_tegels",
-    "productrij_nieuw",
+    "usp_bar",
+    "verhaal",
     "tiktok",
-    "productrij_bestsellers",
     "beoordelingen",
+    "statement",
     "nieuwsbrief"
   ]
 }

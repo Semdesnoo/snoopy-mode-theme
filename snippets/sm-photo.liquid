@@ -46,6 +46,8 @@
       <img
         src="{{ default_file | asset_url }}"
         alt="{{ _alt | escape }}"
+        width="2000"
+        height="1000"
         loading="{{ _loading }}"
         {% if fetchpriority != blank %}fetchpriority="{{ fetchpriority }}"{% endif %}
         {% if img_class != blank %}class="{{ img_class }}"{% endif %}

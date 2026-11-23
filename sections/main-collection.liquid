@@ -24,6 +24,8 @@
     gap: clamp(2rem, 4vw, 3.5rem);
     align-items: start;
   }
+  /* Geen filters ingesteld: productgebied over de volle breedte. */
+  .shop-layout--full { grid-template-columns: minmax(0, 1fr) !important; }
 
   .filters {
     position: sticky;
@@ -54,11 +56,6 @@
   /* Op desktop is de "Toon resultaten"-knop minder nodig (filters dienen direct in) */
   .filters__apply { display: none; }
 
-  /* Zwarte rand om collectie-/productfoto's op de kaarten */
-  .product-card .media,
-  .shop-layout .media {
-    border: 1px solid var(--ink);
-  }
 
   .filters__title {
     font-family: var(--font-body);
@@ -402,7 +399,7 @@
 <section class="section section--tight has-drawer" style="padding-top:0;">
   <div class="container container--wide">
     {%- paginate collection.products by section.settings.products_per_page -%}
-    <div class="shop-layout">
+    <div class="shop-layout{% if collection.filters.size == 0 %} shop-layout--full{% endif %}">
 
       {%- comment -%} ---- FILTER-ZIJBALK (Shopify faceted filters) ----
          Alleen renderen als er daadwerkelijk storefront-filters zijn ingesteld

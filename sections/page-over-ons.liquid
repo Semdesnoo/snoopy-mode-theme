@@ -222,12 +222,14 @@
         {%- endif -%}
       </div>
       <div class="about-hero__media reveal" data-delay="1">
+        {%- assign _alt_hero_alt = section.settings.hero_alt | default: 'Snoopy Mode' -%}
+        {%- assign _label_hero_alt = section.settings.hero_alt | default: 'Snoopy Mode' -%}
         {%- render 'sm-photo',
           image: section.settings.hero_image,
           image_mobile: section.settings.hero_image_mobile,
           key: 'over-hero',
-          alt: section.settings.hero_alt | default: 'Snoopy Mode',
-          label: section.settings.hero_alt | default: 'Snoopy Mode',
+          alt: _alt_hero_alt,
+          label: _label_hero_alt,
           wrapper_class: 'media media--landscape',
           loading: 'eager',
           fetchpriority: 'high',
@@ -339,12 +341,14 @@
     <div class="team-grid">
 
       <figure class="team-member reveal">
+        {%- assign _alt_member1_name = section.settings.member1_name | default: 'Monique' -%}
+        {%- assign _label_member1_name = section.settings.member1_name | default: 'Monique' -%}
         {%- render 'sm-photo',
           image: section.settings.member1_image,
           image_mobile: section.settings.member1_image_mobile,
           key: 'over-team-1',
-          alt: section.settings.member1_name | default: 'Monique',
-          label: section.settings.member1_name | default: 'Monique',
+          alt: _alt_member1_name,
+          label: _label_member1_name,
           wrapper_class: 'media media--portrait',
           loading: 'lazy',
           widths: '300,400,600,800',
@@ -356,12 +360,14 @@
       </figure>
 
       <figure class="team-member reveal" data-delay="1">
+        {%- assign _alt_member2_name = section.settings.member2_name | default: 'Marjolein' -%}
+        {%- assign _label_member2_name = section.settings.member2_name | default: 'Marjolein' -%}
         {%- render 'sm-photo',
           image: section.settings.member2_image,
           image_mobile: section.settings.member2_image_mobile,
           key: 'over-team-2',
-          alt: section.settings.member2_name | default: 'Marjolein',
-          label: section.settings.member2_name | default: 'Marjolein',
+          alt: _alt_member2_name,
+          label: _label_member2_name,
           wrapper_class: 'media media--portrait',
           loading: 'lazy',
           widths: '300,400,600,800',

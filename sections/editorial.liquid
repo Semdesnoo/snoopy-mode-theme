@@ -13,11 +13,12 @@
   <div class="container container--wide">
     <div class="editorial{% if s.image_position == 'right' %} editorial--reverse{% endif %}">
       <div class="editorial__media reveal">
+        {%- assign _alt_image_alt = s.image_alt | default: s.heading -%}
         {%- render 'sm-photo',
           image: s.image,
           image_mobile: s.image_mobile,
           key: 'editorial',
-          alt: s.image_alt | default: s.heading,
+          alt: _alt_image_alt,
           label: s.placeholder_label,
           wrapper_class: wrapper_class,
           loading: 'lazy',
@@ -29,7 +30,7 @@
           <p class="eyebrow">{{ s.eyebrow }}</p>
         {%- endif -%}
         {%- if s.heading != blank -%}
-          <h2>{{ s.heading }}</h2>
+          <h2>{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h2>
         {%- endif -%}
         {%- if s.text != blank -%}
           {{ s.text }}

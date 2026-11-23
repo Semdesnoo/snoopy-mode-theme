@@ -14,7 +14,7 @@
         <p class="eyebrow">{{ s.eyebrow }}</p>
       {% endif %}
       {% if s.heading != blank %}
-        <h2>{{ s.heading }}</h2>
+        <h2>{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h2>
       {% endif %}
       {% if s.text != blank %}
         <p>{{ s.text }}</p>

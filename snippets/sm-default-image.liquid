@@ -29,7 +29,18 @@
 
 {%- comment -%} ▼▼▼ HIERONDER DE STANDAARDFOTO'S ▼▼▼ {%- endcomment -%}
 
-{%- comment -%} (nog geen standaardfoto's toegevoegd) {%- endcomment -%}
+{%- liquid
+  case key
+    when 'hero'
+      if mobile
+        assign file = 'sm-hero-mobiel.jpg'
+      else
+        assign file = 'sm-hero.jpg'
+      endif
+    when 'editorial', 'over-hero'
+      assign file = 'sm-winkel.jpg'
+  endcase
+-%}
 
 {%- comment -%} ▲▲▲ TOT HIER ▲▲▲ {%- endcomment -%}
 

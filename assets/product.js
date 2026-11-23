@@ -289,3 +289,39 @@
       });
     }
   })();
+
+/* ==========================================================================
+   v10 GALERIJ: stipjes bij swipen (mobiel) + tik op foto = hele foto in <dialog>
+   ========================================================================== */
+(function () {
+  var track = document.querySelector("[data-pdp-track]");
+  if (!track) return;
+  var slides = Array.prototype.slice.call(track.querySelectorAll("[data-zoom]"));
+  var dots = document.querySelectorAll(".pdp-gallery__dots span");
+  if (dots.length && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var i = slides.indexOf(e.target);
+        dots.forEach(function (d, j) { d.classList.toggle("is-active", j === i); });
+      });
+    }, { root: track, threshold: 0.6 });
+    slides.forEach(function (s) { io.observe(s); });
+  }
+
+  var dlg = document.querySelector("[data-pdp-zoom]");
+  if (!dlg || typeof dlg.showModal !== "function") return;
+  var zTrack = dlg.querySelector("[data-zoom-track]");
+  slides.forEach(function (s, i) {
+    s.addEventListener("click", function () {
+      dlg.showModal();
+      document.body.classList.add("is-locked");
+      zTrack.scrollTo({ left: zTrack.clientWidth * i, behavior: "instant" });
+    });
+  });
+  function close() { dlg.close(); }
+  dlg.querySelector("[data-zoom-close]").addEventListener("click", close);
+  dlg.addEventListener("close", function () { document.body.classList.remove("is-locked"); });
+  /* Tik naast de foto (op de donkere achtergrond) sluit ook. */
+  dlg.addEventListener("click", function (e) { if (e.target === dlg || e.target.classList.contains("pdp-zoom__slide")) close(); });
+})();

@@ -11,7 +11,7 @@
   <div class="container">
     <div class="sm-richtext__inner reveal">
       {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
-      {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading }}</h2>{%- endif -%}
+      {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h2>{%- endif -%}
       {%- if s.text != blank -%}{{ s.text }}{%- endif -%}
       {%- if s.button_1_label != blank or s.button_2_label != blank -%}
         <div class="sm-banner__actions" style="justify-content: inherit;">

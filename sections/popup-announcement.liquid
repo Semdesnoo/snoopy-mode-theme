@@ -37,11 +37,12 @@
 
       {%- if s.image != blank or s.placeholder_label != blank -%}
         <div class="sm-popup__media">
+          {%- assign _alt_image_alt = s.image_alt | default: s.heading -%}
           {%- render 'sm-photo',
             image: s.image,
             image_mobile: s.image_mobile,
             key: 'popup-actie',
-            alt: s.image_alt | default: s.heading,
+            alt: _alt_image_alt,
             label: s.placeholder_label,
             wrapper_class: 'media',
             loading: 'lazy',
@@ -52,7 +53,7 @@
 
       <div class="sm-popup__body sm-align-{{ s.align | default: 'left' }}">
         {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
-        {%- if s.heading != blank -%}<h2>{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.heading != blank -%}<h2>{{ s.heading | escape | replace: '[', '<em>' | replace: ']', '</em>' }}</h2>{%- endif -%}
         {%- if s.text != blank -%}<p>{{ s.text }}</p>{%- endif -%}
         {%- if s.code != blank -%}<span class="sm-popup__code">{{ s.code }}</span>{%- endif -%}
 
