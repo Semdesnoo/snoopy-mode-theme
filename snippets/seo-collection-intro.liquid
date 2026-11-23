@@ -1,0 +1,40 @@
+{%- comment -%}
+  Unieke SEO-intro per collectie (Snoo SEO-plan). Alleen gebruikt als de collectie
+  in Shopify nog geen eigen omschrijving heeft; een eigen omschrijving wint altijd.
+  Onbekende collectie = algemene intro met de collectienaam.
+{%- endcomment -%}
+{%- liquid
+  assign city = settings.seo_city | default: 'Rotterdam'
+  case handle
+    when 'nieuw-binnen'
+      echo 'Nieuw binnen bij Snoopy Mode: elke week nieuwe damesmode van Only en unieke items uit Parijs, door Marjolein en Monique zelf uitgekozen en doorgepast. Op is op, dus kijk regelmatig even.'
+    when 'onze-bestseller'
+      echo 'Onze bestsellers: de stukken waar klanten van Snoopy Mode steeds weer voor terugkomen. Van broeken met een goede pasvorm tot jassen en truien die je elke dag draagt.'
+    when 'sale'
+      echo 'Sale bij Snoopy Mode: damesmode met korting, zolang de voorraad strekt. Let op: artikelen uit de sale kun je niet retourneren.'
+    when 'jassen-blazers'
+      echo 'Damesjassen voor elk seizoen, van korte jasjes tot warme puffer- en teddyjassen. Twijfel je over de maat? Vraag het ons, we helpen je graag in de winkel in ' | append: city | append: ' of online.'
+    when 'blazers'
+      echo 'Blazers voor dames: geruit, gestreept of effen, nonchalant of getailleerd. Een blazer maakt elke outfit af, op een jeans of een pantalon.'
+    when 'blouses-tops'
+      echo 'Blouses voor dames, van satijn tot ruit met franje. Makkelijk te combineren met een jeans, pantalon of onder een blazer.'
+    when 'tops'
+      echo 'Tops voor dames: strapless, met pailletten of juist basic. Voor een avond uit of gewoon voor elke dag.'
+    when 'truien-vesten'
+      echo 'Truien en vesten voor dames: zachte coltruien, truien met blote schouder en warme vesten. Elke week komen er nieuwe kleuren bij.'
+    when 'broeken-1'
+      echo 'Broeken voor dames, van krijtstreep pantalon tot army broek. Wij letten bij het uitkiezen extra op de pasvorm.'
+    when 'broeken'
+      echo 'Jeans voor dames: wide leg, straight en barrel jeans in verschillende kleuren. Vraag gerust om maatadvies.'
+    when 'rokken'
+      echo 'Rokken voor dames bij Snoopy Mode, met zorg uitgekozen en makkelijk te combineren met een blouse of trui.'
+    when 'schoenen'
+      echo 'Schoenen voor dames die passen bij de collectie van Snoopy Mode, zodat je je outfit in een keer compleet maakt.'
+    when 'tassen'
+      echo 'Tassen voor dames, van kleine leren tasjes tot suede handtassen. De finishing touch van je outfit.'
+    when 'jurken'
+      echo 'Jurken voor dames bij Snoopy Mode, voor overdag en voor een feestje. Elke week kan er iets nieuws bijkomen.'
+    else
+      echo title | append: ' voor dames, met zorg uitgekozen door Marjolein en Monique van Snoopy Mode in ' | append: city | append: '. Elke week komen er nieuwe items bij.'
+  endcase
+-%}
