@@ -1,0 +1,281 @@
+{%- comment -%}
+  Categorie-tegels — de rij met foto's per categorie ("Jurken", "Broeken", …).
+  Elke tegel is een blok met een eigen foto voor laptop én mobiel.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign cols = s.columns | default: '4'
+  assign cols_mobile = s.columns_mobile | default: '2'
+  assign ratio = s.image_ratio | default: 'phonefull'
+  assign wrapper_class = 'media sm-ratio-' | append: ratio
+  assign wrapper_fit = wrapper_class
+  if s.image_contain
+    assign wrapper_fit = wrapper_class | append: ' sm-fit-contain'
+  endif
+
+  comment
+    Breedte die de tegel echt inneemt, zodat de browser geen onnodig grote foto
+    ophaalt. Rekent mee met het gekozen aantal kolommen; tussen 750 en 989 px
+    zet base.css 4, 5 en 6 kolommen terug naar 3.
+  endcomment
+  assign cols_n = cols | times: 1 | at_least: 1
+  assign cols_mob_n = cols_mobile | times: 1 | at_least: 1
+  assign cols_mid = cols_n | at_most: 3
+  assign desk_vw = 92 | divided_by: cols_n
+  assign mid_vw = 92 | divided_by: cols_mid
+  if s.mobile_slider
+    assign mob_vw = 62
+  else
+    assign mob_vw = 92 | divided_by: cols_mob_n
+  endif
+  assign tile_sizes = '(max-width: 749px) ' | append: mob_vw | append: 'vw, (max-width: 989px) ' | append: mid_vw | append: 'vw, ' | append: desk_vw | append: 'vw'
+-%}
+{%- capture sm_class -%}{%- render 'sm-section-class', s: s -%}{%- endcapture -%}
+
+<section class="section {{ sm_class }}">
+  <div class="container container--wide">
+    {%- if s.heading != blank or s.eyebrow != blank or s.text != blank -%}
+      <div class="section-head section-head--center reveal">
+        {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.text != blank -%}<p>{{ s.text }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="sm-cols sm-cols-{{ cols }} sm-cols-mobile-{{ cols_mobile }}{% if s.mobile_slider %} sm-mobile-slider{% endif %}"{% if s.mobile_slider and s.mobile_autoslide %} data-autoslide="2000"{% endif %}>
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign tile_collection = block.settings.collection
+
+          if block.settings.link != blank
+            assign tile_url = block.settings.link
+          elsif tile_collection != blank
+            assign tile_url = tile_collection.url
+          else
+            assign tile_url = '#'
+          endif
+
+          if block.settings.label != blank
+            assign tile_label = block.settings.label
+          elsif tile_collection != blank
+            assign tile_label = tile_collection.title
+          else
+            assign tile_label = 'Categorie'
+          endif
+        -%}
+        <a class="category-tile reveal{% if block.settings.hide_mobile %} sm-hide-mobile{% endif %}"{% if forloop.index0 > 0 %} data-delay="{{ forloop.index0 }}"{% endif %} href="{{ tile_url }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.image == blank and tile_collection.featured_image != blank -%}
+            <figure class="{{ wrapper_fit }}">
+              {{ tile_collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: tile_label, widths: '300, 400, 600, 800', sizes: tile_sizes }}
+            </figure>
+          {%- else -%}
+            {%- liquid
+              assign tile_key = 'tegel-' | append: forloop.index
+              comment
+                Zonder eigen foto blijft de sierlijke verloop-achtergrond staan;
+                "volledig tonen" heeft dan niets om te tonen.
+              endcomment
+              assign tile_wrapper = wrapper_class
+              if block.settings.image != blank
+                assign tile_wrapper = wrapper_fit
+              endif
+            -%}
+            {%- render 'sm-photo',
+              image: block.settings.image,
+              image_mobile: block.settings.image_mobile,
+              key: tile_key,
+              alt: tile_label,
+              label: tile_label,
+              wrapper_class: tile_wrapper,
+              loading: 'lazy',
+              widths: '300, 400, 600, 800',
+              sizes: tile_sizes -%}
+          {%- endif -%}
+          <div class="category-tile__label">
+            <h3>{{ tile_label }}</h3>
+            {%- if s.tile_cta != blank -%}<span>{{ block.settings.cta | default: s.tile_cta }}</span>{%- endif -%}
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Categorie-tegels",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "header", "content": "Koppen" },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Klein kopje erboven",
+      "default": "Ontdek per categorie"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Kop",
+      "default": "Vind jouw stijl"
+    },
+    { "type": "textarea", "id": "text", "label": "Tekst eronder" },
+    {
+      "type": "text",
+      "id": "tile_cta",
+      "label": "Tekst onder elke tegel",
+      "info": "Leeg laten = geen tekst onder de tegelnaam.",
+      "default": "Shop nu"
+    },
+
+    { "type": "header", "content": "Weergave op laptop & tablet" },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Aantal tegels naast elkaar",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Vorm van de foto's",
+      "info": "Maak je de foto's staand met je telefoon over het hele scherm, kies dan 'Telefoon volledig scherm'.",
+      "options": [
+        { "value": "phonefull", "label": "Telefoon volledig scherm (9:19,5)" },
+        { "value": "phone", "label": "Telefoonfoto staand (9:16)" },
+        { "value": "tall", "label": "Extra staand (2:3)" },
+        { "value": "portrait", "label": "Staand (3:4)" },
+        { "value": "square", "label": "Vierkant" },
+        { "value": "landscape", "label": "Liggend (4:3)" }
+      ],
+      "default": "phonefull"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_contain",
+      "label": "Foto's altijd volledig tonen",
+      "info": "Aan = de hele foto is te zien, met wat rustige achtergrond eromheen. Uit = de foto vult de tegel en de randen vallen buiten beeld.",
+      "default": false
+    },
+
+    { "type": "header", "content": "Weergave op mobiel" },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Aantal tegels naast elkaar",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_slider",
+      "label": "Op mobiel als zijwaartse swipe-rij tonen",
+      "info": "Uitzetten = de tegels komen onder elkaar in een raster.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_autoslide",
+      "label": "De swipe-rij vanzelf laten doorschuiven",
+      "default": true
+    },
+
+    { "type": "header", "content": "Ruimte & achtergrond" },
+    {
+      "type": "select",
+      "id": "space",
+      "label": "Ruimte boven en onder (laptop)",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "none", "label": "Geen" },
+        { "value": "small", "label": "Klein" },
+        { "value": "medium", "label": "Gemiddeld" },
+        { "value": "large", "label": "Groot" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "space_mobile",
+      "label": "Ruimte boven en onder (mobiel)",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "none", "label": "Geen" },
+        { "value": "small", "label": "Klein" },
+        { "value": "medium", "label": "Gemiddeld" },
+        { "value": "large", "label": "Groot" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Achtergrond",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "alt", "label": "Zachte zandtint" },
+        { "value": "white", "label": "Wit" },
+        { "value": "dark", "label": "Donker" }
+      ],
+      "default": "default"
+    },
+
+    { "type": "header", "content": "Zichtbaarheid" },
+    { "type": "checkbox", "id": "hide_mobile", "label": "Deze sectie verbergen op mobiel", "default": false },
+    { "type": "checkbox", "id": "hide_desktop", "label": "Deze sectie verbergen op laptop", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Categorie-tegel",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collectie",
+          "info": "Kies een collectie: naam, foto en link worden dan automatisch overgenomen."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Eigen foto — laptop & tablet",
+          "info": "Overschrijft de foto van de collectie."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Eigen foto — mobiel",
+          "info": "Leeg laten = dezelfde foto als op laptop."
+        },
+        { "type": "text", "id": "label", "label": "Eigen naam (in plaats van de collectienaam)" },
+        { "type": "text", "id": "cta", "label": "Eigen tekst onder de naam" },
+        { "type": "url", "id": "link", "label": "Eigen link (in plaats van de collectie)" },
+        { "type": "checkbox", "id": "hide_mobile", "label": "Deze tegel verbergen op mobiel", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Categorie-tegels",
+      "blocks": [
+        { "type": "tile", "settings": { "label": "Jurken" } },
+        { "type": "tile", "settings": { "label": "Tops & blouses" } },
+        { "type": "tile", "settings": { "label": "Broeken & rokken" } },
+        { "type": "tile", "settings": { "label": "Accessoires" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,196 @@
+{%- comment -%}
+  Klantbeoordelingen — quotes van klanten. Elke beoordeling is een blok.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+{%- capture sm_class -%}{%- render 'sm-section-class', s: s -%}{%- endcapture -%}
+
+<section class="section {{ sm_class }}">
+  <div class="container container--wide">
+    {%- if s.eyebrow != blank or s.heading != blank or s.text != blank -%}
+      <div class="section-head section-head--center reveal">
+        {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.text != blank -%}<p>{{ s.text }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="reviews-grid sm-cols sm-cols-{{ s.columns | default: '3' }} sm-cols-mobile-1{% if s.mobile_slider %} sm-mobile-slider{% endif %}"{% if s.mobile_slider and s.mobile_autoslide %} data-autoslide="3000"{% endif %}>
+      {%- for block in section.blocks -%}
+        {%- assign stars = block.settings.stars | default: 5 -%}
+        <figure class="review reveal{% if block.settings.hide_mobile %} sm-hide-mobile{% endif %}"{% if forloop.index0 > 0 %} data-delay="{{ forloop.index0 }}"{% endif %} {{ block.shopify_attributes }}>
+          {%- if s.show_stars -%}
+            <div class="review__stars" aria-label="{{ stars }} van 5 sterren">{% for i in (1..stars) %}★{% endfor %}</div>
+          {%- endif -%}
+          <blockquote class="review__quote">{{ block.settings.quote }}</blockquote>
+          {%- if block.settings.author != blank -%}
+            <figcaption class="review__author">{{ block.settings.author }}</figcaption>
+          {%- endif -%}
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Klantbeoordelingen",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "header", "content": "Koppen" },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Klein kopje erboven",
+      "default": "Wat klanten zeggen"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Kop",
+      "default": "Geliefd om de kwaliteit"
+    },
+    { "type": "textarea", "id": "text", "label": "Tekst eronder" },
+    { "type": "checkbox", "id": "show_stars", "label": "Sterren tonen", "default": true },
+
+    { "type": "header", "content": "Weergave op laptop & tablet" },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Aantal naast elkaar",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+
+    { "type": "header", "content": "Weergave op mobiel" },
+    {
+      "type": "checkbox",
+      "id": "mobile_slider",
+      "label": "Op mobiel als zijwaartse swipe-rij tonen",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_autoslide",
+      "label": "De swipe-rij vanzelf laten doorschuiven",
+      "default": true
+    },
+
+    { "type": "header", "content": "Ruimte & achtergrond" },
+    {
+      "type": "select",
+      "id": "space",
+      "label": "Ruimte boven en onder (laptop)",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "none", "label": "Geen" },
+        { "value": "small", "label": "Klein" },
+        { "value": "medium", "label": "Gemiddeld" },
+        { "value": "large", "label": "Groot" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "space_mobile",
+      "label": "Ruimte boven en onder (mobiel)",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "none", "label": "Geen" },
+        { "value": "small", "label": "Klein" },
+        { "value": "medium", "label": "Gemiddeld" },
+        { "value": "large", "label": "Groot" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Achtergrond",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "alt", "label": "Zachte zandtint" },
+        { "value": "white", "label": "Wit" },
+        { "value": "dark", "label": "Donker" }
+      ],
+      "default": "alt"
+    },
+
+    { "type": "header", "content": "Zichtbaarheid" },
+    { "type": "checkbox", "id": "hide_mobile", "label": "Deze sectie verbergen op mobiel", "default": false },
+    { "type": "checkbox", "id": "hide_desktop", "label": "Deze sectie verbergen op laptop", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Beoordeling",
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Aantal sterren",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Wat de klant zegt",
+          "default": "\"Eindelijk kleding die past én jaren meegaat.\""
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Naam van de klant",
+          "default": "Sanne uit Utrecht"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_mobile",
+          "label": "Deze beoordeling verbergen op mobiel",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Klantbeoordelingen",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "\"Eindelijk kleding die past én jaren meegaat. De stoffen voelen luxe en de pasvorm is precies goed.\"",
+            "author": "Sanne uit Utrecht"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "\"Snelle levering en prachtig ingepakt. Mijn linnen blazer is een vast onderdeel van mijn garderobe geworden.\"",
+            "author": "Marieke uit Den Haag"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "\"Het persoonlijke advies was goud waard. Ik voel me zelfverzekerd in alles wat ik bestel.\"",
+            "author": "Esther uit Eindhoven"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

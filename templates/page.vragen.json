@@ -1,0 +1,233 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-vragen",
+      "settings": {
+        "eyebrow": "Klantenservice",
+        "heading": "Veelgestelde vragen",
+        "intro": "<p>Antwoorden op de vragen die we het vaakst krijgen — over bestellen, verzending, retourneren, betalen en de juiste maat. Staat je vraag er niet bij? We helpen je graag persoonlijk verder.</p>",
+        "cta_eyebrow": "Nog een vraag?",
+        "cta_heading": "Staat je vraag er niet bij?",
+        "cta_text": "Geen probleem — onze klantenservice helpt je graag persoonlijk verder. We reageren meestal binnen 1 werkdag.",
+        "cta_button_label": "Neem contact op",
+        "cta_button_link": "/pages/contact"
+      },
+      "blocks": {
+        "cat_bestellen": {
+          "type": "category",
+          "settings": {
+            "heading": "Bestellen",
+            "intro": "Alles over het plaatsen, wijzigen en volgen van je bestelling."
+          }
+        },
+        "qa_b1": {
+          "type": "qa",
+          "settings": {
+            "question": "Kan ik bestellen zonder een account aan te maken?",
+            "answer": "<p>Ja, je kunt bij ons afrekenen als gast, zonder account aan te maken. Je vult tijdens het bestellen alleen je bezorg- en betaalgegevens in. Een account maken kan natuurlijk wel handig zijn: je bestellingen en retouren staan dan netjes op één plek en je hoeft je gegevens niet steeds opnieuw in te vullen.</p>"
+          }
+        },
+        "qa_b2": {
+          "type": "qa",
+          "settings": {
+            "question": "Kan ik mijn bestelling nog wijzigen of annuleren?",
+            "answer": "<p>Omdat we bestellingen snel verwerken, is wijzigen of annuleren alleen mogelijk zolang je pakket nog niet is verzonden. Neem daarom zo snel mogelijk contact op met onze klantenservice via <a href=\"mailto:info@snoopy-mode.nl\">info@snoopy-mode.nl</a>, dan kijken we direct wat er nog kan. Is je bestelling al onderweg? Dan kun je gebruikmaken van je bedenktijd en het artikel retourneren; de kosten voor het terugsturen zijn dan voor eigen rekening.</p>"
+          }
+        },
+        "qa_b3": {
+          "type": "qa",
+          "settings": {
+            "question": "Hoe gebruik ik een kortingscode?",
+            "answer": "<p>Je vult je kortingscode in tijdens het afrekenen, in het veld ‘Kortingscode’. Klik op ‘Toepassen’ en de korting wordt direct van je totaalbedrag afgetrokken. Let op: er kan doorgaans maar één kortingscode per bestelling worden gebruikt, en sommige acties gelden niet in combinatie met afgeprijsde artikelen.</p>"
+          }
+        },
+        "qa_b4": {
+          "type": "qa",
+          "settings": {
+            "question": "Een artikel is uitverkocht — komt het terug?",
+            "answer": "<p>Van veel geliefde artikelen bestellen we bij, maar omdat we met zorgvuldig samengestelde, beperkte collecties werken is dat niet altijd mogelijk. Op de productpagina kun je je e-mailadres achterlaten bij een uitverkochte maat; je krijgt dan automatisch bericht zodra het artikel weer op voorraad is.</p>"
+          }
+        },
+        "cat_verzending": {
+          "type": "category",
+          "settings": {
+            "heading": "Verzending & levering",
+            "intro": "Verzendkosten, levertijden en het volgen van je pakket. Meer details lees je op <a href=\"/pages/verzending-retour\">Verzending & retour</a>."
+          }
+        },
+        "qa_v1": {
+          "type": "qa",
+          "settings": {
+            "question": "Wat zijn de verzendkosten?",
+            "answer": "<p>Vanaf €75 verzenden we je bestelling gratis. Daaronder rekenen we €6,95 verzendkosten binnen Nederland. Alle tarieven, ook voor België en de rest van de EU, vind je terug op de pagina <a href=\"/pages/verzending-retour\">Verzending & retour</a>.</p>"
+          }
+        },
+        "qa_v2": {
+          "type": "qa",
+          "settings": {
+            "question": "Wat is de levertijd?",
+            "answer": "<p>Bestel je op een werkdag voor 17:00 uur, dan ligt je pakket de volgende dag in huis. Binnen Nederland ontvang je je bestelling doorgaans binnen 1 tot 2 werkdagen, in België binnen 2 tot 3 werkdagen. Tijdens drukke periodes kan de levering een enkele dag langer duren.</p>"
+          }
+        },
+        "qa_v3": {
+          "type": "qa",
+          "settings": {
+            "question": "Kan ik mijn pakket volgen met track & trace?",
+            "answer": "<p>Zeker. Zodra je bestelling is verzonden, ontvang je per e-mail een track & trace-code waarmee je je pakket op de voet kunt volgen. Heb je een account, dan vind je de verzendstatus ook terug in je bestelgeschiedenis.</p>"
+          }
+        },
+        "qa_v4": {
+          "type": "qa",
+          "settings": {
+            "question": "Verzenden jullie ook naar het buitenland?",
+            "answer": "<p>Naast Nederland bezorgen we ook in België en een aantal andere EU-landen. De exacte tarieven en levertijden per land staan overzichtelijk vermeld op de pagina <a href=\"/pages/verzending-retour\">Verzending & retour</a>. Bij het afrekenen zie je altijd vooraf welke kosten voor jouw land gelden.</p>"
+          }
+        },
+        "cat_retour": {
+          "type": "category",
+          "settings": {
+            "heading": "Retourneren & ruilen",
+            "intro": "Hoe je iets terugstuurt of ruilt. De volledige uitleg vind je op <a href=\"/pages/verzending-retour\">Verzending & retour</a>."
+          }
+        },
+        "qa_r1": {
+          "type": "qa",
+          "settings": {
+            "question": "Hoeveel tijd heb ik om te retourneren?",
+            "answer": "<p>Je hebt 14 dagen bedenktijd, gerekend vanaf de dag dat je je bestelling ontvangt. Zo kun je in alle rust thuis passen. Meld je retour binnen die periode bij ons aan en stuur het artikel daarna per omgaande terug, uiterlijk binnen 14 dagen na je aanmelding. Het artikel moet onbeschadigd, ongedragen en ongebruikt zijn, met de originele kledinglabels en het prijskaartje er nog aan. De kosten voor het terugsturen zijn voor eigen rekening.</p>"
+          }
+        },
+        "qa_r2": {
+          "type": "qa",
+          "settings": {
+            "question": "Hoe stuur ik een artikel terug?",
+            "answer": "<p>Meld je retour aan via je account of per e-mail. Bij je bestelling zit een factuur: geef daarop aan waarom je het artikel terugstuurt en doe die samen met het artikel in het pakket. Stuur het pakket naar Snoopy Mode, Groene Hilledijk 165 B, 3073 AB Rotterdam. De kosten voor het terugsturen zijn voor eigen rekening; we raden je aan met track & trace te verzenden. De stappen staan stap voor stap beschreven op <a href=\"/pages/verzending-retour\">Verzending & retour</a>.</p>"
+          }
+        },
+        "qa_r3": {
+          "type": "qa",
+          "settings": {
+            "question": "Wanneer krijg ik mijn geld terug?",
+            "answer": "<p>Zodra we de artikelen in goede staat en mét de ingevulde factuur hebben ontvangen, storten we het aankoopbedrag terug op de betaalmethode waarmee je hebt betaald. Je ontvangt hiervan altijd een bevestiging per e-mail.</p>"
+          }
+        },
+        "qa_r4": {
+          "type": "qa",
+          "settings": {
+            "question": "Kan ik een artikel ruilen voor een andere maat of kleur?",
+            "answer": "<p>Om je zo snel mogelijk te helpen, werken we met retourneren en opnieuw bestellen in plaats van direct ruilen. Stuur het artikel dat niet past terug en plaats een nieuwe bestelling voor de gewenste maat of kleur. Zo ben je verzekerd van de juiste voorraad. Meer hierover lees je op <a href=\"/pages/verzending-retour\">Verzending & retour</a>.</p>"
+          }
+        },
+        "cat_betalen": {
+          "type": "category",
+          "settings": {
+            "heading": "Betalen",
+            "intro": "Veilig en op de manier die jou het beste uitkomt. Bekijk alle opties op <a href=\"/pages/betaalmethoden\">Betaalmethoden</a>."
+          }
+        },
+        "qa_p1": {
+          "type": "qa",
+          "settings": {
+            "question": "Welke betaalmethoden kan ik gebruiken?",
+            "answer": "<p>Je kunt afrekenen met iDEAL, creditcard (Visa & Mastercard), PayPal en Klarna. Een volledig overzicht van alle mogelijkheden en voorwaarden vind je op de pagina <a href=\"/pages/betaalmethoden\">Betaalmethoden</a>.</p>"
+          }
+        },
+        "qa_p2": {
+          "type": "qa",
+          "settings": {
+            "question": "Is betalen bij Snoopy Mode veilig?",
+            "answer": "<p>Absoluut. Alle betalingen verlopen via een beveiligde verbinding (SSL) en worden afgehandeld door gecertificeerde betaalpartners. Wij slaan zelf geen volledige betaalgegevens op, zodat je gegevens altijd goed beschermd zijn.</p>"
+          }
+        },
+        "qa_p3": {
+          "type": "qa",
+          "settings": {
+            "question": "Kan ik achteraf betalen?",
+            "answer": "<p>Ja, met Klarna kun je achteraf betalen: je rekent je bestelling pas af nadat je hem hebt ontvangen, doorgaans binnen 14 dagen. Zo kun je eerst thuis passen en betaal je alleen wat je houdt. De exacte voorwaarden van Klarna lees je op <a href=\"/pages/betaalmethoden\">Betaalmethoden</a>.</p>"
+          }
+        },
+        "cat_maten": {
+          "type": "category",
+          "settings": {
+            "heading": "Maten & pasvorm",
+            "intro": "De juiste maat in één keer goed. Raadpleeg ook onze <a href=\"/pages/maattabel\">maattabel</a>."
+          }
+        },
+        "qa_m1": {
+          "type": "qa",
+          "settings": {
+            "question": "Hoe vind ik de juiste maat?",
+            "answer": "<p>Meet jezelf op met een meetlint en vergelijk je maten met onze <a href=\"/pages/maattabel\">maattabel</a>, waarin alle afmetingen in centimeters staan. Twijfel je tussen twee maten? Mail dan gerust je lengte en maten naar onze stylisten via <a href=\"mailto:info@snoopy-mode.nl\">info@snoopy-mode.nl</a> — we adviseren je graag persoonlijk.</p>"
+          }
+        },
+        "qa_m2": {
+          "type": "qa",
+          "settings": {
+            "question": "Valt de kleding groot of klein uit?",
+            "answer": "<p>De meeste artikelen vallen volgens de Nederlandse standaardmaat. Wijkt een item daarvan af, dan vermelden we dat duidelijk op de productpagina, bijvoorbeeld ‘valt ruim’ of ‘valt aan de kleine kant’. Houd daarnaast de <a href=\"/pages/maattabel\">maattabel</a> aan voor de exacte afmetingen per maat.</p>"
+          }
+        },
+        "cat_account": {
+          "type": "category",
+          "settings": {
+            "heading": "Account & nieuwsbrief",
+            "intro": "Je gegevens, je voorkeuren en de Snoopy Mode-club."
+          }
+        },
+        "qa_a1": {
+          "type": "qa",
+          "settings": {
+            "question": "Hoe maak ik een account aan?",
+            "answer": "<p>Klik op het accounticoon rechtsboven en kies ‘Account aanmaken’. Je vult je e-mailadres en een wachtwoord in, en klaar. Met een account volg je eenvoudig je bestellingen en retouren, en hoef je je gegevens bij een volgende bestelling niet opnieuw in te vullen.</p>"
+          }
+        },
+        "qa_a2": {
+          "type": "qa",
+          "settings": {
+            "question": "Hoe schrijf ik me in of uit voor de nieuwsbrief?",
+            "answer": "<p>Inschrijven kan via het nieuwsbriefformulier onderaan elke pagina; als welkom ontvang je €10 korting op je eerste bestelling. Je ontvangt dan als eerste nieuwe collecties, stijltips en exclusieve aanbiedingen. Wil je je uitschrijven? Dat kan op elk moment via de link onderaan iedere nieuwsbrief.</p>"
+          }
+        },
+        "qa_a3": {
+          "type": "qa",
+          "settings": {
+            "question": "Hoe wijzig ik mijn gegevens?",
+            "answer": "<p>Log in op je account en ga naar ‘Mijn gegevens’ om je adres, e-mailadres of wachtwoord aan te passen. Kom je er niet uit of wil je liever dat wij iets voor je wijzigen? Stuur dan even een bericht naar <a href=\"mailto:info@snoopy-mode.nl\">info@snoopy-mode.nl</a>, dan regelen we het voor je.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "cat_bestellen",
+        "qa_b1",
+        "qa_b2",
+        "qa_b3",
+        "qa_b4",
+        "cat_verzending",
+        "qa_v1",
+        "qa_v2",
+        "qa_v3",
+        "qa_v4",
+        "cat_retour",
+        "qa_r1",
+        "qa_r2",
+        "qa_r3",
+        "qa_r4",
+        "cat_betalen",
+        "qa_p1",
+        "qa_p2",
+        "qa_p3",
+        "cat_maten",
+        "qa_m1",
+        "qa_m2",
+        "cat_account",
+        "qa_a1",
+        "qa_a2",
+        "qa_a3"
+      ]
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": ["main", "newsletter"]
+}

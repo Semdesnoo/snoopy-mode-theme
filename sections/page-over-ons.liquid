@@ -1,0 +1,759 @@
+{%- comment -%}
+  Pagina "Over ons" — bewerkbaar via de Thema-editor.
+  De opmaak is een 1-op-1 replica van de blauwdruk (over-ons.html): de 2-koloms
+  hero, het merkverhaal van Marjolein & Monique, de waarden-grid met iconen, de
+  "Onze belofte"-split, het manifest-citaat, de team-sectie (Monique & Marjolein),
+  de cijfers/stats en het bedrijfs-/KVK-blok onderaan.
+
+  Alle belangrijke teksten komen uit section.settings; de vier waarden komen uit
+  blocks ("waarde"). De hero-afbeelding, de belofte-afbeelding en de twee
+  teamfoto's zijn bewerkbaar via een image_picker; is er geen afbeelding geupload,
+  dan valt het terug op de oorspronkelijke .media-placeholder met label, zodat het
+  er netjes blijft uitzien.
+
+  Het pagina-eigen CSS uit de blauwdruk staat hieronder LETTERLIJK in een
+  {% style %}-blok; dit staat NIET in base.css. Uitstraling en klassenamen zijn
+  exact behouden. GEEN page.content.
+{%- endcomment -%}
+
+{% style %}
+    /* Hero-split: kop/intro naast een .media-placeholder */
+    .about-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: clamp(2rem, 5vw, 5rem);
+      padding-block: clamp(3rem, 7vw, 6rem);
+    }
+    .about-hero__body {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--sp-1);
+    }
+    .about-hero__body h1 {
+      font-size: clamp(2.25rem, 5vw, 3.75rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      max-width: 14ch;
+    }
+    .about-hero__media .media { aspect-ratio: 4 / 3; }
+    .about-hero__media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
+
+    /* Merkverhaal: gecentreerde, rustige tekstkolom */
+    .story-prose {
+      max-width: 62ch;
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-1_5);
+    }
+    .story-prose p {
+      font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+    .story-prose .signature {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.25rem;
+      color: var(--ink);
+    }
+
+    /* Waarden-sectie */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-2);
+    }
+    .value {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-0_75);
+    }
+    .value__icon {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: var(--border);
+      color: var(--accent);
+    }
+    .value__icon svg { width: 22px; height: 22px; }
+    .value h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 400;
+    }
+    .value p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* Manifest / citaat-blok */
+    .manifest__quote {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(1.6rem, 4vw, 2.85rem);
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      max-width: 22ch;
+      margin-inline: auto;
+      text-align: center;
+    }
+    .manifest__quote em,
+    .manifest__quote .text-accent {
+      color: var(--accent);
+      font-style: italic;
+    }
+    .manifest__cite {
+      display: block;
+      margin-top: var(--sp-2);
+      font-family: var(--font-body);
+      font-size: 0.74rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--bg) 70%, transparent);
+    }
+
+
+    /* Team-sectie (de twee makers) */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--sp-2);
+      max-width: 620px;
+      margin-inline: auto;
+    }
+    .team-grid img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .team-note {
+      margin-top: var(--sp-2);
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .team-note strong { color: var(--ink-soft); letter-spacing: 0.04em; }
+    .team-member__name {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 400;
+      margin-top: var(--sp-1);
+    }
+    .team-member__role {
+      font-size: 0.74rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Editorial-media met geuploade foto */
+    .editorial__media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* CTA-sectie naar de collectie */
+    .about-cta {
+      text-align: center;
+      max-width: 56ch;
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-1_5);
+    }
+    .about-cta h2 { font-size: clamp(1.75rem, 4vw, 2.75rem); }
+    .about-cta p { color: var(--ink-soft); }
+    /* Warme klei-tint zodat dit blok zich onderscheidt van de crèmekleurige secties */
+    .about-cta-section { background-color: #EAD9C4; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .about-hero { grid-template-columns: 1fr; gap: var(--sp-2); }
+      .values-grid { grid-template-columns: repeat(2, 1fr); }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .values-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); gap: var(--sp-1); }
+    }
+{% endstyle %}
+
+<!-- ============================================================
+     HERO-SPLIT: kop "Ons verhaal" + introzin naast de hero-afbeelding.
+     ============================================================ -->
+<section class="section--tight">
+  <div class="container container--wide">
+    <!-- Broodkruimel voor context -->
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <ul>
+        <li><a href="{{ routes.root_url }}">Home</a></li>
+        <li><span aria-current="page">{{ section.settings.heading | default: 'Over ons' }}</span></li>
+      </ul>
+    </nav>
+
+    <div class="about-hero">
+      <div class="about-hero__body reveal">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        <h1>{{ section.settings.heading | default: 'Ons verhaal' }}</h1>
+        {%- if section.settings.intro != blank -%}
+          <div class="lead">{{ section.settings.intro }}</div>
+        {%- endif -%}
+        {%- if section.settings.hero_button_label != blank -%}
+          <a class="btn btn--outline" href="{{ section.settings.hero_button_link | default: '/collections/all' }}">{{ section.settings.hero_button_label }}</a>
+        {%- endif -%}
+      </div>
+      <div class="about-hero__media reveal" data-delay="1">
+        {%- render 'sm-photo',
+          image: section.settings.hero_image,
+          image_mobile: section.settings.hero_image_mobile,
+          key: 'over-hero',
+          alt: section.settings.hero_alt | default: 'Snoopy Mode',
+          label: section.settings.hero_alt | default: 'Snoopy Mode',
+          wrapper_class: 'media media--landscape',
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '400,800,1200,1600',
+          sizes: '(max-width: 900px) 100vw, 50vw' -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MERKVERHAAL: warme, persoonlijke tekst in alinea's
+     ============================================================ -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      {%- if section.settings.story_eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.story_eyebrow }}</p>
+      {%- endif -%}
+      <h2 class="section-head__title">{{ section.settings.story_heading | default: 'Een droom die werkelijkheid werd' }}</h2>
+    </div>
+    <div class="story-prose reveal" data-delay="1">
+      {{ section.settings.story_body }}
+      {%- if section.settings.story_signature != blank -%}
+        <p class="signature">{{ section.settings.story_signature }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WAARDEN-SECTIE: waar Snoopy Mode voor staat (blocks)
+     ============================================================ -->
+<section class="section">
+  <div class="container container--wide">
+    <div class="section-head section-head--center reveal">
+      {%- if section.settings.values_eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.values_eyebrow }}</p>
+      {%- endif -%}
+      <h2 class="section-head__title">{{ section.settings.values_heading | default: 'Onze waarden' }}</h2>
+    </div>
+    {%- liquid
+      assign values_slide_ms = section.settings.values_autoslide_seconds | default: 3 | times: 1000
+    -%}
+    <div
+      class="values-grid sm-cols{% if section.settings.values_mobile_slider %} sm-mobile-slider{% endif %}"
+      {% if section.settings.values_mobile_slider %}style="--sm-slide-w: {{ section.settings.values_mobile_width | default: 78 }}%;"{% endif %}
+      {% if section.settings.values_mobile_slider and section.settings.values_autoslide %}data-autoslide="{{ values_slide_ms }}"{% endif %}
+    >
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'waarde' -%}
+          <div class="value reveal"{% if forloop.index0 > 0 %} data-delay="{{ forloop.index0 }}"{% endif %} {{ block.shopify_attributes }}>
+            <span class="value__icon" aria-hidden="true">
+              {%- case block.settings.icon -%}
+                {%- when 'clock' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                {%- when 'shield' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+                {%- when 'heart' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>
+                {%- when 'chat' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/></svg>
+                {%- else -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/></svg>
+              {%- endcase -%}
+            </span>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MANIFEST / CITAAT-BLOK: grote quote op een donkere sectie.
+     Staat standaard uit; aan te zetten met het vinkje "Citaatblok tonen".
+     ============================================================ -->
+{%- if section.settings.show_manifest -%}
+  <section class="section section--ink">
+    <div class="container">
+      <figure class="reveal">
+        <blockquote class="manifest__quote">{{ section.settings.manifest_quote }}</blockquote>
+        {%- if section.settings.manifest_cite != blank -%}
+          <figcaption class="manifest__cite">{{ section.settings.manifest_cite }}</figcaption>
+        {%- endif -%}
+      </figure>
+    </div>
+  </section>
+{%- endif -%}
+
+<!-- ============================================================
+     TEAM-SECTIE: de mensen achter Snoopy Mode
+     Staat standaard uit; aan te zetten met het vinkje "Team-sectie tonen".
+     ============================================================ -->
+{%- if section.settings.show_team -%}
+<section class="section">
+  <div class="container container--wide">
+    <div class="section-head section-head--center reveal">
+      {%- if section.settings.team_eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.team_eyebrow }}</p>
+      {%- endif -%}
+      <h2 class="section-head__title">{{ section.settings.team_heading | default: 'Monique & Marjolein' }}</h2>
+      {%- if section.settings.team_intro != blank -%}
+        <p>{{ section.settings.team_intro }}</p>
+      {%- endif -%}
+    </div>
+    <div class="team-grid">
+
+      <figure class="team-member reveal">
+        {%- render 'sm-photo',
+          image: section.settings.member1_image,
+          image_mobile: section.settings.member1_image_mobile,
+          key: 'over-team-1',
+          alt: section.settings.member1_name | default: 'Monique',
+          label: section.settings.member1_name | default: 'Monique',
+          wrapper_class: 'media media--portrait',
+          loading: 'lazy',
+          widths: '300,400,600,800',
+          sizes: '(max-width: 900px) 45vw, 25vw' -%}
+        <figcaption>
+          <p class="team-member__name">{{ section.settings.member1_name | default: 'Monique' }}</p>
+          <p class="team-member__role">{{ section.settings.member1_role | default: 'Mede-oprichter · ontwerp & styling' }}</p>
+        </figcaption>
+      </figure>
+
+      <figure class="team-member reveal" data-delay="1">
+        {%- render 'sm-photo',
+          image: section.settings.member2_image,
+          image_mobile: section.settings.member2_image_mobile,
+          key: 'over-team-2',
+          alt: section.settings.member2_name | default: 'Marjolein',
+          label: section.settings.member2_name | default: 'Marjolein',
+          wrapper_class: 'media media--portrait',
+          loading: 'lazy',
+          widths: '300,400,600,800',
+          sizes: '(max-width: 900px) 45vw, 25vw' -%}
+        <figcaption>
+          <p class="team-member__name">{{ section.settings.member2_name | default: 'Marjolein' }}</p>
+          <p class="team-member__role">{{ section.settings.member2_role | default: 'Mede-oprichter · inkoop & klantcontact' }}</p>
+        </figcaption>
+      </figure>
+
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{%- comment -%} Bedrijfsgegevens-regel: blijft ook staan als de team-sectie uit is. {%- endcomment -%}
+{%- if section.settings.kvk_note != blank -%}
+  <section class="section section--tight">
+    <div class="container container--wide">
+      <div class="team-note reveal">{{ section.settings.kvk_note }}</div>
+    </div>
+  </section>
+{%- endif -%}
+
+
+<!-- ============================================================
+     CTA-SECTIE: naar de collectie
+     ============================================================ -->
+<section class="section about-cta-section">
+  <div class="container">
+    <div class="about-cta reveal">
+      {%- if section.settings.cta_eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.cta_eyebrow }}</p>
+      {%- endif -%}
+      <h2>{{ section.settings.cta_heading | default: 'Ontdek de collectie' }}</h2>
+      {%- if section.settings.cta_body != blank -%}
+        <p>{{ section.settings.cta_body }}</p>
+      {%- endif -%}
+      {%- if section.settings.cta_button_label != blank -%}
+        <a class="btn" href="{{ section.settings.cta_button_link | default: '/collections/all' }}">{{ section.settings.cta_button_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pagina — Over ons",
+  "tag": "section",
+  "max_blocks": 50,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero (Ons verhaal)"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Bovenkop (eyebrow)",
+      "default": "Wie zijn wij"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titel",
+      "default": "Ons verhaal"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Introtekst",
+      "default": "<p>Wij zijn Marjolein en Monique. Al meer dan 30 jaar zijn wij beste vriendinnen en nog langer werkzaam in de modebranche.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero-afbeelding",
+      "info": "Liggende foto (4:3). Leeg = nette placeholder met label."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_mobile",
+      "label": "Hero — mobiele foto (optioneel)",
+      "info": "Leeg = desktopfoto wordt gebruikt."
+    },
+    {
+      "type": "text",
+      "id": "hero_alt",
+      "label": "Hero — alt-tekst / label",
+      "default": "Atelier · Snoopy Mode"
+    },
+    {
+      "type": "text",
+      "id": "hero_button_label",
+      "label": "Hero — knoptekst",
+      "default": "Ontdek de collectie"
+    },
+    {
+      "type": "url",
+      "id": "hero_button_link",
+      "label": "Hero — knoplink"
+    },
+    {
+      "type": "header",
+      "content": "Merkverhaal"
+    },
+    {
+      "type": "text",
+      "id": "story_eyebrow",
+      "label": "Bovenkop (eyebrow)",
+      "default": "Hoe het begon"
+    },
+    {
+      "type": "text",
+      "id": "story_heading",
+      "label": "Kop",
+      "default": "Een droom die werkelijkheid werd"
+    },
+    {
+      "type": "richtext",
+      "id": "story_body",
+      "label": "Tekst",
+      "default": "<p>In 2002 kregen wij de kans om de winkel waar we zelf werkten over te nemen — een droom die werkelijkheid werd.</p><p>Onze grootste passie? Klanten blij maken en ervoor zorgen dat iedereen met een mooie outfit én een goed gevoel de deur uitgaat.</p><p>De tijden veranderen en daarom hebben wij besloten om naast onze vertrouwde winkel ook online zichtbaar te worden. Zo kunnen we nog meer mensen laten genieten van onze collectie en persoonlijke service.</p><p>Natuurlijk hopen we jullie nog steeds gezellig in onze winkel te mogen ontvangen, maar vanaf nu kun je ook online bij ons terecht.</p>"
+    },
+    {
+      "type": "text",
+      "id": "story_signature",
+      "label": "Ondertekening",
+      "default": "Liefs, Marjolein & Monique"
+    },
+    {
+      "type": "header",
+      "content": "Waarden (kop)"
+    },
+    {
+      "type": "text",
+      "id": "values_eyebrow",
+      "label": "Bovenkop (eyebrow)",
+      "default": "Waar we voor staan"
+    },
+    {
+      "type": "text",
+      "id": "values_heading",
+      "label": "Kop",
+      "default": "Onze waarden"
+    },
+    {
+      "type": "checkbox",
+      "id": "values_mobile_slider",
+      "label": "Op mobiel als zijwaartse swipe-rij tonen",
+      "info": "Uitzetten = de waarden komen weer onder elkaar te staan.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "values_autoslide",
+      "label": "Vanzelf laten doorschuiven",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "values_autoslide_seconds",
+      "label": "Om de hoeveel seconden doorschuiven",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "values_mobile_width",
+      "label": "Breedte van een waarde op mobiel",
+      "min": 50,
+      "max": 100,
+      "step": 2,
+      "unit": "%",
+      "default": 78
+    },
+    {
+      "type": "paragraph",
+      "content": "De vier waarden zelf voeg je toe als blokken ('Waarde') onderaan deze sectie."
+    },
+    {
+      "type": "header",
+      "content": "Citaatblok (donkere balk)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_manifest",
+      "label": "Citaatblok tonen",
+      "info": "De brede donkere balk met de grote quote. Staat nu uit; zet dit vinkje aan om hem terug te halen.",
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "manifest_quote",
+      "label": "Citaat",
+      "default": "<p>Iedereen verdient het om met een mooie outfit <em>én</em> een goed gevoel de deur uit te gaan.</p>"
+    },
+    {
+      "type": "text",
+      "id": "manifest_cite",
+      "label": "Bron (optioneel)"
+    },
+    {
+      "type": "header",
+      "content": "Team (Marjolein & Monique)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_team",
+      "label": "Team-sectie tonen",
+      "info": "De rij met de twee portretfoto's en de namen. Staat nu uit; zet dit vinkje aan om hem terug te halen.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "team_eyebrow",
+      "label": "Bovenkop (eyebrow)",
+      "default": "Achter Snoopy Mode"
+    },
+    {
+      "type": "text",
+      "id": "team_heading",
+      "label": "Kop",
+      "default": "Marjolein & Monique"
+    },
+    {
+      "type": "textarea",
+      "id": "team_intro",
+      "label": "Intro",
+      "default": "Twee beste vriendinnen, één passie voor mode. Samen staan we elke dag voor je klaar — in de winkel en online."
+    },
+    {
+      "type": "image_picker",
+      "id": "member1_image",
+      "label": "Foto teamlid 1",
+      "info": "Staande foto. Leeg = nette placeholder met naam."
+    },
+    {
+      "type": "image_picker",
+      "id": "member1_image_mobile",
+      "label": "Teamlid 1 — mobiele foto (optioneel)",
+      "info": "Leeg = desktopfoto wordt gebruikt."
+    },
+    {
+      "type": "text",
+      "id": "member1_name",
+      "label": "Teamlid 1 — naam",
+      "default": "Marjolein"
+    },
+    {
+      "type": "text",
+      "id": "member1_role",
+      "label": "Teamlid 1 — rol",
+      "default": "Eigenaresse & beste vriendin"
+    },
+    {
+      "type": "image_picker",
+      "id": "member2_image",
+      "label": "Foto teamlid 2",
+      "info": "Staande foto. Leeg = nette placeholder met naam."
+    },
+    {
+      "type": "image_picker",
+      "id": "member2_image_mobile",
+      "label": "Teamlid 2 — mobiele foto (optioneel)",
+      "info": "Leeg = desktopfoto wordt gebruikt."
+    },
+    {
+      "type": "text",
+      "id": "member2_name",
+      "label": "Teamlid 2 — naam",
+      "default": "Monique"
+    },
+    {
+      "type": "text",
+      "id": "member2_role",
+      "label": "Teamlid 2 — rol",
+      "default": "Eigenaresse & beste vriendin"
+    },
+    {
+      "type": "richtext",
+      "id": "kvk_note",
+      "label": "Regel met bedrijfsgegevens",
+      "info": "Staat standaard leeg. Je bedrijfsgegevens en KVK-nummer staan op de contactpagina."
+    },
+    {
+      "type": "header",
+      "content": "Oproep (CTA)"
+    },
+    {
+      "type": "text",
+      "id": "cta_eyebrow",
+      "label": "Bovenkop (eyebrow)",
+      "default": "Klaar om te ontdekken?"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "Kop",
+      "default": "Ontdek de collectie"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_body",
+      "label": "Tekst",
+      "default": "Blader door onze collectie en vind iets waar je je goed in voelt. Kom je liever langs? Je bent van harte welkom in de winkel."
+    },
+    {
+      "type": "text",
+      "id": "cta_button_label",
+      "label": "Knoptekst",
+      "default": "Naar de collectie"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_link",
+      "label": "Knoplink"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "waarde",
+      "name": "Waarde",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icoon",
+          "options": [
+            { "value": "clock", "label": "Klok (tijdloos)" },
+            { "value": "shield", "label": "Schild (kwaliteit)" },
+            { "value": "heart", "label": "Hart (bewust)" },
+            { "value": "chat", "label": "Tekstballon (service)" }
+          ],
+          "default": "clock"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titel",
+          "default": "Tijdloos boven trends"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Tekst",
+          "default": "We ontwerpen voor de lange termijn. Geen wegwerpmode, maar silhouetten die jaren relevant blijven en moeiteloos blijven kloppen."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pagina — Over ons",
+      "blocks": [
+        {
+          "type": "waarde",
+          "settings": {
+            "icon": "clock",
+            "title": "Ervaren in mode",
+            "text": "Al meer dan 30 jaar leven wij voor mode. Die ervaring voel je terug in alles wat we voor je uitkiezen."
+          }
+        },
+        {
+          "type": "waarde",
+          "settings": {
+            "icon": "shield",
+            "title": "Met zorg uitgekozen",
+            "text": "Iedere week vind je bij ons de nieuwste collectie van Only en unieke items uit Parijs. Alles wordt door onszelf met zorg uitgezocht en doorgepast."
+          }
+        },
+        {
+          "type": "waarde",
+          "settings": {
+            "icon": "heart",
+            "title": "Jij staat voorop",
+            "text": "Onze grootste passie is jou blij maken, zodat je met een mooie outfit én een goed gevoel de deur uitgaat."
+          }
+        },
+        {
+          "type": "waarde",
+          "settings": {
+            "icon": "chat",
+            "title": "Persoonlijk advies",
+            "text": "Of je nu langskomt of online shopt: we denken graag met je mee met eerlijk, persoonlijk stylingadvies."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

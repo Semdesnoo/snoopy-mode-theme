@@ -1,0 +1,133 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-privacy",
+      "settings": {
+        "eyebrow": "Juridisch",
+        "meta": "Laatst bijgewerkt: 22 juni 2026",
+        "intro": "<p>Snoopy Mode V.O.F. (hierna: &ldquo;Snoopy Mode&rdquo;, &ldquo;wij&rdquo; of &ldquo;ons&rdquo;) hecht grote waarde aan de bescherming van jouw persoonsgegevens. In dit privacybeleid leggen we helder uit welke persoonsgegevens we verzamelen, voor welke doeleinden en op welke rechtsgrond we deze verwerken, hoelang we ze bewaren, met wie we ze delen en welke rechten je hebt. We verwerken jouw persoonsgegevens in overeenstemming met de Algemene verordening gegevensbescherming (AVG) en de Uitvoeringswet AVG.</p>"
+      },
+      "blocks": {
+        "art_1": {
+          "type": "article_address",
+          "settings": {
+            "number": "1.",
+            "heading": "Verwerkingsverantwoordelijke",
+            "body_before": "<p>De verwerkingsverantwoordelijke voor de verwerking van jouw persoonsgegevens, zoals beschreven in dit privacybeleid, is:</p>",
+            "address": "<p>Snoopy Mode V.O.F.<br>Groene Hilledijk 165 B<br>3073 AB Rotterdam<br>Nederland<br>KVK-nummer: 24338638</p>",
+            "body_after": "<p>Heb je vragen over dit privacybeleid of over de verwerking van jouw gegevens? Neem dan contact met ons op via <a href=\"mailto:info@snoopy-mode.nl\">info@snoopy-mode.nl</a> of telefonisch op <a href=\"tel:+31643474683\">06 43 47 46 83</a>.</p><p>Snoopy Mode heeft geen wettelijke verplichting om een functionaris voor gegevensbescherming aan te stellen. Voor alle privacyvragen kun je terecht bij onze klantenservice.</p>"
+          }
+        },
+        "art_2": {
+          "type": "article",
+          "settings": {
+            "number": "2.",
+            "heading": "Welke persoonsgegevens we verzamelen",
+            "body": "<p>Afhankelijk van de manier waarop je gebruikmaakt van onze webshop en diensten, verwerken wij de volgende categorie&euml;n persoonsgegevens:</p><ul><li><strong>NAW-gegevens:</strong> voor- en achternaam, factuuradres en bezorgadres.</li><li><strong>Contactgegevens:</strong> e-mailadres en telefoonnummer.</li><li><strong>Bestelgegevens:</strong> bestelde artikelen, maten, ordernummer, bestelgeschiedenis en eventuele retouren.</li><li><strong>Betaalgegevens:</strong> de door jou gekozen betaalmethode en de transactiestatus. De volledige betaalgegevens (zoals kaart- of rekeningnummer) worden verwerkt door onze betaalprovider; wij slaan deze niet zelf op.</li><li><strong>Accountgegevens:</strong> indien je een account aanmaakt, je inloggegevens en voorkeuren.</li><li><strong>Communicatiegegevens:</strong> de inhoud van berichten die je ons stuurt via e-mail, telefoon of het contactformulier.</li><li><strong>Gegevens over websitegebruik:</strong> IP-adres, apparaat- en browsertype, bezochte pagina&rsquo;s en klikgedrag, voor zover verzameld via cookies en vergelijkbare technieken.</li></ul><p>We verzamelen alleen de gegevens die nodig zijn voor de in dit beleid genoemde doeleinden. Verstrek je bepaalde gegevens niet, dan kunnen we mogelijk je bestelling niet uitvoeren of je vraag niet beantwoorden.</p>"
+          }
+        },
+        "art_3": {
+          "type": "article_table",
+          "settings": {
+            "number": "3.",
+            "heading": "Doeleinden en rechtsgronden",
+            "body_before": "<p>Wij verwerken jouw persoonsgegevens uitsluitend voor specifieke doeleinden en op basis van een geldige rechtsgrond uit artikel 6 AVG. Hieronder vind je een overzicht.</p>",
+            "table_col_1": "Doeleinde",
+            "table_col_2": "Rechtsgrond",
+            "body_after": "<p>Verwerken we gegevens op basis van een gerechtvaardigd belang, dan maken we steeds een afweging tussen ons belang en jouw recht op privacy. Verwerken we op basis van jouw toestemming, dan kun je deze toestemming op elk moment intrekken (zie artikel 9).</p>"
+          }
+        },
+        "art_4": {
+          "type": "article",
+          "settings": {
+            "number": "4.",
+            "heading": "Bewaartermijnen",
+            "body": "<p>We bewaren jouw persoonsgegevens niet langer dan noodzakelijk is voor de doeleinden waarvoor ze zijn verzameld, tenzij we wettelijk verplicht zijn ze langer te bewaren. We hanteren de volgende richttermijnen:</p><ul><li><strong>Bestel- en betaalgegevens:</strong> in verband met de fiscale bewaarplicht bewaren we facturen en bijbehorende gegevens 7 jaar.</li><li><strong>Accountgegevens:</strong> zolang je account actief is; na verwijdering of langdurige inactiviteit verwijderen of anonimiseren we de gegevens.</li><li><strong>Contact- en klantenservicegegevens:</strong> tot 2 jaar na het laatste contact, om je vervolgvragen goed te kunnen behandelen.</li><li><strong>Nieuwsbriefgegevens:</strong> totdat je je uitschrijft of je toestemming intrekt.</li><li><strong>Cookiegegevens:</strong> conform de bewaartermijnen die zijn vermeld in ons <a href=\"cookies.html\">cookiebeleid</a>.</li></ul><p>Na afloop van de toepasselijke bewaartermijn verwijderen of anonimiseren we jouw persoonsgegevens.</p>"
+          }
+        },
+        "art_5": {
+          "type": "article",
+          "settings": {
+            "number": "5.",
+            "heading": "Delen met derden",
+            "body": "<p>We verkopen jouw persoonsgegevens nooit aan derden. We delen gegevens uitsluitend met partijen die ons helpen bij de uitvoering van onze dienstverlening of wanneer we daartoe wettelijk verplicht zijn. Het gaat onder meer om de volgende categorie&euml;n ontvangers:</p><ul><li><strong>Bezorgdienst:</strong> voor de bezorging van je bestelling delen we je naam en bezorgadres met onze logistiek partner, zoals PostNL.</li><li><strong>Betaalprovider:</strong> voor de veilige afhandeling van betalingen schakelen we een externe betaaldienstverlener in.</li><li><strong>E-mail- en nieuwsbriefdienst:</strong> voor het versturen van transactionele e-mails en onze nieuwsbrief maken we gebruik van een externe e-maildienstverlener.</li><li><strong>IT- en hostingpartners:</strong> voor de hosting, het onderhoud en de beveiliging van onze webshop.</li><li><strong>Bevoegde instanties:</strong> wanneer we daartoe wettelijk verplicht zijn, bijvoorbeeld op grond van een rechtmatig verzoek van een toezichthouder of opsporingsinstantie.</li></ul><p>Met partijen die in onze opdracht persoonsgegevens verwerken (verwerkers), sluiten we een verwerkersovereenkomst. Daarin leggen we onder meer vast dat zij de gegevens passend beveiligen, vertrouwelijk behandelen en uitsluitend gebruiken voor de met ons overeengekomen doeleinden.</p>"
+          }
+        },
+        "art_6": {
+          "type": "article",
+          "settings": {
+            "number": "6.",
+            "heading": "Doorgifte buiten de EER",
+            "body": "<p>Wij verwerken jouw persoonsgegevens in beginsel binnen de Europese Economische Ruimte (EER). Het kan voorkomen dat een door ons ingeschakelde dienstverlener gegevens verwerkt in een land buiten de EER.</p><p>In dat geval zorgen we voor passende waarborgen zoals vereist door de AVG, bijvoorbeeld een adequaatheidsbesluit van de Europese Commissie of het gebruik van de standaardcontractbepalingen (Standard Contractual Clauses). Op verzoek lichten we toe welke waarborgen van toepassing zijn.</p>"
+          }
+        },
+        "art_7": {
+          "type": "article",
+          "settings": {
+            "number": "7.",
+            "heading": "Cookies",
+            "body": "<p>Onze webshop maakt gebruik van cookies en vergelijkbare technieken. Functionele cookies zijn noodzakelijk voor de werking van de website, bijvoorbeeld om je winkelmand te onthouden. Voor analytische en marketingcookies vragen we vooraf jouw toestemming.</p><p>Een uitgebreide uitleg over de cookies die we gebruiken, hun doel en bewaartermijnen, en hoe je je voorkeuren kunt aanpassen, lees je in ons <a href=\"cookies.html\">cookiebeleid</a>.</p>"
+          }
+        },
+        "art_8": {
+          "type": "article",
+          "settings": {
+            "number": "8.",
+            "heading": "Beveiliging",
+            "body": "<p>We nemen passende technische en organisatorische maatregelen om jouw persoonsgegevens te beschermen tegen verlies, misbruik en ongeoorloofde toegang. Denk hierbij aan versleutelde verbindingen (SSL/TLS), toegangsbeveiliging, geheimhoudingsplicht voor medewerkers en periodieke evaluatie van onze beveiligingsmaatregelen.</p><p>Heb je het vermoeden dat jouw gegevens niet goed beveiligd zijn of dat er sprake is van misbruik? Neem dan zo snel mogelijk contact met ons op via <a href=\"mailto:info@snoopy-mode.nl\">info@snoopy-mode.nl</a>.</p>"
+          }
+        },
+        "art_9": {
+          "type": "article",
+          "settings": {
+            "number": "9.",
+            "heading": "Jouw rechten",
+            "body": "<p>Op grond van de AVG heb je verschillende rechten met betrekking tot jouw persoonsgegevens. Je hebt het recht op:</p><ul><li><strong>Inzage:</strong> opvragen welke persoonsgegevens we van je verwerken.</li><li><strong>Rectificatie:</strong> onjuiste of onvolledige gegevens laten corrigeren of aanvullen.</li><li><strong>Verwijdering:</strong> je gegevens laten wissen (het &lsquo;recht op vergetelheid&rsquo;), voor zover er geen wettelijke bewaarplicht geldt.</li><li><strong>Beperking:</strong> de verwerking van je gegevens tijdelijk laten beperken.</li><li><strong>Bezwaar:</strong> bezwaar maken tegen verwerkingen die berusten op een gerechtvaardigd belang, en tegen direct marketing.</li><li><strong>Dataportabiliteit:</strong> de door jou verstrekte gegevens in een gangbaar, machineleesbaar formaat ontvangen of laten overdragen.</li><li><strong>Intrekken van toestemming:</strong> een eerder gegeven toestemming op elk moment intrekken, zonder dat dit afbreuk doet aan de rechtmatigheid van de verwerking v&oacute;&oacute;r de intrekking.</li></ul>"
+          }
+        },
+        "art_10": {
+          "type": "article",
+          "settings": {
+            "number": "10.",
+            "heading": "Hoe je jouw rechten uitoefent",
+            "body": "<p>Wil je een van bovenstaande rechten uitoefenen? Stuur dan een verzoek naar <a href=\"mailto:info@snoopy-mode.nl\">info@snoopy-mode.nl</a>. Om je privacy te beschermen kunnen we je vragen je identiteit te bevestigen voordat we je verzoek in behandeling nemen.</p><p>We reageren in beginsel binnen &eacute;&eacute;n maand op je verzoek. Is je verzoek complex of ontvangen we veel verzoeken, dan kan deze termijn met maximaal twee maanden worden verlengd. We laten je hierover dan tijdig weten. Het uitoefenen van je rechten is in principe kosteloos.</p>"
+          }
+        },
+        "art_11": {
+          "type": "article",
+          "settings": {
+            "number": "11.",
+            "heading": "Klacht bij de Autoriteit Persoonsgegevens",
+            "body": "<p>We helpen je graag verder als je een klacht hebt over de manier waarop we met jouw persoonsgegevens omgaan. Kom je er met ons niet uit, dan heb je het recht een klacht in te dienen bij de toezichthouder, de Autoriteit Persoonsgegevens.</p><p>Meer informatie en het indienen van een klacht vind je op <a href=\"https://www.autoriteitpersoonsgegevens.nl\" target=\"_blank\" rel=\"noopener noreferrer\">autoriteitpersoonsgegevens.nl</a>.</p>"
+          }
+        },
+        "art_12": {
+          "type": "article",
+          "settings": {
+            "number": "12.",
+            "heading": "Wijzigingen in dit privacybeleid",
+            "body": "<p>We kunnen dit privacybeleid van tijd tot tijd aanpassen, bijvoorbeeld bij wijzigingen in onze dienstverlening of in de wet- en regelgeving. De meest actuele versie vind je altijd op deze pagina, met bovenaan de datum van de laatste wijziging.</p><p>Bij ingrijpende wijzigingen die voor jou van belang zijn, informeren we je waar mogelijk actief, bijvoorbeeld per e-mail of via een melding op onze website. We raden je aan dit beleid regelmatig te raadplegen.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "art_1",
+        "art_2",
+        "art_3",
+        "art_4",
+        "art_5",
+        "art_6",
+        "art_7",
+        "art_8",
+        "art_9",
+        "art_10",
+        "art_11",
+        "art_12"
+      ]
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": ["main", "newsletter"]
+}

@@ -1,0 +1,97 @@
+{%- comment -%}
+  Cookiemelding — een balkje onderaan met een korte tekst en een knop.
+
+  LET OP: dit is een MELDING, geen volwaardige cookie-toestemmingsmodule.
+  Shopify heeft daar zelf een banner voor (Instellingen → Klantprivacy → Cookiebanner)
+  die echt gekoppeld is aan het blokkeren van tracking. Gebruik die als je aan de
+  Europese regels moet voldoen. Deze melding staat daarom standaard uit.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+
+{%- if s.enabled -%}
+  <div
+    class="sm-cookiebar sm-cookiebar--{{ s.style | default: 'bar' }}{% if s.hide_mobile %} sm-hide-mobile{% endif %}"
+    data-sm-cookiebar
+    data-days="{{ s.remember_days }}"
+    data-editor="{% if request.design_mode %}true{% else %}false{% endif %}"
+    role="region"
+    aria-label="{{ s.aria_label | default: 'Cookiemelding' | escape }}"
+    aria-hidden="true"
+  >
+    <div class="sm-cookiebar__text">
+      {{ s.text }}
+      {%- if s.link_label != blank -%}
+        <a href="{{ s.link_url | default: '/pages/cookies' }}">{{ s.link_label }}</a>
+      {%- endif -%}
+    </div>
+    <div class="sm-cookiebar__actions">
+      {%- if s.accept_label != blank -%}
+        <button class="btn btn--sm" type="button" data-sm-cookie-dismiss>{{ s.accept_label }}</button>
+      {%- endif -%}
+      {%- if s.decline_label != blank -%}
+        <button class="btn btn--outline btn--sm" type="button" data-sm-cookie-dismiss>{{ s.decline_label }}</button>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Cookiemelding",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Cookiemelding aanzetten",
+      "default": false
+    },
+    {
+      "type": "paragraph",
+      "content": "Dit is een eenvoudige melding. Wil je écht aan de cookieregels voldoen, gebruik dan de banner van Shopify zelf: Instellingen → Klantprivacy → Cookiebanner. Zet er dan niet twee tegelijk aan."
+    },
+
+    { "type": "header", "content": "Tekst" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Tekst",
+      "default": "<p>We gebruiken cookies om de webshop goed te laten werken en te verbeteren.</p>"
+    },
+    { "type": "text", "id": "link_label", "label": "Tekst van het linkje", "default": "Lees meer" },
+    { "type": "url", "id": "link_url", "label": "Waar het linkje naartoe gaat" },
+    { "type": "text", "id": "accept_label", "label": "Tekst op de eerste knop", "default": "Akkoord" },
+    {
+      "type": "text",
+      "id": "decline_label",
+      "label": "Tekst op de tweede knop",
+      "info": "Leeg laten = maar één knop."
+    },
+
+    { "type": "header", "content": "Weergave" },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Vorm",
+      "options": [
+        { "value": "bar", "label": "Brede balk onderaan" },
+        { "value": "card", "label": "Klein kaartje linksonder" }
+      ],
+      "default": "bar"
+    },
+    {
+      "type": "range",
+      "id": "remember_days",
+      "label": "Hoelang onthouden",
+      "min": 30,
+      "max": 360,
+      "step": 30,
+      "unit": "d",
+      "default": 180
+    },
+    { "type": "checkbox", "id": "hide_mobile", "label": "Niet tonen op mobiel", "default": false },
+    { "type": "text", "id": "aria_label", "label": "Voorleestekst", "default": "Cookiemelding" }
+  ]
+}
+{% endschema %}

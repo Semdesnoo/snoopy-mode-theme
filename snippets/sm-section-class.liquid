@@ -1,0 +1,34 @@
+{%- comment -%}
+  Bouwt de extra CSS-classes voor een sectie op basis van de instellingen die de
+  eigenaar in de Thema-editor kiest: verbergen per apparaat, ruimte boven/onder,
+  achtergrondkleur en tekstuitlijning — apart voor laptop en mobiel.
+
+  Gebruik:
+    {%- capture sm_class -%}{%- render 'sm-section-class', s: section.settings -%}{%- endcapture -%}
+    <section class="section {{ sm_class }}">
+{%- endcomment -%}
+{%- liquid
+  assign out = ''
+  if s.hide_mobile
+    assign out = out | append: ' sm-hide-mobile'
+  endif
+  if s.hide_desktop
+    assign out = out | append: ' sm-hide-desktop'
+  endif
+  if s.space != blank and s.space != 'default'
+    assign out = out | append: ' sm-space-' | append: s.space
+  endif
+  if s.space_mobile != blank and s.space_mobile != 'default'
+    assign out = out | append: ' sm-space-mobile-' | append: s.space_mobile
+  endif
+  if s.bg != blank and s.bg != 'default'
+    assign out = out | append: ' sm-bg-' | append: s.bg
+  endif
+  if s.align != blank and s.align != 'default'
+    assign out = out | append: ' sm-align-' | append: s.align
+  endif
+  if s.align_mobile != blank and s.align_mobile != 'default'
+    assign out = out | append: ' sm-align-mobile-' | append: s.align_mobile
+  endif
+  echo out | strip
+-%}

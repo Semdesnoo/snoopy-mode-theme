@@ -1,0 +1,16 @@
+{%- comment -%}
+  Productpagina.
+
+  Bewust een .liquid-sjabloon en géén .json: JSON-sjablonen zijn in deze winkel
+  eerder bij het importeren geweigerd. Ook is de pagina opgeknipt in
+  drie kleine secties in plaats van één groot bestand — dat importeert betrouwbaarder
+  en als er ooit één onderdeel uitvalt, blijft de rest van de pagina gewoon werken.
+  De maat-adviseur zit als snippet in de sectie main-product.
+{%- endcomment -%}
+{{ 'product.css' | asset_url | stylesheet_tag }}
+
+{% section 'main-product' %}
+{% section 'product-recommend' %}
+{% section 'product-reviews' %}
+
+<script src="{{ 'product.js' | asset_url }}" defer></script>

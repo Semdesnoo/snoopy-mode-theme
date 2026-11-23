@@ -1,0 +1,36 @@
+{%- comment -%}
+  STANDAARDFOTO'S DIE IN HET THEMA ZELF ZITTEN
+  ============================================
+  Foto's die je in de Thema-editor kiest, horen bij dát thema. Upload je later een
+  nieuwe versie van het thema, dan moet je ze opnieuw kiezen. Foto's die hier staan
+  zitten IN het thema zelf en komen dus automatisch mee met elke nieuwe versie.
+
+  Volgorde op de website:
+    1. Heeft de eigenaar in de Thema-editor een foto gekozen? Die wint altijd.
+    2. Zo niet: de standaardfoto hieronder (bestand uit de map assets/).
+    3. Staat die er ook niet: het nette vlak met een tekstje.
+
+  EEN STANDAARDFOTO TOEVOEGEN (voor wie het thema onderhoudt):
+    1. Zet het beeldbestand in de map assets/, bijvoorbeeld sm-hero.jpg
+       en eventueel sm-hero-mobiel.jpg voor de telefoon.
+    2. Haal hieronder de bijbehorende regel uit het commentaar en vul de naam in.
+    3. Maak een nieuwe zip. Klaar — de foto komt voortaan altijd mee.
+
+  Sleutels die het thema gebruikt:
+    hero · editorial · banner · popup-nieuwsbrief · popup-actie
+    over-hero · over-team-1 · over-team-2 · tegel-1 t/m tegel-6
+
+  Voorbeeld van twee ingevulde regels (laptop en mobiel), zonder de accolades:
+    if key == 'hero'              ->  assign file = 'sm-hero.jpg'
+    if key == 'hero' and mobile   ->  assign file = 'sm-hero-mobiel.jpg'
+{%- endcomment -%}
+
+{%- assign file = '' -%}
+
+{%- comment -%} ▼▼▼ HIERONDER DE STANDAARDFOTO'S ▼▼▼ {%- endcomment -%}
+
+{%- comment -%} (nog geen standaardfoto's toegevoegd) {%- endcomment -%}
+
+{%- comment -%} ▲▲▲ TOT HIER ▲▲▲ {%- endcomment -%}
+
+{{- file -}}

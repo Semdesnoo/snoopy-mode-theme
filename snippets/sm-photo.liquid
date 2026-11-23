@@ -1,0 +1,57 @@
+{%- comment -%}
+  Toont één foto met drie mogelijkheden, in deze volgorde:
+    1. de foto die in de Thema-editor is gekozen (apart voor laptop en mobiel)
+    2. een standaardfoto die in het thema zelf zit (zie snippet sm-default-image)
+    3. een net vlak met een tekstje, zolang er nog geen foto is
+
+  Gebruik:
+    {%- render 'sm-photo',
+      image: s.image, image_mobile: s.image_mobile,
+      key: 'hero', alt: s.image_alt, label: s.placeholder_label,
+      wrapper_class: 'media media--wide', img_class: 'hero__img',
+      loading: 'eager', fetchpriority: 'high',
+      widths: '600, 1200, 1600, 2400', sizes: '100vw' -%}
+{%- endcomment -%}
+{%- liquid
+  assign _wrapper = wrapper_class | default: 'media'
+  assign _loading = loading | default: 'lazy'
+  assign _widths = widths | default: '400, 600, 800, 1000, 1200, 1600'
+  assign _sizes = sizes | default: '100vw'
+  assign _alt = alt | default: ''
+-%}
+{%- capture default_file -%}{%- render 'sm-default-image', key: key -%}{%- endcapture -%}
+{%- assign default_file = default_file | strip -%}
+{%- capture default_file_mobile -%}{%- render 'sm-default-image', key: key, mobile: true -%}{%- endcapture -%}
+{%- assign default_file_mobile = default_file_mobile | strip -%}
+
+{%- if image != blank -%}
+  <figure class="{{ _wrapper }}">
+    {%- render 'sm-picture',
+      image: image,
+      image_mobile: image_mobile,
+      alt: _alt,
+      class: img_class,
+      loading: _loading,
+      fetchpriority: fetchpriority,
+      widths: _widths,
+      sizes: _sizes -%}
+  </figure>
+{%- elsif default_file != blank -%}
+  {%- comment -%} Standaardfoto uit het thema zelf. {%- endcomment -%}
+  <figure class="{{ _wrapper }}">
+    <picture>
+      {%- if default_file_mobile != blank -%}
+        <source media="(max-width: 749px)" srcset="{{ default_file_mobile | asset_url }}">
+      {%- endif -%}
+      <img
+        src="{{ default_file | asset_url }}"
+        alt="{{ _alt | escape }}"
+        loading="{{ _loading }}"
+        {% if fetchpriority != blank %}fetchpriority="{{ fetchpriority }}"{% endif %}
+        {% if img_class != blank %}class="{{ img_class }}"{% endif %}
+      >
+    </picture>
+  </figure>
+{%- else -%}
+  <div class="{{ _wrapper }}" data-label="{{ label | escape }}"{% if _alt != blank %} role="img" aria-label="{{ _alt | escape }}"{% endif %}></div>
+{%- endif -%}

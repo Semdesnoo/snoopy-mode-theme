@@ -1,0 +1,123 @@
+{%- comment -%}
+  Tekstblok — een losse kop met tekst en eventueel knoppen.
+  Handig voor een aankondiging, een korte uitleg of een tussenkopje op de homepage.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+{%- capture sm_class -%}{%- render 'sm-section-class', s: s -%}{%- endcapture -%}
+
+<section class="section {{ sm_class }}">
+  <div class="container">
+    <div class="sm-richtext__inner reveal">
+      {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+      {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading }}</h2>{%- endif -%}
+      {%- if s.text != blank -%}{{ s.text }}{%- endif -%}
+      {%- if s.button_1_label != blank or s.button_2_label != blank -%}
+        <div class="sm-banner__actions" style="justify-content: inherit;">
+          {%- if s.button_1_label != blank -%}
+            <a class="btn" href="{{ s.button_1_link | default: '#' }}">{{ s.button_1_label }}</a>
+          {%- endif -%}
+          {%- if s.button_2_label != blank -%}
+            <a class="btn btn--outline" href="{{ s.button_2_link | default: '#' }}">{{ s.button_2_label }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Tekstblok",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Tekst" },
+    { "type": "text", "id": "eyebrow", "label": "Klein kopje erboven" },
+    { "type": "text", "id": "heading", "label": "Kop", "default": "Een kop die opvalt" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Tekst",
+      "default": "<p>Vertel hier iets over je winkel, een actie of een nieuwe collectie.</p>"
+    },
+
+    { "type": "header", "content": "Knop 1" },
+    { "type": "text", "id": "button_1_label", "label": "Tekst op de knop" },
+    { "type": "url", "id": "button_1_link", "label": "Waar de knop naartoe gaat" },
+
+    { "type": "header", "content": "Knop 2" },
+    { "type": "text", "id": "button_2_label", "label": "Tekst op de knop" },
+    { "type": "url", "id": "button_2_link", "label": "Waar de knop naartoe gaat" },
+
+    { "type": "header", "content": "Uitlijning" },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Tekst uitlijnen (laptop)",
+      "options": [
+        { "value": "center", "label": "Gecentreerd" },
+        { "value": "left", "label": "Links" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "align_mobile",
+      "label": "Tekst uitlijnen (mobiel)",
+      "options": [
+        { "value": "center", "label": "Gecentreerd" },
+        { "value": "left", "label": "Links" }
+      ],
+      "default": "center"
+    },
+
+    { "type": "header", "content": "Ruimte & achtergrond" },
+    {
+      "type": "select",
+      "id": "space",
+      "label": "Ruimte boven en onder (laptop)",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "none", "label": "Geen" },
+        { "value": "small", "label": "Klein" },
+        { "value": "medium", "label": "Gemiddeld" },
+        { "value": "large", "label": "Groot" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "space_mobile",
+      "label": "Ruimte boven en onder (mobiel)",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "none", "label": "Geen" },
+        { "value": "small", "label": "Klein" },
+        { "value": "medium", "label": "Gemiddeld" },
+        { "value": "large", "label": "Groot" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Achtergrond",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "alt", "label": "Zachte zandtint" },
+        { "value": "white", "label": "Wit" },
+        { "value": "dark", "label": "Donker" }
+      ],
+      "default": "default"
+    },
+
+    { "type": "header", "content": "Zichtbaarheid" },
+    { "type": "checkbox", "id": "hide_mobile", "label": "Deze sectie verbergen op mobiel", "default": false },
+    { "type": "checkbox", "id": "hide_desktop", "label": "Deze sectie verbergen op laptop", "default": false }
+  ],
+  "presets": [
+    { "name": "Tekstblok" }
+  ]
+}
+{% endschema %}

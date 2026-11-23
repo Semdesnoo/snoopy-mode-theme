@@ -1,0 +1,71 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-maattabel",
+      "settings": {
+        "eyebrow": "Klantenservice",
+        "intro": "<p>Vind moeiteloos je juiste maat. Bepaal je confectiemaat met de tabellen hieronder of meet jezelf op met een meetlint voor een nauwkeurig resultaat. Twijfel je nog? Gebruik de <a href=\"/products\">maat-adviseur op elke productpagina</a>.</p>",
+        "measure_eyebrow": "Stap voor stap",
+        "measure_title": "Hoe meet ik mezelf?",
+        "measure_text": "<p>Pak een zacht meetlint en meet bij voorkeur over dunne kleding of op de blote huid. Houd het meetlint recht en horizontaal rond je lichaam — niet te strak en niet te los. Sta ontspannen en adem rustig uit. Vergelijk je maten daarna met de kolommen in de tabel hierboven.</p>",
+        "tip_title": "Tussen twee maten?",
+        "tip_text": "<p>Kies de grotere voor extra comfort.</p>",
+        "cta_eyebrow": "Klaar om te shoppen",
+        "cta_title": "Vind jouw maat in de collectie",
+        "cta_text": "<p>Nu je je maat kent, ontdek je onze tijdloze stukken — bij elk artikel vind je de afmetingen en pasvorm.</p>",
+        "cta_label": "Bekijk de collectie",
+        "cta_link": "/collections/all"
+      },
+      "blocks": {
+        "size_kleding": {
+          "type": "size_block",
+          "settings": {
+            "title": "Kleding (dames)",
+            "note": "Alle afmetingen zijn lichaamsmaten in centimeters.",
+            "table": "kleding"
+          }
+        },
+        "size_schoenen": {
+          "type": "size_block",
+          "settings": {
+            "title": "Schoenen",
+            "note": "Meet je voet aan het einde van de dag, wanneer hij iets gezwollen is.",
+            "table": "schoenen"
+          }
+        },
+        "measure_borst": {
+          "type": "measure_point",
+          "settings": {
+            "term": "Borst",
+            "description": "Meet rond het volste deel van je borst, met het meetlint over de schouderbladen langs je rug."
+          }
+        },
+        "measure_taille": {
+          "type": "measure_point",
+          "settings": {
+            "term": "Taille",
+            "description": "Meet rond het smalste deel van je middel, doorgaans net boven de navel."
+          }
+        },
+        "measure_heup": {
+          "type": "measure_point",
+          "settings": {
+            "term": "Heup",
+            "description": "Meet rond het volste deel van je heupen, met je voeten tegen elkaar."
+          }
+        }
+      },
+      "block_order": [
+        "size_kleding",
+        "size_schoenen",
+        "measure_borst",
+        "measure_taille",
+        "measure_heup"
+      ]
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": ["main", "newsletter"]
+}

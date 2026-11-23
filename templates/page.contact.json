@@ -1,0 +1,44 @@
+{
+  "sections": {
+    "main": {
+      "type": "contact",
+      "blocks": {
+        "hours-1": { "type": "opening_hours", "settings": { "day": "Maandag", "hours": "13:00 – 17:00" } },
+        "hours-2": { "type": "opening_hours", "settings": { "day": "Dinsdag", "hours": "11:00 – 17:00" } },
+        "hours-3": { "type": "opening_hours", "settings": { "day": "Woensdag", "hours": "11:00 – 17:00" } },
+        "hours-4": { "type": "opening_hours", "settings": { "day": "Donderdag", "hours": "11:00 – 17:00" } },
+        "hours-5": { "type": "opening_hours", "settings": { "day": "Vrijdag", "hours": "11:00 – 17:00" } },
+        "hours-6": { "type": "opening_hours", "settings": { "day": "Zaterdag", "hours": "11:00 – 17:00" } },
+        "hours-7": { "type": "opening_hours", "settings": { "day": "Zondag", "hours": "Gesloten" } },
+        "faq-1": { "type": "faq", "settings": { "question": "Verzending", "answer": "<p>We verzenden naar Nederland en België. Bestellingen boven €75 zijn gratis; daaronder rekenen we €6,95 verzendkosten. Bestel je voor 17:00 uur op een werkdag, dan ligt je pakket de volgende dag in huis.</p>" } },
+        "faq-2": { "type": "faq", "settings": { "question": "Retourneren", "answer": "<p>Meld je retour eerst bij ons aan en stuur het artikel daarna per omgaande terug, uiterlijk binnen 14 dagen na je aanmelding. Het artikel moet onbeschadigd, ongedragen en ongebruikt zijn, met de originele kledinglabels en het prijskaartje er nog aan, en de ingevulde factuur gaat mee in het pakket. De kosten voor het terugsturen zijn voor eigen rekening; we raden je aan met track &amp; trace te verzenden. Artikelen uit de Sale kunnen niet retour. Zodra we de artikelen in goede staat en mét factuur hebben ontvangen, storten we het bedrag terug op je rekening.</p>" } },
+        "faq-3": { "type": "faq", "settings": { "question": "Betaalmethoden", "answer": "<p>Je kunt veilig afrekenen met iDEAL, creditcard (Visa & Mastercard), PayPal en Klarna. Met Klarna betaal je desgewenst achteraf, binnen 14 dagen na ontvangst van je bestelling.</p>" } },
+        "faq-4": { "type": "faq", "settings": { "question": "Maatadvies", "answer": "<p>Twijfel je over je maat? Op elke productpagina vind je een maattabel met afmetingen in centimeters. Kom je er niet uit, mail dan gerust je vragen en lengte/maat naar onze stylisten — we adviseren je graag persoonlijk.</p>" } },
+        "faq-5": { "type": "faq", "settings": { "question": "Levertijd", "answer": "<p>Voorraadartikelen worden dezelfde of de volgende werkdag verzonden. Binnen Nederland ontvang je je bestelling doorgaans binnen 1 tot 2 werkdagen, in België binnen 2 tot 3 werkdagen. Je ontvangt altijd een track & trace-code per e-mail.</p>" } },
+        "link-1": { "type": "quick_link", "settings": { "title": "Maattabel & pasvorm", "text": "Bekijk afmetingen en pasvorm bij elk artikel in de collectie.", "link_label": "Naar de collectie" } },
+        "link-2": { "type": "quick_link", "settings": { "title": "Verzending & retour", "text": "Alles over levertijden, kosten en het terugsturen van een bestelling.", "link_label": "Lees meer" } },
+        "link-3": { "type": "quick_link", "settings": { "title": "Ons verhaal", "text": "Ontdek waar Snoopy Mode voor staat en hoe onze collecties ontstaan.", "link_label": "Over Snoopy Mode" } }
+      },
+      "block_order": ["hours-1", "hours-2", "hours-3", "hours-4", "hours-5", "hours-6", "hours-7", "faq-1", "faq-2", "faq-3", "faq-4", "faq-5", "link-1", "link-2", "link-3"],
+      "settings": {
+        "eyebrow": "Klantcontact",
+        "heading": "Contact",
+        "intro": "We helpen je graag — meestal binnen 1 werkdag antwoord.",
+        "company_email": "info@snoopy-mode.nl",
+        "company_phone": "06 43 47 46 83",
+        "company_address": "Snoopy Mode V.O.F.\nGroene Hilledijk 165 B\n3073 AB Rotterdam\nNederland",
+        "address_note": "Kom gerust langs als we geopend zijn.",
+        "business_details": "Snoopy Mode V.O.F.\nKVK-nummer 24338638\nVestigingsnummer 000011061243",
+        "hours_label": "Openingstijden klantenservice",
+        "map_address": "Groene Hilledijk 165B, 3073 AB Rotterdam",
+        "faq_eyebrow": "Veelgestelde vragen",
+        "faq_heading": "Snel een antwoord",
+        "faq_subheading": "Misschien staat het antwoord op je vraag er al tussen."
+      }
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": ["main", "newsletter"]
+}

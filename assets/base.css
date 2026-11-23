@@ -1,0 +1,3016 @@
+/* ==========================================================================
+   SNOOPY MODE — Design-systeem (styles.css)
+   Statische webshop-blauwdruk. Elegant & minimalistisch (COS / Arket / Massimo Dutti).
+   Later om te zetten naar een Shopify-thema; structuur is sectie-gebaseerd.
+   Alle commentaren in het Nederlands.
+   ========================================================================== */
+
+/* ==========================================================================
+   1) DESIGN TOKENS (:root custom properties)
+   ========================================================================== */
+:root {
+  /* Kleurpalet */
+  --bg: #FAF8F4;          /* warm off-white, hoofdachtergrond */
+  --bg-alt: #F1EBE2;      /* zachte zandtint voor afwisselende secties */
+  --surface: #FFFFFF;     /* kaarten/oppervlak */
+  --ink: #1C1A17;         /* bijna-zwart, hoofdtekst & koppen */
+  --ink-soft: #4A453E;    /* iets zachter voor subkoppen */
+  --muted: #837B70;       /* secundaire tekst */
+  --line: #E4DBCE;        /* dunne lijnen/randen */
+  --accent: #A07E5E;      /* warme klei/taupe, spaarzaam voor hover/details/links */
+  --accent-deep: #6E5337; /* donkere accenttint */
+  --sale: #9A3B2E;        /* terracotta-rood voor sale/prijs-korting, zeer spaarzaam */
+
+  /* Typografie */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Jost", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Spacing-schaal (rem) */
+  --sp-0_5: 0.5rem;
+  --sp-0_75: 0.75rem;
+  --sp-1: 1rem;
+  --sp-1_5: 1.5rem;
+  --sp-2: 2rem;
+  --sp-3: 3rem;
+  --sp-4: 4rem;
+  --sp-6: 6rem;
+  --sp-8: 8rem;
+
+  /* Verticaal sectie-ritme */
+  --section-y: clamp(5rem, 9vw, 8rem);
+
+  /* Container */
+  --container: 1280px;
+  --container-wide: 1480px;
+  --container-pad: clamp(1.25rem, 5vw, 4rem);
+
+  /* Randen & vormen */
+  --radius: 2px;
+  --border: 1px solid var(--line);
+
+  /* Transities */
+  --t-fast: 0.3s ease;
+  --t-slow: 0.5s ease;
+
+  /* Z-index lagen */
+  --z-header: 100;
+  --z-overlay: 200;
+  --z-drawer: 210;
+  --z-menu: 220;
+}
+
+/* ==========================================================================
+   2) MODERNE RESET
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  overflow-x: clip;              /* site staat vast: geen horizontaal swipen */
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;              /* vergrendelt horizontaal schuiven (clip houdt sticky werkend) */
+}
+
+/* Body-scroll-lock bij open overlays/drawer/menu */
+body.is-locked {
+  overflow: hidden;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+/* <picture> mag de layout/styling niet beïnvloeden: de <img> erin gedraagt
+   zich exact zoals een losse <img> (de bestaande .media-regels blijven gelden). */
+picture {
+  display: contents;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* ==========================================================================
+   3) TYPOGRAFIE-HELPERS
+   ========================================================================== */
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.75rem;          /* ~12px */
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  display: inline-block;
+}
+
+.display-1 {
+  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.display-2 {
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.lead {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.text-muted { color: var(--muted); }
+.text-accent { color: var(--accent); }
+.italic { font-style: italic; }
+
+/* In-tekst links */
+.prose a,
+.link-accent {
+  color: var(--accent);
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--t-fast);
+}
+.prose a:hover,
+.link-accent:hover {
+  background-size: 100% 1px;
+}
+
+/* ==========================================================================
+   4) LAYOUT-UTILITIES (container & grid)
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.container--wide {
+  max-width: var(--container-wide);
+}
+
+/* Sectie-ritme */
+.section {
+  padding-block: var(--section-y);
+}
+.section--tight { padding-block: clamp(3rem, 6vw, 5rem); }
+.section--alt { background-color: var(--bg-alt); }
+.section--ink { background-color: var(--ink); color: var(--bg); }
+.section--ink h2,
+.section--ink h3 { color: var(--bg); }
+
+/* Sectie-kop */
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-0_75);
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+.section-head--center {
+  align-items: center;
+  text-align: center;
+}
+.section-head--between {
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.section-head__title {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+.section-head p {
+  color: var(--muted);
+  max-width: 52ch;
+}
+
+/* Generiek grid */
+.grid { display: grid; gap: var(--sp-2); }
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+/* ==========================================================================
+   5) MEDIA — CSS PLACEHOLDER-SYSTEEM
+   --------------------------------------------------------------------------
+   LET OP: dit is een puur CSS-placeholder (werkt offline, geen externe foto's).
+   In productie/Shopify vervangen door <img src="..." alt="..."> binnen .media,
+   of de .media-div volledig door een <figure><img></figure> vervangen.
+   Aspect-ratio via modifier-klassen; duotone-gradient varieert per :nth-child.
+   ========================================================================== */
+.media {
+  --m1: var(--bg-alt);
+  --m2: var(--accent);
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-alt);
+  aspect-ratio: 3 / 4;            /* default = portrait */
+}
+
+/* Diagonale duotone-gradient + subtiele sheen-laag */
+.media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(125deg,
+      color-mix(in srgb, var(--m2) 14%, var(--m1)) 0%,
+      var(--m1) 45%,
+      color-mix(in srgb, var(--m1) 70%, var(--surface)) 100%),
+    linear-gradient(305deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0) 40%);
+  transition: transform var(--t-slow);
+  transform: scale(1.001);
+}
+
+/* Centraal label + dun kader binnenin */
+.media::after {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink) 45%, transparent);
+  outline: 1px solid rgba(28, 26, 23, 0.08);
+  outline-offset: -16px;
+}
+
+/* Aspect-ratio modifiers */
+.media--portrait  { aspect-ratio: 3 / 4; }
+.media--tall      { aspect-ratio: 2 / 3; }
+.media--landscape { aspect-ratio: 4 / 3; }
+.media--wide      { aspect-ratio: 16 / 9; }
+.media--square    { aspect-ratio: 1 / 1; }
+.media--full      { aspect-ratio: auto; height: 100%; }
+
+/* nth-child gradient-variatie: warme palet-tinten afwisselen */
+.media:nth-child(odd)        { --m1: #EFE7DB; --m2: #A07E5E; }
+.media:nth-child(even)       { --m1: #E7DECF; --m2: #6E5337; }
+.media:nth-child(3n)         { --m1: #F1EBE2; --m2: #837B70; }
+.media:nth-child(4n)         { --m1: #E9E0D2; --m2: #A07E5E; }
+.media:nth-child(5n)         { --m1: #EDE4D6; --m2: #6E5337; }
+
+/* Lichte image-zoom op hover binnen link/kaart */
+a:hover .media::before,
+.card:hover .media::before,
+.media-link:hover .media::before {
+  transform: scale(1.04);
+}
+
+/* Wanneer er later een <img> in .media zit */
+.media > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-slow);
+}
+/* Foto in een <picture> (mobiel/desktop): de <picture> vult .media, de <img> vult de <picture> */
+.media > picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.media > picture > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-slow);
+}
+.media:has(> img)::after,
+.media:has(> picture)::after { content: none; }
+a:hover .media > img,
+a:hover .media > picture > img { transform: scale(1.04); }
+
+/* Afbeeldingen pas ZACHT tonen zodra ze volledig geladen zijn (geen pop-in).
+   De placeholder-gradient blijft eronder tijdens het laden. Alleen actief mét JS,
+   zodat foto's zonder JS gewoon direct zichtbaar zijn. */
+.js .media > img,
+.js .media > picture > img,
+.js .about-hero__media img,
+.js .team-grid img,
+.js .product-gallery__main img,
+.js .product-gallery__thumb img {
+  opacity: 0;
+  transition: opacity 0.5s ease, transform var(--t-slow);
+}
+/* UITZONDERING — de eerste grote foto op de pagina (hero en productfoto)
+   faden we NIET in. Google meet hoe snel de bezoeker iets te zien krijgt, en
+   een doorzichtige foto telt niet mee als "getoond": het zacht opkomen kostte
+   daardoor kostbare seconden op de belangrijkste foto van de pagina. */
+.js .hero .media > img,
+.js .hero .media > picture > img,
+.js .product-gallery__main img,
+.js .about-hero__media img {
+  opacity: 1;
+  transition: transform var(--t-slow);
+}
+
+.js .media > img.is-loaded,
+.js .media > picture > img.is-loaded,
+.js .about-hero__media img.is-loaded,
+.js .team-grid img.is-loaded,
+.js .product-gallery__main img.is-loaded,
+.js .product-gallery__thumb img.is-loaded {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   6) BADGES (Nieuw / Sale)
+   ========================================================================== */
+.badge {
+  position: absolute;
+  top: var(--sp-0_75);
+  left: var(--sp-0_75);
+  z-index: 2;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.4em 0.9em;
+  background: var(--ink);
+  color: var(--bg);
+}
+.badge--sale { background: var(--sale); }
+.badge--soft { background: var(--surface); color: var(--ink); border: var(--border); }
+
+/* ==========================================================================
+   7) KNOPPEN
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.9em 2em;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast),
+              border-color var(--t-fast);
+}
+.btn:hover {
+  background: var(--accent-deep);
+  border-color: var(--accent-deep);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.btn--outline:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* Lichte variant voor donkere ondergrond (bijv. over hero/ink-sectie) */
+.btn--light {
+  background: var(--bg);
+  color: var(--ink);
+  border-color: var(--bg);
+}
+.btn--light:hover {
+  background: transparent;
+  color: var(--bg);
+  border-color: var(--bg);
+}
+.btn--outline-light {
+  background: transparent;
+  color: var(--bg);
+  border-color: rgba(250, 248, 244, 0.7);
+}
+.btn--outline-light:hover {
+  background: var(--bg);
+  color: var(--ink);
+  border-color: var(--bg);
+}
+
+/* Tekstlink/ghost met underline-animatie */
+.btn--ghost {
+  background: none;
+  border: none;
+  padding: 0.4em 0;
+  color: var(--ink);
+  position: relative;
+}
+.btn--ghost::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform var(--t-fast);
+}
+.btn--ghost:hover { color: var(--accent); }
+.btn--ghost:hover::after {
+  transform-origin: left;
+  transform: scaleX(0.4);
+}
+
+.btn--block { width: 100%; }
+.btn--sm { font-size: 0.7rem; padding: 0.7em 1.4em; }
+
+/* ==========================================================================
+   8) ANNOUNCEMENT-BAR
+   ========================================================================== */
+.announcement {
+  background: var(--ink);
+  color: var(--bg);
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.65rem var(--container-pad);
+}
+/* Roterende boodschappen: alle items liggen in dezelfde grid-cel en faden
+   om de beurt in/uit (zie de rotator in main.js). */
+.announcement__viewport {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  min-height: 1.15em;
+}
+.announcement__item {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(0.6em);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  pointer-events: none;
+}
+.announcement__item.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+/* Respecteer de systeeminstelling 'verminderde beweging': alleen subtiel faden. */
+@media (prefers-reduced-motion: reduce) {
+  .announcement__item { transition: opacity 0.25s ease; transform: none; }
+  .announcement__item.is-active { transform: none; }
+}
+
+/* ==========================================================================
+   9) HEADER & NAVIGATIE
+   --------------------------------------------------------------------------
+   Op de homepagina-hero is de header transparant/over de hero (.header--overlay).
+   Na scrollen >10px krijgt <body> de klasse .is-scrolled -> witte/opake header.
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--bg);
+  border-bottom: var(--border);
+  transition: background var(--t-fast), border-color var(--t-fast),
+              color var(--t-fast);
+}
+
+.header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-1_5);
+  min-height: 76px;
+}
+
+/* Woordmerk */
+.brand {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Hoofdnavigatie (desktop) */
+.main-nav {
+  grid-column: 2;
+  justify-self: center;
+}
+.main-nav ul {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 2.4vw, 2.5rem);
+}
+/* Dropdown-knop ("Producten") exact gelijk uitlijnen met de tekstlinks */
+.main-nav > ul > li { display: flex; align-items: center; }
+.nav-dropdown-toggle { line-height: 1; }
+.main-nav a { line-height: 1; }
+.main-nav a {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 400;
+  padding-block: 0.4rem;
+  position: relative;
+  color: var(--ink);
+  transition: color var(--t-fast);
+}
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-fast);
+}
+.main-nav a:hover { color: var(--accent); }
+.main-nav a:hover::after,
+.main-nav a.is-active::after { transform: scaleX(1); }
+.main-nav a.is-active { color: var(--accent-deep); }
+
+/* --- Navigatie-dropdown "Producten" (desktop) --- */
+.nav-item-dropdown { position: relative; }
+.nav-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  position: relative;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 400;
+  padding-block: 0.4rem;
+  background: none;
+  border: none;
+  color: var(--ink);
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+.nav-dropdown-toggle::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-fast);
+}
+.nav-item-dropdown:hover .nav-dropdown-toggle,
+.nav-item-dropdown:focus-within .nav-dropdown-toggle { color: var(--accent); }
+.nav-item-dropdown:hover .nav-dropdown-toggle::after,
+.nav-item-dropdown:focus-within .nav-dropdown-toggle::after,
+.nav-item-dropdown.is-open .nav-dropdown-toggle::after { transform: scaleX(1); }
+.nav-caret { width: 0.8em; height: 0.8em; transition: transform var(--t-fast); }
+.nav-item-dropdown:hover .nav-caret,
+.nav-item-dropdown:focus-within .nav-caret,
+.nav-item-dropdown.is-open .nav-caret { transform: rotate(180deg); }
+
+.nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  min-width: 340px;
+  padding: 1rem 0 0.4rem;
+  background: var(--surface);
+  border: var(--border);
+  box-shadow: 0 24px 48px -28px rgba(28, 26, 23, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--t-fast), transform var(--t-fast), visibility var(--t-fast);
+  z-index: 50;
+}
+.nav-item-dropdown:hover .nav-dropdown,
+.nav-item-dropdown:focus-within .nav-dropdown,
+.nav-item-dropdown.is-open .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+.nav-dropdown ul { display: block; gap: 0; }
+.nav-dropdown li { list-style: none; }
+.nav-dropdown a {
+  display: block;
+  padding: 0.72rem 2.25rem;
+  font-size: 0.98rem;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  font-weight: 400;
+  white-space: nowrap;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.nav-dropdown a::after { content: none; }
+/* Kleur met HOGE specificiteit forceren: de transparante overlay-header
+   (.header--overlay .main-nav a -> wit) mag deze links niet onzichtbaar maken. */
+.nav-dropdown a,
+.header--overlay .nav-item-dropdown .nav-dropdown a,
+body.is-scrolled .header--overlay .nav-item-dropdown .nav-dropdown a { color: var(--ink-soft); }
+.nav-dropdown a:hover,
+.header--overlay .nav-item-dropdown .nav-dropdown a:hover,
+body.is-scrolled .header--overlay .nav-item-dropdown .nav-dropdown a:hover { background: var(--bg-alt); color: var(--ink); }
+.nav-dropdown a.nav-dropdown__all,
+.header--overlay .nav-item-dropdown .nav-dropdown a.nav-dropdown__all,
+body.is-scrolled .header--overlay .nav-item-dropdown .nav-dropdown a.nav-dropdown__all {
+  margin-top: 0.55rem;
+  padding: 0.95rem 2.25rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Toggle-kleur meekleuren met de transparante header over de hero */
+.header--overlay .nav-dropdown-toggle { color: var(--bg); }
+body.is-scrolled .header--overlay .nav-dropdown-toggle { color: var(--ink); }
+body.is-scrolled .header--overlay .nav-item-dropdown:hover .nav-dropdown-toggle,
+body.is-scrolled .header--overlay .nav-item-dropdown:focus-within .nav-dropdown-toggle { color: var(--accent); }
+
+/* Icoon-acties rechts */
+.header-actions {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-0_75);
+}
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  color: var(--ink);
+  position: relative;
+  transition: color var(--t-fast);
+}
+.icon-btn:hover { color: var(--accent); }
+.icon-btn svg { width: 21px; height: 21px; }
+
+/* Winkelmand-badge (telnummer) */
+.cart-count {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 500;
+  line-height: 17px;
+  text-align: center;
+  border-radius: var(--radius);
+}
+.cart-count[data-empty="true"] { display: none; }
+
+/* Hamburger (alleen mobiel zichtbaar) */
+.menu-toggle { display: none; }
+
+/* --- Transparante header over de hero --- */
+.header--overlay {
+  position: absolute;
+  inset: 0 0 auto 0;
+  background: transparent;
+  border-bottom-color: transparent;
+  color: var(--bg);
+}
+
+.header--overlay .brand,
+.header--overlay .main-nav a,
+.header--overlay .icon-btn,
+.header--overlay .menu-toggle {
+  color: var(--bg);
+}
+.header--overlay .main-nav a.is-active { color: var(--bg); }
+
+/* Na scrollen: opaak maken (geldt ook voor overlay-header) */
+body.is-scrolled .header--overlay {
+  position: fixed;
+  background: var(--bg);
+  border-bottom-color: var(--line);
+  color: var(--ink);
+  box-shadow: 0 1px 0 rgba(28, 26, 23, 0.02);
+}
+body.is-scrolled .header--overlay .brand,
+body.is-scrolled .header--overlay .main-nav a,
+body.is-scrolled .header--overlay .icon-btn,
+body.is-scrolled .header--overlay .menu-toggle {
+  color: var(--ink);
+}
+body.is-scrolled .header--overlay .main-nav a:hover,
+body.is-scrolled .header--overlay .main-nav a.is-active { color: var(--accent); }
+
+/* ==========================================================================
+   10) MOBIEL OFF-CANVAS MENU
+   ========================================================================== */
+.mobile-nav {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(86vw, 380px);
+  background: var(--bg);
+  z-index: var(--z-menu);
+  transform: translateX(100%);
+  transition: transform var(--t-slow);
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-1_5);
+  visibility: hidden;
+}
+.mobile-nav.is-open {
+  transform: translateX(0);
+  visibility: visible;
+}
+.mobile-nav__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--sp-1_5);
+  border-bottom: var(--border);
+}
+.mobile-nav__links {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--sp-1);
+}
+.mobile-nav__links a {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  padding: var(--sp-0_75) 0;
+  border-bottom: var(--border);
+  transition: color var(--t-fast);
+}
+.mobile-nav__links a:hover,
+.mobile-nav__links a.is-active { color: var(--accent); }
+
+/* --- Productfilters (blueprint-demo): vangnet-stijlen --- */
+.filter-clear {
+  margin-top: var(--sp-1);
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.filter-clear:hover { color: var(--accent-deep); }
+[data-no-results] {
+  grid-column: 1 / -1;
+  padding: var(--sp-3) 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--muted);
+  text-align: center;
+}
+[data-price-value] { color: var(--ink-soft); }
+.filter-size { cursor: pointer; }
+.filter-size.is-selected {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+.filter-color { cursor: pointer; }
+.filter-color.is-selected {
+  box-shadow: 0 0 0 1px var(--bg), 0 0 0 2px var(--ink);
+}
+
+/* Mobiel uitklap-submenu "Producten" */
+.mobile-nav__group { border-bottom: var(--border); }
+.mobile-nav__group summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  padding: var(--sp-0_75) 0;
+  transition: color var(--t-fast);
+}
+.mobile-nav__group summary::-webkit-details-marker { display: none; }
+.mobile-nav__group summary::after {
+  content: "+";
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--muted);
+}
+.mobile-nav__group[open] summary::after { content: "\2212"; }
+.mobile-nav__group summary:hover { color: var(--accent); }
+.mobile-nav__sub {
+  display: flex;
+  flex-direction: column;
+  padding: 0.1rem 0 0.85rem 0.25rem;
+}
+.mobile-nav__sub a {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--ink-soft);
+  padding: 0.4rem 0;
+  border-bottom: none;
+  transition: color var(--t-fast);
+}
+.mobile-nav__sub a:hover { color: var(--accent); }
+/* Zoeken + account in het mobiele menu (boven de footer) */
+.mobile-nav__utils {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--sp-1_5);
+  padding-top: var(--sp-1);
+  border-top: var(--border);
+}
+.mobile-nav__util {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-0_75);
+  padding: var(--sp-0_75) 0;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+.mobile-nav__util:hover { color: var(--accent); }
+.mobile-nav__util svg { width: 20px; height: 20px; flex: none; }
+
+.mobile-nav__foot {
+  margin-top: auto;
+  padding-top: var(--sp-1_5);
+  border-top: var(--border);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   11) OVERLAY (gedeeld voor drawer/menu/zoek)
+   ========================================================================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 26, 23, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: var(--z-overlay);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--t-fast), visibility var(--t-fast);
+}
+.overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ==========================================================================
+   12) WINKELMAND-DRAWER
+   ========================================================================== */
+.cart-drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(94vw, 480px);
+  background: var(--surface);
+  z-index: var(--z-drawer);
+  transform: translateX(100%);
+  transition: transform var(--t-slow);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -8px 0 40px rgba(28, 26, 23, 0.12);
+  visibility: hidden;
+}
+.cart-drawer.is-open {
+  transform: translateX(0);
+  visibility: visible;
+}
+.cart-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-1_5);
+  border-bottom: var(--border);
+}
+.cart-drawer__head h2 {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.cart-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-1_5);
+}
+.cart-drawer__foot {
+  padding: var(--sp-1_5);
+  border-top: var(--border);
+}
+.cart-drawer__foot .row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--sp-0_5);
+  font-size: 0.9rem;
+}
+.cart-drawer__foot .row[hidden] { display: none; }
+.cart-drawer__foot .row--sub { color: var(--ink-soft); }
+.cart-drawer__foot .row--total {
+  margin-top: var(--sp-0_75);
+  padding-top: var(--sp-0_75);
+  border-top: var(--border);
+  margin-bottom: var(--sp-1);
+  font-size: 1rem;
+  font-weight: 500;
+}
+.cart-drawer__note {
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--muted);
+  margin-bottom: var(--sp-1);
+}
+
+/* Lege staat */
+.cart-empty {
+  text-align: center;
+  padding-block: var(--sp-4) var(--sp-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1_5);
+}
+.cart-empty p {
+  color: var(--muted);
+}
+.cart-empty[hidden] { display: none; }
+
+/* Regel in de winkelmand: foto — gegevens — kruisje */
+.cart-item {
+  display: grid;
+  grid-template-columns: 76px 1fr 24px;
+  gap: var(--sp-1);
+  padding-block: 1.1rem;
+  border-bottom: var(--border);
+  align-items: start;
+}
+.cart-item:last-child { border-bottom: 0; }
+.cart-item .media { aspect-ratio: 3/4; }
+.cart-item .media::after { content: none; }
+.cart-item__media { display: block; }
+.cart-item__media img { display: block; width: 100%; height: auto; }
+.cart-item__info { min-width: 0; }
+.cart-item__name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.cart-item__name a { color: inherit; }
+.cart-item__name,
+.cart-item__meta { overflow-wrap: anywhere; }
+.cart-item__meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+.cart-item__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-1);
+  margin-top: var(--sp-0_75);
+}
+.cart-item__price {
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Aantal aanpassen: − 1 + */
+.qty-step {
+  display: inline-flex;
+  align-items: center;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.qty-step__btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+.qty-step__btn:hover { color: var(--ink); background: var(--bg-alt); }
+.qty-step__btn[disabled] { opacity: 0.35; cursor: default; }
+.qty-step__btn[disabled]:hover { background: none; color: var(--ink-soft); }
+.qty-step__value {
+  min-width: 28px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Terwijl Shopify de wijziging verwerkt. */
+[data-cart-items].is-busy {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity var(--t-fast);
+}
+
+/* Voortgang naar gratis verzending */
+.cart-progress {
+  padding: 1.1rem var(--sp-1_5);
+  border-bottom: var(--border);
+  background: var(--bg-alt);
+}
+.cart-progress[hidden] { display: none; }
+.cart-progress__text {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin-bottom: 0.6rem;
+}
+.cart-progress__track {
+  height: 4px;
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+@media (max-width: 480px) {
+  .cart-drawer__body,
+  .cart-drawer__foot,
+  .cart-progress { padding-left: var(--sp-1); padding-right: var(--sp-1); }
+  .cart-item { grid-template-columns: 64px 1fr 28px; gap: var(--sp-0_75); }
+  .cart-item__row { flex-wrap: wrap; row-gap: var(--sp-0_5); }
+  .qty-step__btn { width: 44px; height: 44px; }
+  .qty-step__value { min-width: 32px; }
+  .cart-item__remove { width: 44px; height: 44px; margin: -8px -10px 0 0; }
+}
+
+.cart-progress__bar {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  border-radius: var(--radius);
+  transition: width var(--t-slow);
+}
+
+/* ==========================================================================
+   12b) TOAST / POPUP-MELDING ("In je winkelmand ✓")
+   Vast rechtsboven; schuift in en verdwijnt na ~2,5s (zie global.js).
+   ========================================================================== */
+.toast-stack {
+  position: fixed;
+  top: calc(76px + var(--sp-1));
+  right: var(--container-pad);
+  z-index: calc(var(--z-menu) + 10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-0_75);
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: min(86vw, 340px);
+  padding: 0.85rem 1.1rem;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 40px -18px rgba(28, 26, 23, 0.5);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity var(--t-fast), transform var(--t-fast);
+}
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.toast__icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--accent);
+}
+.toast__icon svg { width: 18px; height: 18px; }
+@media (max-width: 640px) {
+  .toast-stack { top: auto; bottom: var(--sp-1); left: var(--sp-1); right: var(--sp-1); }
+  .toast { max-width: none; transform: translateY(24px); }
+  .toast.is-visible { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast { transition: opacity 0.2s ease; transform: none; }
+  .toast.is-visible { transform: none; }
+}
+
+/* ==========================================================================
+   13) ZOEK-OVERLAY
+   ========================================================================== */
+.search-overlay {
+  position: fixed;
+  inset: 0 0 auto 0;
+  background: var(--bg);
+  z-index: var(--z-drawer);
+  transform: translateY(-100%);
+  transition: transform var(--t-slow);
+  border-bottom: var(--border);
+  visibility: hidden;
+}
+.search-overlay.is-open {
+  transform: translateY(0);
+  visibility: visible;
+}
+.search-overlay__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1_5);
+  padding-block: clamp(1.5rem, 5vw, 3rem);
+}
+.search-overlay .search-close { align-self: flex-end; }
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: var(--sp-1);
+}
+.search-form input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  padding: 0;
+  outline: none;
+}
+.search-form input::placeholder { color: var(--muted); }
+/* Verberg de standaard (blauwe) wisknop van de browser */
+.search-form input::-webkit-search-cancel-button,
+.search-form input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+/* Eigen, ingetogen wisknop (verschijnt via main.js zodra je typt) */
+.search-clear {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+.search-clear svg { width: 18px; height: 18px; }
+.search-clear:hover { color: var(--ink); }
+.search-clear[hidden] { display: none; }
+
+/* Bewaard voor later (verlanglijst van gasten) in de winkelmand-drawer */
+.cart-saved { margin-top: var(--sp-2); padding-top: var(--sp-1_5); border-top: var(--border); }
+.cart-saved[hidden] { display: none; }
+.cart-item--saved { grid-template-columns: 56px 1fr 28px; }
+.cart-item--saved img.media { width: 56px; height: auto; aspect-ratio: 3/4; object-fit: cover; }
+.cart-saved__title {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: var(--sp-1);
+}
+.cart-saved__hint { margin-top: var(--sp-1); font-size: 0.8rem; color: var(--muted); }
+.cart-saved__hint a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.cart-item__remove {
+  align-self: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: -4px -6px 0 0;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+.cart-item__remove svg { width: 14px; height: 14px; }
+.cart-item__remove:hover { color: var(--ink); }
+.btn-wishlist.is-added { border-color: var(--accent); color: var(--accent-deep); }
+/* "Zoek"-knop niet laten krimpen naast het invoerveld */
+.search-form .btn { flex: none; }
+
+/* ==========================================================================
+   14) HERO
+   ========================================================================== */
+.hero {
+  position: relative;
+  margin-top: -76px;             /* trek onder de absolute overlay-header */
+}
+.hero .media {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 88vh;
+}
+.hero .media::before {
+  --m1: #DED2C0;
+  --m2: #6E5337;
+}
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(28, 26, 23, 0.28) 0%,
+    rgba(28, 26, 23, 0.08) 40%,
+    rgba(28, 26, 23, 0.42) 100%);
+  z-index: 1;
+}
+.hero__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: clamp(3rem, 8vw, 6rem);
+  color: var(--bg);
+}
+.hero__content .eyebrow { color: var(--bg); opacity: 0.9; }
+.hero__title {
+  color: var(--bg);
+  max-width: 16ch;
+  margin-block: var(--sp-1) var(--sp-1);
+}
+.hero__text {
+  color: var(--bg);
+  opacity: 0.92;
+  max-width: 46ch;
+  margin-bottom: var(--sp-2);
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+
+/* ==========================================================================
+   15) USP-BALK
+   ========================================================================== */
+.usp-bar {
+  border-block: var(--border);
+}
+.usp-bar__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.usp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-0_75);
+  padding: var(--sp-1_5) var(--sp-1);
+  text-align: left;
+  border-left: var(--border);
+}
+.usp:first-child { border-left: none; }
+.usp svg {
+  width: 26px;
+  height: 26px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.usp__title {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.usp__sub {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   16) CATEGORIE-TEGELS
+   ========================================================================== */
+.category-tile {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+.category-tile .media { aspect-ratio: 3 / 4; }
+.category-tile__label {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 100%;
+  padding: var(--sp-1_5);
+  color: var(--bg);
+  background: linear-gradient(180deg, transparent, rgba(28,26,23,0.5));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.category-tile__label h3 {
+  font-size: 1.25rem;
+  color: var(--bg);
+}
+.category-tile__label span {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* Mobiel (2-koloms tegels): stapel titel + aantal zodat ze niet botsen.
+   Geldt voor zowel de collectie-overzichtstegels ("X artikelen") als de
+   homepage-categorietegels ("Shop nu"); stapelen is voor beide veilig. */
+@media (max-width: 749px) {
+  .category-tile__label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: var(--sp-1) var(--sp-0_75);
+  }
+  .category-tile__label h3 {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+  .category-tile__label span {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* ==========================================================================
+   17) PRODUCT-CARD
+   ========================================================================== */
+.product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.product-card__media-wrap {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin-bottom: var(--sp-1);
+}
+.product-card__quick {
+  position: absolute;
+  left: var(--sp-0_75);
+  right: var(--sp-0_75);
+  bottom: var(--sp-0_75);
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity var(--t-fast), transform var(--t-fast);
+}
+.product-card:hover .product-card__quick {
+  opacity: 1;
+  transform: translateY(0);
+}
+.product-card__name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.3;
+}
+.product-card__name a { transition: color var(--t-fast); }
+.product-card__name a:hover { color: var(--accent); }
+.product-card__cat {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+.product-card__price {
+  margin-top: 0.3rem;
+  font-size: 0.95rem;
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+.price-old {
+  color: var(--muted);
+  text-decoration: line-through;
+  font-size: 0.85rem;
+}
+.price-sale { color: var(--sale); }
+
+/* ==========================================================================
+   18) EDITORIAL SPLIT-SECTIE
+   ========================================================================== */
+.editorial {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+.editorial--reverse .editorial__media { order: 2; }
+.editorial__media .media { aspect-ratio: 4 / 5; }
+.editorial__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-1);
+}
+.editorial__body h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+.editorial__body p { color: var(--ink-soft); max-width: 48ch; }
+
+/* ==========================================================================
+   19) LOOKBOOK-TEASER
+   ========================================================================== */
+.lookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-1_5);
+}
+.lookbook-grid .media:first-child {
+  grid-row: span 2;
+  aspect-ratio: 3 / 4;
+}
+.lookbook-grid .media { aspect-ratio: 4 / 3; }
+
+/* ==========================================================================
+   20) INSTAGRAM / UGC-STRIP
+   ========================================================================== */
+/* Instagram-slider: swipebare carrousel met prev/next-knoppen */
+.ig-slider { position: relative; margin-top: var(--sp-1); }
+.ig-slider__track {
+  display: flex;
+  gap: var(--sp-0_75);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 0.25rem;
+  margin: 0;
+  list-style: none;
+  scrollbar-width: none;
+}
+.ig-slider__track::-webkit-scrollbar { display: none; }
+.ig-tile {
+  flex: 0 0 auto;
+  width: clamp(180px, 22vw, 260px);
+  scroll-snap-align: start;
+}
+.ig-tile a { position: relative; display: block; overflow: hidden; }
+.ig-tile .media { aspect-ratio: 1 / 1; transition: transform 0.5s ease; }
+.ig-tile a:hover .media { transform: scale(1.04); }
+.ig-tile__icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bg);
+  background: rgba(28, 26, 23, 0);
+  opacity: 0;
+  transition: opacity var(--t-fast), background var(--t-fast);
+}
+.ig-tile__icon svg { width: 30px; height: 30px; }
+.ig-tile a:hover .ig-tile__icon,
+.ig-tile a:focus-visible .ig-tile__icon { opacity: 1; background: rgba(28, 26, 23, 0.3); }
+.ig-cta { text-align: center; margin-top: var(--sp-2); }
+
+/* Herbruikbare slider-knoppen */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 10px 26px -14px rgba(28, 26, 23, 0.45);
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.slider-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.slider-btn svg { width: 20px; height: 20px; }
+.slider-btn--prev { left: -0.6rem; }
+.slider-btn--next { right: -0.6rem; }
+.slider-btn[hidden] { display: none; }
+@media (max-width: 640px) {
+  .slider-btn { display: none; } /* op mobiel swipen */
+}
+
+/* ==========================================================================
+   21) KLANTBEOORDELINGEN
+   ========================================================================== */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-2);
+}
+.review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: var(--sp-2);
+  background: var(--surface);
+  border: var(--border);
+}
+.review__stars { color: var(--accent); letter-spacing: 0.2em; font-size: 0.9rem; }
+.review__quote {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.review__author {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: auto;
+}
+
+/* --- Beoordelingen: samenvattingsblok + verrijkte kaarten (o.a. productpagina) --- */
+.review-summary {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) 1px minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  max-width: 820px;
+  margin: 0 auto var(--sp-3);
+  padding: clamp(1.75rem, 4vw, 2.75rem);
+  background: var(--surface);
+  border: var(--border);
+}
+.review-summary__rule { align-self: stretch; background: var(--line); }
+.review-summary__score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.3rem;
+}
+.review-summary__avg {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 4.25rem);
+  line-height: 0.95;
+  color: var(--ink);
+}
+.review-summary__outof {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.review-summary__stars {
+  color: var(--accent);
+  letter-spacing: 0.22em;
+  font-size: 1rem;
+  margin-top: 0.2rem;
+}
+.review-summary__count { font-size: 0.85rem; color: var(--ink-soft); }
+.review-summary__recommend { font-size: 0.78rem; color: var(--muted); }
+.review-summary__bars { display: flex; flex-direction: column; gap: 0.5rem; }
+.review-bar {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr 1.75rem;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.review-bar__label { letter-spacing: 0.04em; color: var(--ink-soft); white-space: nowrap; }
+.review-bar__track {
+  height: 6px;
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.review-bar__fill { display: block; height: 100%; background: var(--accent); border-radius: var(--radius); }
+.review-bar__num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Verrijkte review-kaart */
+.review__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-1);
+}
+.review__date {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.review__person { display: flex; align-items: center; gap: 0.8rem; margin-top: auto; }
+.review__avatar {
+  flex: none;
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bg-alt);
+  color: var(--accent-deep);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.review__who { display: flex; flex-direction: column; gap: 0.15rem; }
+.review__name { font-size: 0.85rem; color: var(--ink); letter-spacing: 0.02em; }
+.review__badge { font-size: 0.7rem; letter-spacing: 0.04em; color: var(--accent); }
+.reviews-actions { text-align: center; margin-top: var(--sp-3); }
+
+@media (max-width: 640px) {
+  .review-summary { grid-template-columns: 1fr; gap: var(--sp-2); }
+  .review-summary__rule { display: none; }
+}
+
+/* ==========================================================================
+   22) FORMULIER-VELDEN
+   ========================================================================== */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.field label {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.input,
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 0.85em 1em;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  transition: border-color var(--t-fast);
+}
+.input:focus,
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.field textarea { resize: vertical; min-height: 140px; }
+
+/* ==========================================================================
+   23) NIEUWSBRIEF-SECTIE (herbruikbaar .newsletter)
+   ========================================================================== */
+.newsletter {
+  background: var(--surface);
+}
+.newsletter .eyebrow { color: var(--accent); }
+.newsletter__inner {
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+}
+.newsletter h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+.newsletter p { color: var(--ink-soft); max-width: 50ch; }
+.newsletter-form {
+  display: flex;
+  gap: var(--sp-0_75);
+  width: 100%;
+  max-width: 460px;
+  margin-top: var(--sp-0_75);
+}
+.newsletter-form input {
+  flex: 1;
+  padding: 0.95em 1.2em;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+.newsletter-form input:focus { outline: none; border-color: var(--accent); }
+.newsletter__disclaimer {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.newsletter__thanks {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--accent-deep);
+  padding: var(--sp-1);
+}
+.newsletter__thanks[hidden] { display: none; }
+
+/* ==========================================================================
+   24) BREADCRUMB
+   ========================================================================== */
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-block: var(--sp-1_5);
+}
+.breadcrumb a { transition: color var(--t-fast); }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb span[aria-current] { color: var(--ink); }
+.breadcrumb li::after { content: "/"; margin-left: 0.5rem; color: var(--line); }
+.breadcrumb li:last-child::after { content: none; }
+.breadcrumb ul { display: flex; gap: 0.5rem; }
+
+/* ==========================================================================
+   25) FOOTER
+   ========================================================================== */
+.site-footer {
+  background: var(--ink);
+  color: color-mix(in srgb, var(--bg) 78%, transparent);
+}
+.footer-main {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  padding-block: var(--section-y) var(--sp-4);
+}
+.footer-brand .brand { color: var(--bg); font-size: 1rem; }
+.footer-brand p {
+  margin-top: var(--sp-1);
+  max-width: 32ch;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.footer-social {
+  display: flex;
+  gap: var(--sp-1);
+  margin-top: var(--sp-1_5);
+}
+.footer-social a {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(250, 248, 244, 0.2);
+  color: var(--bg);
+  transition: background var(--t-fast), color var(--t-fast),
+              border-color var(--t-fast);
+}
+.footer-social a:hover {
+  background: var(--bg);
+  color: var(--ink);
+  border-color: var(--bg);
+}
+.footer-social svg { width: 18px; height: 18px; }
+
+/* Klein Google Maps-kaartje in de footer */
+.footer-map { margin-top: var(--sp-1_5); max-width: 340px; }
+.footer-map__frame {
+  display: block;
+  width: 100%;
+  height: 170px;
+  border: 1px solid rgba(250, 248, 244, 0.2);
+  filter: grayscale(1) contrast(0.92) brightness(1.05);
+  transition: filter 0.4s ease;
+}
+.footer-map:hover .footer-map__frame { filter: grayscale(0); }
+.footer-map__link {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+  color: rgba(250, 248, 244, 0.78);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.footer-map__link:hover { color: var(--bg); }
+
+.footer-col h3 {
+  position: relative;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bg);
+  margin-bottom: var(--sp-1_5);
+  padding-bottom: 0.7rem;
+}
+.footer-col h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 26px;
+  height: 1px;
+  background: var(--accent);
+}
+.footer-col ul { display: flex; flex-direction: column; gap: 0.7rem; }
+.footer-col a {
+  position: relative;
+  display: inline-block;
+  font-size: 0.88rem;
+  color: rgba(250, 248, 244, 0.72);
+  transition: color var(--t-fast);
+}
+.footer-col a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-fast);
+}
+.footer-col a:hover { color: var(--bg); }
+.footer-col a:hover::after { transform: scaleX(1); }
+/* Contact-e-mail in de merk-kolom */
+.footer-email {
+  display: inline-block;
+  margin-top: var(--sp-1);
+  font-size: 0.88rem;
+  color: rgba(250, 248, 244, 0.72);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--t-fast);
+}
+.footer-email:hover { color: var(--bg); }
+
+/* Onderbalk */
+.footer-bottom {
+  border-top: 1px solid rgba(250, 248, 244, 0.14);
+  padding-block: var(--sp-1_5);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-1);
+  font-size: 0.76rem;
+}
+.footer-bottom .legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+.footer-bottom a { transition: color var(--t-fast); }
+.footer-bottom a:hover { color: var(--bg); }
+.pay-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.pay-chip {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35em 0.7em;
+  border: 1px solid rgba(250, 248, 244, 0.22);
+  border-radius: var(--radius);
+  color: color-mix(in srgb, var(--bg) 80%, transparent);
+}
+.footer-made { margin-left: auto; }
+
+/* ==========================================================================
+   26) REVEAL-ON-SCROLL ANIMATIES
+   ========================================================================== */
+/* Inhoud is meteen zichtbaar bij het openen van de pagina — geen
+   verschijn-bij-scrollen meer (geen wachten op een animatie). */
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+/* Trapsgewijze vertraging voor opeenvolgende items */
+.reveal[data-delay="1"] { transition-delay: 0.08s; }
+.reveal[data-delay="2"] { transition-delay: 0.16s; }
+.reveal[data-delay="3"] { transition-delay: 0.24s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  * { scroll-behavior: auto; }
+}
+
+/* ==========================================================================
+   27) FOCUS-STATES & TOEGANKELIJKHEID
+   ========================================================================== */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0.75rem 1.25rem;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* ==========================================================================
+   28) RESPONSIVE — mobiel-first aanpassingen (breakpoints 640 / 900 / 1200)
+   ========================================================================== */
+
+/* < 1200px */
+@media (max-width: 1200px) {
+  .footer-main { grid-template-columns: 1fr 1fr; row-gap: var(--sp-3); }
+  .footer-brand { grid-column: 1 / -1; }
+}
+
+/* < 900px : tablet -> menu inklappen */
+@media (max-width: 900px) {
+  .header-inner { grid-template-columns: auto 1fr auto; min-height: 64px; }
+  .main-nav { display: none; }
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    grid-column: 1;
+    justify-self: start;
+    color: inherit;
+  }
+  .menu-toggle svg { width: 22px; height: 22px; }
+  .brand { grid-column: 2; justify-self: center; font-size: 0.95rem; letter-spacing: 0.26em; }
+  .header-actions { grid-column: 3; }
+  /* Op mobiel alleen het winkelmand-icoon in de header; zoeken + account
+     verhuizen naar het hamburger-menu (.mobile-nav__utils). */
+  .header-actions__desktop { display: none; }
+
+  .grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .grid--3 { grid-template-columns: repeat(2, 1fr); }
+
+  .usp-bar__grid { grid-template-columns: repeat(2, 1fr); }
+  .usp:nth-child(odd) { border-left: none; }
+  .usp:nth-child(n+3) { border-top: var(--border); }
+
+  .editorial { grid-template-columns: 1fr; gap: var(--sp-2); }
+  .editorial--reverse .editorial__media { order: 0; }
+
+  .lookbook-grid { grid-template-columns: repeat(2, 1fr); }
+  .lookbook-grid .media:first-child { grid-row: auto; }
+
+  .insta-strip { grid-template-columns: repeat(3, 1fr); }
+
+  .reviews-grid { grid-template-columns: 1fr; }
+
+  .announcement { font-size: 0.66rem; }
+}
+
+/* < 640px : mobiel */
+@media (max-width: 640px) {
+  .grid--4,
+  .grid--3,
+  .grid--2 { grid-template-columns: repeat(2, 1fr); gap: var(--sp-1); }
+
+  /* Hero: de FOTO vult gegarandeerd het hele vlak; tekst + knop liggen eroverheen.
+     Hoogte op .hero zelf vastzetten en .media + foto absoluut laten vullen,
+     zodat er nooit een grijs/beige achtergrondblok onder de foto verschijnt. */
+  .hero { position: relative; min-height: 86vh; overflow: hidden; }
+  .hero .media {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+  .hero .media > picture,
+  .hero .media > img,
+  .hero .media > picture > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    justify-content: flex-end;
+    padding-bottom: clamp(2rem, 8vw, 3.25rem);
+  }
+  .hero__title { font-size: clamp(1.55rem, 7.5vw, 2.15rem); max-width: 18ch; margin-block: 0.4rem; }
+  .hero__text { font-size: 0.9rem; margin-bottom: var(--sp-1_5); max-width: 34ch; }
+
+  .hero__actions { flex-direction: column; align-items: stretch; }
+  .hero__actions .btn { width: 100%; }
+
+  .newsletter-form { flex-direction: column; }
+  .newsletter-form .btn { width: 100%; }
+
+  .section-head--between { flex-direction: column; align-items: flex-start; }
+
+  .footer-main { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+  .footer-made { margin-left: 0; }
+
+  .insta-strip { grid-template-columns: repeat(2, 1fr); }
+  .lookbook-grid { grid-template-columns: 1fr; }
+
+  /* Announcement-bar roteert nu door de boodschappen (zie main.js);
+     iets compacter op mobiel, en laat een lange zin desnoods afbreken. */
+  .announcement { letter-spacing: 0.05em; }
+  .announcement__item { white-space: normal; }
+}
+
+/* ==========================================================================
+   Auto-bewegende sliders op mobiel: categorie-tegels + reviews
+   (Instagram is al een slider; die krijgt alleen auto-beweging via JS.)
+   ========================================================================== */
+@media (max-width: 749px) {
+  .grid--4.is-mobile-slider,
+  .reviews-grid.is-mobile-slider {
+    display: flex;
+    grid-template-columns: none;
+    flex-wrap: nowrap;
+    gap: var(--sp-1);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-padding-inline: var(--container-pad);
+    padding-bottom: 0.5rem;
+  }
+  .grid--4.is-mobile-slider::-webkit-scrollbar,
+  .reviews-grid.is-mobile-slider::-webkit-scrollbar { display: none; }
+  .grid--4.is-mobile-slider > *,
+  .reviews-grid.is-mobile-slider > * {
+    flex: 0 0 80%;
+    scroll-snap-align: center;
+  }
+}
+
+/* ==========================================================================
+   29) PRESTATIE & TOEGANKELIJKHEID — additieve optimalisaties
+   --------------------------------------------------------------------------
+   Puur additief: behoudt de bestaande uitstraling. Doel = snellere rendering
+   van lange pagina's, GPU-vriendelijke animaties en respect voor de
+   systeeminstelling 'verminderde beweging'. Niets hierboven wordt overschreven
+   qua look; we maken alleen offscreen-werk goedkoper en animaties lichter.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   29.1) GPU-vriendelijke animatie-hints
+   De .reveal en .product-card__quick animeren al transform/opacity (goedkoop).
+   We zetten will-change alleen tijdens hover/zichtbaarheid zodat de browser
+   niet permanent compositor-lagen vasthoudt (dat zou juist geheugen kosten).
+   -------------------------------------------------------------------------- */
+.media::before,
+.media > img,
+.ig-tile .media {
+  /* Hint dat alleen transform verandert -> compositor kan dit los renderen */
+  will-change: auto;
+  backface-visibility: hidden;
+}
+a:hover .media::before,
+.card:hover .media::before,
+.media-link:hover .media::before,
+.product-card:hover .product-card__quick,
+.ig-tile a:hover .media {
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   29.2) content-visibility op grote, herhaalde / onder-de-vouw secties
+   De browser slaat layout/paint van offscreen secties over tot ze in beeld
+   komen. We zetten dit BEWUST NIET op header, hero, aankondigingsbalk of
+   sticky/overlay-elementen (boven de vouw of positionering-gevoelig).
+   contain-intrinsic-size geeft een schatting zodat de scrollbar stabiel blijft
+   en er geen sprongen ontstaan. Conservatief gehouden.
+   -------------------------------------------------------------------------- */
+.section:not(.hero):not(.usp-bar):not(.has-drawer),
+.site-footer {
+  content-visibility: auto;
+  /* Schatting van de gerenderde hoogte van een doorsnee sectie (1 col breed). */
+  contain-intrinsic-size: auto 720px;
+}
+/* Footer is doorgaans compacter dan een volle inhoudssectie. */
+.site-footer {
+  contain-intrinsic-size: auto 520px;
+}
+
+/* --------------------------------------------------------------------------
+   29.3) Stabiele afbeeldingsverhoudingen (geen layout-shift / CLS)
+   .media heeft al aspect-ratio + achtergrond. We borgen dat ELKE latere <img>
+   (product, hero, collectie, Instagram) de ratio van de container erft en
+   nooit verspringt voor hij geladen is. Echte foto's krijgen zo automatisch
+   vaste afmetingen via de bestaande rendercode.
+   -------------------------------------------------------------------------- */
+.media > img {
+  /* Erf de aspect-ratio van .media zodat de plek gereserveerd blijft. */
+  aspect-ratio: inherit;
+  background-color: var(--bg-alt);
+}
+/* Losse <img> buiten .media (bv. logo's) krijgen toch hoogte-uit-breedte
+   indien afmetingen ontbreken, om springen te voorkomen. */
+img[width][height] {
+  height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   29.4) Verminderde beweging — uitgebreid (toegankelijkheid + minder werk)
+   Vult de bestaande reduced-motion-blokken aan: schakelt transities,
+   animaties en transform-reveals globaal uit/minimaliseert ze. .reveal staat
+   direct zichtbaar; sliders en zoom-effecten worden stilgezet.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html { scroll-behavior: auto; }
+
+  /* Reveals meteen tonen, geen transform-onthulling */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .reveal[data-delay="1"],
+  .reveal[data-delay="2"],
+  .reveal[data-delay="3"] { transition-delay: 0s !important; }
+
+  /* Hover-/scroll-zoom op media uitschakelen */
+  .media::before,
+  .media > img,
+  .ig-tile .media,
+  a:hover .media::before,
+  .card:hover .media::before,
+  .media-link:hover .media::before,
+  a:hover .media > img,
+  .ig-tile a:hover .media {
+    transform: none !important;
+  }
+
+  /* Quick-add knop direct tonen i.p.v. omhoog schuiven */
+  .product-card__quick {
+    transform: none !important;
+    transition: opacity 0.001ms !important;
+  }
+
+  /* Vloeiend snap-scrollen van sliders uitzetten */
+  .ig-slider__track,
+  .grid--4.is-mobile-slider,
+  .reviews-grid.is-mobile-slider { scroll-behavior: auto !important; }
+}
+
+/* ==========================================================================
+   30) Homepage-sliders & responsieve productaantallen
+   ========================================================================== */
+/* Continu doorlopende Instagram-marquee: geen snap/smooth die de auto-scroll stoort. */
+.ig-slider__track[data-autoslide="continuous"] {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+/* Het aantal producten op mobiel regelt elke productrij nu zelf,
+   via de instelling "Aantal producten — mobiel" in de Thema-editor. */
+
+/* ==========================================================================
+   31) INSTELBAAR VANUIT DE THEMA-EDITOR (v6.0)
+   Alles hieronder wordt aangestuurd door instellingen in Shopify, zodat de
+   eigenaar tekst, foto's, kleuren en de mobiele weergave zelf kan bijstellen.
+   ========================================================================== */
+
+/* --- Zichtbaarheid per apparaat -------------------------------------------
+   Elke sectie heeft de vinkjes "Verbergen op mobiel" / "Verbergen op laptop".
+   -------------------------------------------------------------------------- */
+@media (max-width: 749px) {
+  .sm-hide-mobile,
+  .shopify-section:has(> .sm-hide-mobile) { display: none !important; }
+}
+@media (min-width: 750px) {
+  .sm-hide-desktop,
+  .shopify-section:has(> .sm-hide-desktop) { display: none !important; }
+}
+
+/* --- Ruimte boven/onder een sectie ---------------------------------------- */
+.sm-space-none   { padding-block: 0 !important; }
+.sm-space-small  { padding-block: clamp(2rem, 4vw, 3.5rem) !important; }
+.sm-space-medium { padding-block: clamp(3.5rem, 6vw, 5.5rem) !important; }
+.sm-space-large  { padding-block: clamp(5rem, 9vw, 8rem) !important; }
+@media (max-width: 749px) {
+  .sm-space-mobile-none   { padding-block: 0 !important; }
+  .sm-space-mobile-small  { padding-block: 1.75rem !important; }
+  .sm-space-mobile-medium { padding-block: 2.75rem !important; }
+  .sm-space-mobile-large  { padding-block: 4rem !important; }
+}
+
+/* --- Achtergrondkeuze per sectie ------------------------------------------ */
+.sm-bg-default { background: var(--bg); }
+.sm-bg-alt     { background: var(--bg-alt); }
+.sm-bg-white   { background: var(--surface); }
+.sm-bg-dark    { background: var(--ink); color: var(--bg); }
+.sm-bg-dark h1,
+.sm-bg-dark h2,
+.sm-bg-dark h3,
+.sm-bg-dark p,
+.sm-bg-dark .eyebrow,
+.sm-bg-dark .section-head__title { color: var(--bg); }
+
+/* --- Tekstuitlijning per apparaat ----------------------------------------- */
+.sm-align-left   { text-align: left; }
+.sm-align-center { text-align: center; }
+.sm-align-right  { text-align: right; }
+.sm-align-center .section-head,
+.sm-align-center .editorial__body { align-items: center; }
+@media (max-width: 749px) {
+  .sm-align-mobile-left   { text-align: left; }
+  .sm-align-mobile-center { text-align: center; }
+  .sm-align-mobile-right  { text-align: right; }
+}
+
+/* --- Tekst die alleen op één apparaat verschijnt --------------------------- */
+.sm-only-mobile  { display: none; }
+@media (max-width: 749px) {
+  .sm-only-mobile  { display: revert; }
+  .sm-only-desktop { display: none; }
+}
+
+/* --- Hero: hoogte apart voor laptop en mobiel ------------------------------
+   'aspect-ratio: auto' is nodig omdat .hero .media standaard 16/9 is; zonder
+   die reset zou een lage hero op brede schermen alsnog hoog blijven.
+   -------------------------------------------------------------------------- */
+.hero.sm-hero-short .media,
+.hero.sm-hero-medium .media,
+.hero.sm-hero-tall .media,
+.hero.sm-hero-full .media { aspect-ratio: auto; }
+.hero.sm-hero-short .media  { min-height: 58vh; }
+.hero.sm-hero-medium .media { min-height: 72vh; }
+.hero.sm-hero-tall .media   { min-height: 88vh; }
+.hero.sm-hero-full .media   { min-height: 100vh; }
+
+@media (max-width: 749px) {
+  /* Onder 640px staat de hoogte op .hero zelf (de foto vult die absoluut),
+     dus daar moet de keuze van de eigenaar ook op .hero landen. */
+  .hero.sm-hero-mobile-short  { min-height: 55vh; }
+  .hero.sm-hero-mobile-medium { min-height: 68vh; }
+  .hero.sm-hero-mobile-tall   { min-height: 82vh; }
+  .hero.sm-hero-mobile-full   { min-height: 100svh; }
+  .hero.sm-hero-mobile-short .media  { min-height: 55vh; }
+  .hero.sm-hero-mobile-medium .media { min-height: 68vh; }
+  .hero.sm-hero-mobile-tall .media   { min-height: 82vh; }
+  .hero.sm-hero-mobile-full .media   { min-height: 100svh; }
+}
+
+/* --- Donkerte van de laag over de hero-foto (leesbaarheid) ----------------- */
+.hero__overlay {
+  background: linear-gradient(180deg,
+    rgba(28, 26, 23, calc(var(--sm-hero-overlay, 0.28) * 1)) 0%,
+    rgba(28, 26, 23, calc(var(--sm-hero-overlay, 0.28) * 0.3)) 40%,
+    rgba(28, 26, 23, calc(var(--sm-hero-overlay, 0.28) * 1.5)) 100%);
+}
+@media (max-width: 749px) {
+  .hero__overlay {
+    background: linear-gradient(180deg,
+      rgba(28, 26, 23, calc(var(--sm-hero-overlay-mobile, 0.32) * 1)) 0%,
+      rgba(28, 26, 23, calc(var(--sm-hero-overlay-mobile, 0.32) * 0.35)) 40%,
+      rgba(28, 26, 23, calc(var(--sm-hero-overlay-mobile, 0.32) * 1.5)) 100%);
+  }
+}
+
+/* --- Hero: tekst boven/midden/onder --------------------------------------- */
+.hero__content.sm-hero-pos-top    { justify-content: flex-start; padding-top: clamp(6rem, 14vw, 9rem); }
+.hero__content.sm-hero-pos-center { justify-content: center; }
+.hero__content.sm-hero-pos-bottom { justify-content: flex-end; }
+.hero__content.sm-align-center .hero__title,
+.hero__content.sm-align-center .hero__text { margin-inline: auto; }
+.hero__content.sm-align-center .hero__actions { justify-content: center; }
+@media (max-width: 749px) {
+  .hero__content.sm-hero-pos-mobile-top    { justify-content: flex-start; padding-top: clamp(5rem, 22vw, 7rem); }
+  .hero__content.sm-hero-pos-mobile-center { justify-content: center; }
+  .hero__content.sm-hero-pos-mobile-bottom { justify-content: flex-end; }
+  .hero__content.sm-align-mobile-center .hero__title,
+  .hero__content.sm-align-mobile-center .hero__text { margin-inline: auto; }
+}
+
+/* --- Instelbaar aantal kolommen (laptop / mobiel) -------------------------- */
+.sm-cols { display: grid; gap: clamp(1rem, 2vw, 2rem); }
+/* De USP-balk heeft doorlopende scheidingslijntjes en dus géén tussenruimte. */
+.usp-bar__grid.sm-cols { gap: 0; }
+.sm-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sm-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.sm-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.sm-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.sm-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+@media (max-width: 989px) and (min-width: 750px) {
+  .sm-cols-4, .sm-cols-5, .sm-cols-6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 749px) {
+  .sm-cols-mobile-1 { grid-template-columns: minmax(0, 1fr); }
+  .sm-cols-mobile-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sm-cols-mobile-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Mobiel als swipe-rij i.p.v. raster */
+  .sm-cols.sm-mobile-slider {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: var(--sm-slide-w, 62%);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+  }
+  .sm-cols.sm-mobile-slider::-webkit-scrollbar { display: none; }
+  .sm-cols.sm-mobile-slider > * { scroll-snap-align: start; min-width: 0; }
+}
+
+/* --- Verhouding van foto's, instelbaar per sectie --------------------------
+   !important omdat dit een bewuste keuze van de eigenaar is die altijd moet
+   winnen van de standaardverhoudingen verderop in dit bestand.
+   -------------------------------------------------------------------------- */
+.sm-ratio-portrait  { aspect-ratio: 3 / 4 !important; }
+.sm-ratio-square    { aspect-ratio: 1 / 1 !important; }
+.sm-ratio-landscape { aspect-ratio: 4 / 3 !important; }
+.sm-ratio-wide      { aspect-ratio: 16 / 9 !important; }
+.sm-ratio-tall      { aspect-ratio: 2 / 3 !important; }
+/* Twee staande telefoonvormen:
+   - phone (9:16)     = een foto die je in de gewone camerastand maakt
+   - phonefull (9:19,5) = een foto die het hele telefoonscherm vult
+   Is je foto ook echt die vorm, dan valt er niets weg. */
+.sm-ratio-phone     { aspect-ratio: 9 / 16 !important; }
+.sm-ratio-phonefull { aspect-ratio: 9 / 19.5 !important; }
+
+/* Tussen 750 en 900 px staat de productpagina in één kolom over de volle
+   breedte. Een 9:16- of 9:19,5-foto wordt daar meer dan twee schermen hoog.
+   We beperken de BREEDTE van de hele galerij (foto én de rij kleine fotootjes
+   eronder), want dan blijft de verhouding intact en valt er nog steeds niets
+   weg. 45vh × 16/9 ≈ 80vh hoog, 39vh × 19,5/9 ≈ 85vh hoog.
+   Boven 900 px niet nodig: daar staat de productinfo in een tweede kolom die
+   meescrolt (sticky), dus de bestelknop blijft altijd in beeld. Op de telefoon
+   ook niet: daar is de foto ongeveer één scherm hoog. */
+@media (min-width: 750px) and (max-width: 900px) {
+  .product-gallery:has(.sm-ratio-phone) {
+    max-width: 45vh;
+    margin-inline: auto;
+  }
+  .product-gallery:has(.sm-ratio-phonefull) {
+    max-width: 39vh;
+    margin-inline: auto;
+  }
+}
+
+/* --- Foto volledig tonen in plaats van bijsnijden -------------------------
+   Normaal vult de foto het hele vlak en valt er iets buiten beeld (cover).
+   Met deze klasse past de hele foto in het vlak (contain) en blijft er wat
+   rustige achtergrond over. Handig als je foto's niet allemaal even hoog
+   zijn. De sierlijke verloop-achtergrond gaat dan uit, anders zie je die
+   randen in de overgebleven ruimte.
+   -------------------------------------------------------------------------- */
+.sm-fit-contain { background-color: var(--bg-alt); }
+.sm-fit-contain::before { display: none !important; }
+.sm-fit-contain > img,
+.sm-fit-contain > picture > img { object-fit: contain !important; }
+/* De dunne zwarte rand op de productpagina zit normaal op de foto zelf. Bij
+   'volledig tonen' zou die om de lege zijkanten lopen, dus verhuist hij naar
+   het kader. */
+.sm-fit-contain > img,
+.sm-fit-contain > picture > img { border-color: transparent !important; }
+.product-gallery__main.sm-fit-contain { border: 1px solid var(--ink); }
+
+/* --- Logo-breedte in de header, apart voor laptop en mobiel ---------------- */
+.brand__logo { width: var(--sm-logo-w, 180px); height: auto; }
+@media (max-width: 749px) {
+  .brand__logo { width: var(--sm-logo-w-mobile, 130px); }
+}
+.footer-brand .brand__logo { width: var(--sm-footer-logo-w, 160px); }
+
+/* --- Losse tekstsectie ("Rijke tekst") ------------------------------------ */
+.sm-richtext__inner { max-width: 760px; margin-inline: auto; }
+.sm-richtext__inner > * + * { margin-top: var(--sp-1); }
+.sm-richtext__inner .btn { margin-top: var(--sp-1_5); }
+.sm-align-left .sm-richtext__inner { margin-inline: 0; }
+
+/* --- Afbeeldingsbanner ---------------------------------------------------- */
+.sm-banner { position: relative; overflow: hidden; }
+.sm-banner__media { width: 100%; }
+.sm-banner__media img { width: 100%; height: 100%; object-fit: cover; }
+.sm-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 18, 16, var(--sm-banner-overlay, 0.3));
+  pointer-events: none;
+}
+.sm-banner__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  color: var(--bg);
+}
+.sm-banner__content.sm-banner--top    { justify-content: flex-start; }
+.sm-banner__content.sm-banner--bottom { justify-content: flex-end; }
+.sm-banner__content.sm-align-center { align-items: center; }
+.sm-banner__content.sm-align-right  { align-items: flex-end; }
+.sm-banner__content h2 { color: var(--bg); font-size: clamp(1.6rem, 4vw, 3rem); }
+.sm-banner__content p  { color: var(--bg); max-width: 46ch; }
+.sm-banner__content .eyebrow { color: var(--bg); opacity: 0.9; }
+.sm-banner__actions { display: flex; flex-wrap: wrap; gap: var(--sp-0_75); margin-top: var(--sp-1); }
+@media (max-width: 749px) {
+  .sm-banner__content.sm-align-mobile-center { align-items: center; }
+  .sm-banner__content .sm-banner__actions { width: 100%; flex-direction: column; }
+  .sm-banner__content .sm-banner__actions .btn { width: 100%; text-align: center; }
+}
+
+/* --- USP-iconen uit de bibliotheek ---------------------------------------- */
+.usp svg { width: 26px; height: 26px; flex: none; }
+
+/* --- Categorie-tegels: instelbaar label ----------------------------------- */
+.category-tile__label span:empty { display: none; }
+
+/* ==========================================================================
+   32) POP-UPS (v6.1)
+   Nieuwsbrief-pop-up, actie-pop-up en cookiemelding. Alles wordt aangestuurd
+   vanuit de Thema-editor: aan/uit, tekst, foto, moment en positie.
+   ========================================================================== */
+.sm-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2.5rem);
+}
+.sm-popup.is-open { display: flex; }
+body.sm-popup-open { overflow: hidden; }
+
+.sm-popup__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 26, 23, 0.55);
+  animation: sm-popup-fade 0.35s ease both;
+}
+.sm-popup__dialog {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(880px, 100%);
+  max-height: min(90vh, 720px);
+  overflow: auto;
+  background: var(--bg);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px rgba(28, 26, 23, 0.25);
+  animation: sm-popup-rise 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.sm-popup__dialog--with-media { grid-template-columns: 1fr 1fr; }
+.sm-popup__dialog--narrow { width: min(520px, 100%); }
+
+.sm-popup__media { position: relative; overflow: hidden; background: var(--bg-alt); }
+.sm-popup__media .media,
+.sm-popup__media img {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+  display: block;
+  aspect-ratio: auto;
+}
+.sm-popup__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-0_75);
+  padding: clamp(1.5rem, 3.5vw, 2.75rem);
+  text-align: left;
+}
+.sm-popup__body.sm-align-center { text-align: center; align-items: center; }
+.sm-popup__body h2 {
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  margin: 0;
+}
+.sm-popup__body p { color: var(--ink-soft); margin: 0; }
+.sm-popup__code {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.5em 1em;
+  border: 1px dashed var(--accent);
+  color: var(--accent-deep);
+  font-family: var(--font-body);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+.sm-popup__body.sm-align-center .sm-popup__code { align-self: center; }
+.sm-popup__actions { display: flex; flex-wrap: wrap; gap: var(--sp-0_75); margin-top: var(--sp-0_5); }
+.sm-popup__dismiss {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.sm-popup__dismiss:hover { color: var(--ink); }
+.sm-popup__note { font-size: 0.78rem; color: var(--muted); }
+.sm-popup__thanks { color: var(--accent-deep); }
+
+.sm-popup__close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius);
+  background: rgba(250, 248, 244, 0.9);
+  color: var(--ink);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--t-fast), transform var(--t-fast);
+}
+.sm-popup__close:hover { background: var(--bg-alt); transform: scale(1.06); }
+
+/* Formulier in de pop-up */
+.sm-popup__form { display: flex; gap: var(--sp-0_5); flex-wrap: wrap; }
+.sm-popup__form input[type="email"] {
+  flex: 1 1 200px;
+  min-width: 0;
+  padding: 0.75em 0.9em;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.95rem;
+}
+.sm-popup__form .btn { flex: none; }
+
+/* Hoek-variant: klein kaartje rechtsonder in plaats van een groot venster */
+.sm-popup--corner {
+  align-items: flex-end;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+.sm-popup--corner .sm-popup__overlay { display: none; }
+.sm-popup--corner .sm-popup__dialog {
+  width: min(380px, 100%);
+  pointer-events: auto;
+  box-shadow: 0 14px 40px rgba(28, 26, 23, 0.2);
+}
+.sm-popup--corner .sm-popup__dialog--with-media { grid-template-columns: 1fr; }
+.sm-popup--corner .sm-popup__media .media,
+.sm-popup--corner .sm-popup__media img { min-height: 160px; }
+
+@keyframes sm-popup-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sm-popup-rise {
+  from { opacity: 0; transform: translateY(18px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sm-popup__overlay,
+  .sm-popup__dialog { animation: none; }
+}
+
+@media (max-width: 749px) {
+  .sm-popup { padding: 0.9rem; align-items: flex-end; }
+  .sm-popup__dialog,
+  .sm-popup--corner .sm-popup__dialog { width: 100%; max-height: 88vh; }
+  .sm-popup__dialog--with-media { grid-template-columns: 1fr; }
+  .sm-popup__media .media,
+  .sm-popup__media img { min-height: 180px; max-height: 34vh; }
+  .sm-popup__body { padding: 1.35rem; }
+  .sm-popup__actions { width: 100%; }
+  .sm-popup__actions .btn { width: 100%; text-align: center; }
+  .sm-popup__form { flex-direction: column; }
+  .sm-popup__form .btn { width: 100%; }
+  /* Foto verbergen op mobiel als de eigenaar dat kiest */
+  .sm-popup__dialog--hide-media-mobile .sm-popup__media { display: none; }
+  .sm-popup__dialog--hide-media-mobile { grid-template-columns: 1fr; }
+}
+
+/* --- Cookiemelding -------------------------------------------------------- */
+.sm-cookiebar {
+  position: fixed;
+  z-index: 250;
+  display: none;
+  gap: var(--sp-1);
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 40px rgba(28, 26, 23, 0.18);
+  padding: clamp(1rem, 2vw, 1.35rem);
+  animation: sm-popup-rise 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.sm-cookiebar.is-open { display: flex; }
+.sm-cookiebar--bar {
+  left: clamp(0.75rem, 3vw, 2rem);
+  right: clamp(0.75rem, 3vw, 2rem);
+  bottom: clamp(0.75rem, 3vw, 2rem);
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.sm-cookiebar--card {
+  left: clamp(0.75rem, 3vw, 2rem);
+  bottom: clamp(0.75rem, 3vw, 2rem);
+  width: min(400px, calc(100% - 1.5rem));
+  flex-direction: column;
+  align-items: flex-start;
+}
+.sm-cookiebar__text { color: var(--ink-soft); font-size: 0.88rem; max-width: 70ch; }
+.sm-cookiebar__text p { margin: 0; }
+.sm-cookiebar__text a { color: var(--accent-deep); text-decoration: underline; }
+.sm-cookiebar__actions { display: flex; gap: var(--sp-0_5); flex-wrap: wrap; flex: none; }
+
+@media (max-width: 749px) {
+  .sm-cookiebar--bar,
+  .sm-cookiebar--card {
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    width: auto;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sm-cookiebar__actions { width: 100%; }
+  .sm-cookiebar__actions .btn { flex: 1; text-align: center; }
+}
+
+/* ==========================================================================
+   33) SOCIALE LINKS BUITEN DE FOOTER (snippet sm-socials)
+   ========================================================================== */
+.sm-socials {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  margin-top: var(--sp-1_5);
+}
+.sm-socials__label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sm-socials__list { display: flex; gap: 0.6rem; }
+.sm-socials__list a {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink);
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.sm-socials__list a:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+.sm-socials__list svg { width: 19px; height: 19px; }
+
+/* Op een donkere achtergrond */
+.sm-socials--dark .sm-socials__label { color: rgba(250, 248, 244, 0.7); }
+.sm-socials--dark .sm-socials__list a {
+  border-color: rgba(250, 248, 244, 0.25);
+  color: var(--bg);
+}
+.sm-socials--dark .sm-socials__list a:hover {
+  background: var(--bg);
+  border-color: var(--bg);
+  color: var(--ink);
+}
+
+/* Gecentreerd meelopen met de tekstuitlijning van de sectie */
+.sm-align-center .sm-socials,
+.sm-banner__content.sm-align-center .sm-socials { justify-content: center; }
+@media (max-width: 749px) {
+  .sm-align-mobile-center .sm-socials { justify-content: center; }
+}
+
+/* ==========================================================================
+   34) UITGELICHT MENU-ITEM (bijvoorbeeld "Sale")
+   Welk item dit is, stel je in bij de sectie Koptekst.
+   ========================================================================== */
+.main-nav a.nav-highlight,
+.nav-dropdown-toggle.nav-highlight,
+.mobile-nav__links > a.nav-highlight,
+.mobile-nav__group > summary.nav-highlight {
+  color: var(--sale);
+}
+.main-nav a.nav-highlight:hover,
+.nav-dropdown-toggle.nav-highlight:hover,
+.mobile-nav__links > a.nav-highlight:hover { color: var(--sale); opacity: 0.75; }
+.main-nav a.nav-highlight::after { background: var(--sale); }
+
+/* Op de doorzichtige balk over de hero blijft de tekst licht en leesbaar;
+   het item valt daar op met een streepje in plaats van een kleur. */
+.header--overlay .main-nav a.nav-highlight {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
+}
+body.is-scrolled .header--overlay .main-nav a.nav-highlight {
+  color: var(--sale);
+  text-decoration: none;
+}
+
+/* --- Swipe-rijen: USP-balk en de waarden op Over ons ----------------------- */
+@media (max-width: 749px) {
+  /* De pluspunten staan tegen elkaar aan met een dun scheidingslijntje;
+     de om-en-om-regels van het raster gelden hier niet. */
+  .usp-bar__grid.sm-mobile-slider .usp {
+    border-left: none;
+    border-top: none;
+    padding-inline: var(--sp-1);
+  }
+  .usp-bar__grid.sm-mobile-slider .usp + .usp { border-left: var(--border); }
+
+  /* De waarden krijgen wat lucht tussen de kaartjes. */
+  .values-grid.sm-mobile-slider { gap: var(--sp-1_5); }
+  .values-grid.sm-mobile-slider .value { padding-right: 0.25rem; }
+}
+
+/* --- Sociale knoppen in het mobiele menu, onder "Account" ------------------ */
+.mobile-nav__socials {
+  padding-top: var(--sp-1);
+  margin-top: var(--sp-0_5);
+  border-top: var(--border);
+}
+.mobile-nav__socials .sm-socials {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-0_75);
+  margin-top: 0;
+}
+.mobile-nav__socials .sm-socials__list { gap: var(--sp-0_75); }
+
+/* ==========================================================================
+   35) VRIJE TEKST (.rte)
+   Alles wat je in Shopify zelf typt — productomschrijvingen, uitklapblokken,
+   collectieteksten — komt als kant-en-klare HTML binnen. Zonder deze regels
+   zou die tekst kaal zijn: geen witruimte tussen alinea's en geen opsommings-
+   tekens, want de reset bovenin dit bestand haalt die juist weg.
+   ========================================================================== */
+.rte > * + * { margin-top: var(--sp-1); }
+.rte p { color: inherit; }
+.rte strong, .rte b { font-weight: 500; color: var(--ink); }
+.rte em, .rte i { font-style: italic; }
+.rte a {
+  color: var(--accent-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rte a:hover { color: var(--accent); }
+
+.rte h1, .rte h2, .rte h3, .rte h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--ink);
+  margin-top: var(--sp-1_5);
+}
+.rte h1 { font-size: 1.6rem; }
+.rte h2 { font-size: 1.35rem; }
+.rte h3 { font-size: 1.15rem; }
+.rte h4 { font-size: 1rem; }
+
+.rte ul, .rte ol {
+  margin-left: 1.1rem;
+  padding-left: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.rte ul { list-style: disc; }
+.rte ol { list-style: decimal; }
+.rte li { list-style: inherit; display: list-item; }
+.rte li::marker { color: var(--accent); }
+
+.rte blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: var(--sp-1);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.rte img { max-width: 100%; height: auto; }
+.rte hr { border: none; border-top: var(--border); margin-block: var(--sp-1_5); }
+
+.rte table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.rte th, .rte td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.6rem 0.8rem;
+  border-bottom: var(--border);
+}
+.rte th { font-family: var(--font-body); font-weight: 500; color: var(--ink); }
+
+/* --- Linkje naar de winkelmandpagina, onder de afrekenknop in de lade ------ */
+.cart-drawer__view {
+  display: block;
+  margin-top: var(--sp-0_75);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cart-drawer__view:hover { color: var(--ink); }
+.cart-drawer__foot form { margin: 0; }
+.cart-drawer__foot .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+/* ==========================================================================
+   36) DOORLOPENDE BAND (marquee) — o.a. de USP-balk op mobiel
+   De inhoud staat er twee keer in; het script schuift de band steeds een
+   klein stukje op en springt bij de helft onzichtbaar terug naar het begin.
+   Zo loopt hij eindeloos door van rechts naar links.
+   ========================================================================== */
+@media (max-width: 749px) {
+  .sm-marquee {
+    display: flex !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    /* Belangrijk: geen 'smooth' en geen snap — die vechten met het schuiven. */
+    scroll-behavior: auto !important;
+    scroll-snap-type: none !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .sm-marquee::-webkit-scrollbar { display: none; }
+
+  .sm-marquee > .usp {
+    flex: 0 0 auto;
+    width: var(--sm-slide-w, 66%);
+    min-width: 0;
+  }
+
+  /* Doorlopende scheidingslijntjes, ook over de kopie heen. */
+  .usp-bar__grid.sm-marquee .usp { border-left: var(--border); border-top: none; }
+  .usp-bar__grid.sm-marquee > .usp:first-child { border-left: none; }
+}
+
+/* Op laptop is het gewoon een rij naast elkaar: de kopie is dan overbodig. */
+@media (min-width: 750px) {
+  .usp-bar__grid .sm-marquee__copy { display: none; }
+}

@@ -1,0 +1,62 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-over-ons",
+      "blocks": {
+        "waarde_1": {
+          "type": "waarde",
+          "settings": {
+            "icon": "clock",
+            "title": "Ervaren in mode",
+            "text": "Al meer dan 30 jaar leven wij voor mode. Die ervaring voel je terug in alles wat we voor je uitkiezen."
+          }
+        },
+        "waarde_2": {
+          "type": "waarde",
+          "settings": {
+            "icon": "shield",
+            "title": "Met zorg uitgekozen",
+            "text": "Iedere week vind je bij ons de nieuwste collectie van Only en unieke items uit Parijs. Alles wordt door onszelf met zorg uitgezocht en doorgepast."
+          }
+        },
+        "waarde_3": {
+          "type": "waarde",
+          "settings": {
+            "icon": "heart",
+            "title": "Jij staat voorop",
+            "text": "Onze grootste passie is jou blij maken, zodat je met een mooie outfit én een goed gevoel de deur uitgaat."
+          }
+        },
+        "waarde_4": {
+          "type": "waarde",
+          "settings": {
+            "icon": "chat",
+            "title": "Persoonlijk advies",
+            "text": "Of je nu langskomt of online shopt: we denken graag met je mee met eerlijk, persoonlijk stylingadvies."
+          }
+        }
+      },
+      "block_order": [
+        "waarde_1",
+        "waarde_2",
+        "waarde_3",
+        "waarde_4"
+      ],
+      "settings": {
+        "show_team": false,
+        "values_mobile_slider": true,
+        "values_autoslide": true,
+        "values_autoslide_seconds": 3,
+        "values_mobile_width": 78,
+        "show_manifest": false
+      }
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": [
+    "main",
+    "newsletter"
+  ]
+}

@@ -1,0 +1,69 @@
+{%- comment -%}
+  Rij met bijpassende producten onder de productpagina.
+  Kies zelf producten, of laat het thema producten uit dezelfde collectie kiezen.
+{%- endcomment -%}
+
+<!-- COMBINEER MET / ANDEREN BEKEKEN OOK -->
+{%- if section.settings.show_recommendations -%}
+  <section class="section section--alt product-recos">
+    <div class="container container--wide">
+      <div class="section-head section-head--between reveal">
+        <div>
+          {%- if section.settings.reco_eyebrow != blank -%}<p class="eyebrow">{{ section.settings.reco_eyebrow }}</p>{%- endif -%}
+          {%- if section.settings.reco_heading != blank -%}<h2 class="section-head__title">{{ section.settings.reco_heading }}</h2>{%- endif -%}
+        </div>
+        {%- if section.settings.reco_link_label != blank -%}
+          <a class="btn--ghost" href="{{ routes.all_products_collection_url }}">{{ section.settings.reco_link_label }}</a>
+        {%- endif -%}
+      </div>
+      <div class="grid grid--4 is-mobile-slider" data-autoslide="2000">
+        {%- if section.settings.related_products != blank and section.settings.related_products.count > 0 -%}
+          {%- for rec in section.settings.related_products limit: 6 -%}
+            {%- unless rec.id == product.id -%}{%- render 'product-card', product: rec, sizes: '(max-width: 749px) 62vw, 23vw' -%}{%- endunless -%}
+          {%- endfor -%}
+        {%- elsif section.settings.related_collection != blank -%}
+          {%- for rec in section.settings.related_collection.products limit: 6 -%}
+            {%- unless rec.id == product.id -%}{%- render 'product-card', product: rec, sizes: '(max-width: 749px) 62vw, 23vw' -%}{%- endunless -%}
+          {%- endfor -%}
+        {%- elsif recommendations.performed and recommendations.products_count > 0 -%}
+          {%- for rec in recommendations.products limit: 6 -%}
+            {%- render 'product-card', product: rec, sizes: '(max-width: 749px) 62vw, 23vw' -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign reco_col = product.collections.first -%}
+          {%- if reco_col != blank and reco_col.products.size > 0 -%}
+            {%- for rec in reco_col.products limit: 6 -%}
+              {%- unless rec.id == product.id -%}{%- render 'product-card', product: rec, sizes: '(max-width: 749px) 62vw, 23vw' -%}{%- endunless -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- comment -%} Laatste terugval: NOOIT leeg — toon willekeurige winkelproducten {%- endcomment -%}
+            {%- for rec in collections.all.products limit: 6 -%}
+              {%- unless rec.id == product.id -%}{%- render 'product-card', product: rec, sizes: '(max-width: 749px) 62vw, 23vw' -%}{%- endunless -%}
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Combineer met",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_recommendations", "label": "Deze sectie tonen", "default": true },
+    { "type": "text", "id": "reco_eyebrow", "label": "Klein kopje erboven", "default": "Maak het compleet" },
+    { "type": "text", "id": "reco_heading", "label": "Kop", "default": "Combineer met" },
+    { "type": "text", "id": "reco_link_label", "label": "Tekst van de knop rechts", "default": "Bekijk alles" },
+    {
+      "type": "product_list",
+      "id": "related_products",
+      "label": "Zelf producten kiezen",
+      "limit": 6,
+      "info": "Leeg laten = we kiezen automatisch producten uit dezelfde collectie."
+    },
+    { "type": "collection", "id": "related_collection", "label": "Terugval-collectie" }
+  ]
+}
+{% endschema %}

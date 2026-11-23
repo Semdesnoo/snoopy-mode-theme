@@ -1,0 +1,353 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Snoopy Mode v9.4",
+    "theme_version": "9.4.0",
+    "theme_author": "Snoopy Mode",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "Algemeen",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Het logo stel je in bij de sectie 'Koptekst' bovenaan de pagina."
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Het kleine icoontje in het tabblad van de browser. Vierkant, minimaal 96 Ã— 96 pixels."
+      }
+    ]
+  },
+  {
+    "name": "Kleuren",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Pas hier het hele kleurenpalet van de winkel aan. Wijzigingen zie je meteen in het voorbeeld."
+      },
+      { "type": "header", "content": "Achtergronden" },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Hoofdachtergrond",
+        "default": "#FAF8F4"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_alt",
+        "label": "Afwisselende achtergrond",
+        "info": "De zachtere tint die om-en-om bij secties wordt gebruikt.",
+        "default": "#F1EBE2"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Kaarten & vlakken",
+        "default": "#FFFFFF"
+      },
+      { "type": "header", "content": "Tekst" },
+      {
+        "type": "color",
+        "id": "color_ink",
+        "label": "Koppen & hoofdtekst",
+        "default": "#1C1A17"
+      },
+      {
+        "type": "color",
+        "id": "color_ink_soft",
+        "label": "Lopende tekst",
+        "default": "#4A453E"
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Bijschriften & labels",
+        "default": "#837B70"
+      },
+      { "type": "header", "content": "Accenten & lijnen" },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accentkleur",
+        "info": "Voor links, hover-effecten en kleine details.",
+        "default": "#A07E5E"
+      },
+      {
+        "type": "color",
+        "id": "color_accent_deep",
+        "label": "Donkere accentkleur",
+        "default": "#6E5337"
+      },
+      {
+        "type": "color",
+        "id": "color_line",
+        "label": "Lijnen & randen",
+        "default": "#E4DBCE"
+      },
+      {
+        "type": "color",
+        "id": "color_sale",
+        "label": "Sale / kortingsprijs",
+        "default": "#9A3B2E"
+      }
+    ]
+  },
+  {
+    "name": "Lettertypes",
+    "settings": [
+      {
+        "type": "select",
+        "id": "font_pair",
+        "label": "Lettertype-combinatie",
+        "info": "Het eerste lettertype is voor koppen, het tweede voor de lopende tekst.",
+        "options": [
+          { "value": "fraunces_jost", "label": "Fraunces + Jost (huidig ontwerp)" },
+          { "value": "cormorant_jost", "label": "Cormorant Garamond + Jost (klassiek)" },
+          { "value": "playfair_inter", "label": "Playfair Display + Inter (modern)" },
+          { "value": "marcellus_karla", "label": "Marcellus + Karla (rustig)" },
+          { "value": "dmserif_dmsans", "label": "DM Serif + DM Sans (eigentijds)" },
+          { "value": "jost_only", "label": "Alleen Jost (strak, zonder schreef)" }
+        ],
+        "default": "fraunces_jost"
+      }
+    ]
+  },
+  {
+    "name": "Tekstgrootte & ruimte",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Je stelt de laptop- en de mobiele weergave apart in."
+      },
+      { "type": "header", "content": "Laptop & tablet" },
+      {
+        "type": "range",
+        "id": "font_size_base",
+        "label": "Grootte lopende tekst",
+        "min": 13,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "label": "Koppen & witruimte",
+        "info": "100% is het originele ontwerp. Lager = compacter, hoger = ruimer.",
+        "min": 85,
+        "max": 120,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      { "type": "header", "content": "Mobiel" },
+      {
+        "type": "range",
+        "id": "font_size_base_mobile",
+        "label": "Grootte lopende tekst",
+        "min": 12,
+        "max": 19,
+        "step": 1,
+        "unit": "px",
+        "default": 15
+      },
+      {
+        "type": "range",
+        "id": "heading_scale_mobile",
+        "label": "Koppen & witruimte",
+        "min": 80,
+        "max": 120,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      { "type": "header", "content": "Ruimte tussen secties" },
+      {
+        "type": "range",
+        "id": "section_spacing",
+        "label": "Standaard sectie-ruimte",
+        "info": "Per sectie kun je dit apart bijstellen onder 'Ruimte'.",
+        "min": 60,
+        "max": 140,
+        "step": 10,
+        "unit": "%",
+        "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Vormgeving",
+    "settings": [
+      {
+        "type": "range",
+        "id": "corner_radius",
+        "label": "Ronde hoeken",
+        "info": "0 = strakke, rechte hoeken (past bij het huidige ontwerp).",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "default": 2
+      }
+    ]
+  },
+  {
+    "name": "Productkaarten",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Geldt voor alle plekken waar producten staan: homepage, collecties, zoekresultaten Ã©n de grote foto op de productpagina."
+      },
+      {
+        "type": "select",
+        "id": "card_image_ratio",
+        "label": "Vorm van de productfoto's",
+        "info": "Kies de vorm die bij je eigen foto's past. Maak je ze staand met je telefoon over het hele scherm, kies dan 'Telefoon volledig scherm'. Van foto's met een andere vorm valt altijd iets weg aan de randen â€” wil je dat nooit, zet dan de optie hieronder aan.",
+        "options": [
+          { "value": "phonefull", "label": "Telefoon volledig scherm (9:19,5)" },
+          { "value": "phone", "label": "Telefoonfoto staand (9:16)" },
+          { "value": "tall", "label": "Extra staand (2:3)" },
+          { "value": "portrait", "label": "Staand (3:4)" },
+          { "value": "square", "label": "Vierkant" },
+          { "value": "landscape", "label": "Liggend (4:3)" }
+        ],
+        "default": "phonefull"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_image_contain",
+        "label": "Foto's altijd volledig tonen",
+        "info": "Aan = de hele foto is te zien en er blijft wat rustige achtergrond over. Uit = de foto vult het hele vlak en de randen vallen buiten beeld. Zet dit aan als je foto's niet allemaal even hoog zijn.",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_product_type",
+        "label": "Categorie boven de productnaam tonen",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_price",
+        "label": "Prijs tonen",
+        "default": true
+      },
+      { "type": "header", "content": "Labels op de foto" },
+      {
+        "type": "text",
+        "id": "badge_new_label",
+        "label": "Label voor nieuwe producten",
+        "info": "Verschijnt bij producten met de tag 'nieuw'. Leeg laten = geen label.",
+        "default": "Nieuw"
+      },
+      {
+        "type": "text",
+        "id": "badge_sale_label",
+        "label": "Label bij korting",
+        "info": "Verschijnt zodra je een 'vergelijk-prijs' invult. Leeg laten = geen label.",
+        "default": "Aanbieding"
+      },
+      { "type": "header", "content": "Knop op de foto" },
+      {
+        "type": "checkbox",
+        "id": "show_quick_view",
+        "label": "Knop tonen als je met de muis over een product gaat",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "quick_view_label",
+        "label": "Tekst op die knop",
+        "default": "Snel bekijken"
+      }
+    ]
+  },
+  {
+    "name": "Verzendkosten & gratis verzending",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Deze bedragen worden gebruikt in de winkelmand-lade Ã©n op de winkelmandpagina, zodat ze altijd gelijk zijn. Let op: de Ã©chte verzendkosten stel je in bij Instellingen â†’ Verzending en bezorging; die gelden bij het afrekenen."
+      },
+      {
+        "type": "checkbox",
+        "id": "free_shipping_enabled",
+        "label": "Balk 'nog X euro tot gratis verzending' tonen",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Gratis verzending vanaf (euro)",
+        "info": "Hetzelfde bedrag als in je verzendinstellingen. Bij Snoopy Mode is dat 75.",
+        "default": 75
+      },
+      {
+        "type": "number",
+        "id": "shipping_cost",
+        "label": "Verzendkosten onder dat bedrag (euro)",
+        "info": "Leeg laten = â‚¬ 6,95. Wil je een ander bedrag? Gebruik een punt als decimaalteken, bijvoorbeeld 7.50"
+      }
+    ]
+  },
+  {
+    "name": "Sociale media",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram-URL"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok-URL"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook-URL"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest",
+        "label": "Pinterest-URL"
+      }
+    ]
+  },
+  {
+    "name": "Bedrijfsgegevens",
+    "settings": [
+      {
+        "type": "text",
+        "id": "company_email",
+        "label": "E-mailadres",
+        "default": "info@snoopy-mode.nl"
+      },
+      {
+        "type": "text",
+        "id": "company_phone",
+        "label": "Telefoon",
+        "default": "06 43 47 46 83"
+      },
+      {
+        "type": "textarea",
+        "id": "company_address",
+        "label": "Adres",
+        "default": "Snoopy Mode V.O.F.\nGroene Hilledijk 165 B\n3073 AB Rotterdam"
+      },
+      {
+        "type": "text",
+        "id": "company_kvk",
+        "label": "KVK-nummer",
+        "default": "24338638"
+      }
+    ]
+  }
+]
+

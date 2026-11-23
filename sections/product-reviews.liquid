@@ -1,0 +1,154 @@
+{%- comment -%}
+  Beoordelingen onder de productpagina.
+  Elke beoordeling is een blok. Geen blokken = de sectie blijft onzichtbaar.
+{%- endcomment -%}
+
+<!-- KLANTBEOORDELINGEN voor dit product — volledig instelbaar via blokken -->
+{%- assign review_blocks = section.blocks | where: 'type', 'review' -%}
+{%- if section.settings.show_reviews and review_blocks.size > 0 -%}
+  <section class="section product-reviews">
+    <div class="container container--wide">
+      <div class="section-head section-head--center reveal">
+        {%- if section.settings.reviews_eyebrow != blank -%}<p class="eyebrow">{{ section.settings.reviews_eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.reviews_heading != blank -%}<h2 class="section-head__title">{{ section.settings.reviews_heading }}</h2>{%- endif -%}
+      </div>
+
+      {%- if section.settings.show_review_summary -%}
+        <!-- Samenvatting: gemiddelde score + verdeling per sterklasse -->
+        {%- liquid
+          assign c5 = section.settings.count_5 | default: 0
+          assign c4 = section.settings.count_4 | default: 0
+          assign c3 = section.settings.count_3 | default: 0
+          assign c2 = section.settings.count_2 | default: 0
+          assign c1 = section.settings.count_1 | default: 0
+          assign total = c5 | plus: c4 | plus: c3 | plus: c2 | plus: c1
+          assign max_count = c5
+          if c4 > max_count
+            assign max_count = c4
+          endif
+          if c3 > max_count
+            assign max_count = c3
+          endif
+          if c2 > max_count
+            assign max_count = c2
+          endif
+          if c1 > max_count
+            assign max_count = c1
+          endif
+          if max_count == 0
+            assign max_count = 1
+          endif
+
+          assign points = c5 | times: 5
+          assign points = c4 | times: 4 | plus: points
+          assign points = c3 | times: 3 | plus: points
+          assign points = c2 | times: 2 | plus: points
+          assign points = c1 | plus: points
+          if total > 0
+            assign avg_x10 = points | times: 10 | divided_by: total
+          else
+            assign avg_x10 = 0
+          endif
+          assign avg_whole = avg_x10 | divided_by: 10
+          assign avg_dec = avg_x10 | modulo: 10
+          assign avg_text = avg_whole | append: ',' | append: avg_dec
+          assign stars_full = avg_x10 | plus: 5 | divided_by: 10
+
+          assign count_text = section.settings.reviews_count_text | default: 'Gebaseerd op {aantal} beoordelingen'
+          assign count_text = count_text | replace: '{aantal}', total
+        -%}
+        <div class="review-summary reveal">
+          <div class="review-summary__score">
+            <span class="review-summary__avg">{{ avg_text }}</span>
+            <span class="review-summary__outof">{{ section.settings.reviews_outof_text | default: 'van 5' }}</span>
+            <div class="review-summary__stars" aria-label="Gemiddeld {{ avg_text }} van 5 sterren">{% for i in (1..5) %}{% if i <= stars_full %}★{% else %}☆{% endif %}{% endfor %}</div>
+            {%- if total > 0 -%}<p class="review-summary__count">{{ count_text }}</p>{%- endif -%}
+            {%- if section.settings.reviews_recommend_text != blank -%}
+              <p class="review-summary__recommend">{{ section.settings.reviews_recommend_text }}</p>
+            {%- endif -%}
+          </div>
+          <span class="review-summary__rule" aria-hidden="true"></span>
+          <div class="review-summary__bars">
+            {%- assign counts = c5 | append: ',' | append: c4 | append: ',' | append: c3 | append: ',' | append: c2 | append: ',' | append: c1 | split: ',' -%}
+            {%- for n in counts -%}
+              {%- assign star_label = 5 | minus: forloop.index0 -%}
+              {%- assign pct = n | times: 100 | divided_by: max_count -%}
+              <div class="review-bar">
+                <span class="review-bar__label">{{ star_label }} ★</span>
+                <span class="review-bar__track"><span class="review-bar__fill" style="width: {{ pct }}%;"></span></span>
+                <span class="review-bar__num">{{ n }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <!-- Losse beoordelingen -->
+      <div class="reviews-grid is-mobile-slider" data-autoslide="3000">
+        {%- for block in review_blocks -%}
+          {%- assign stars = block.settings.stars | default: 5 -%}
+          <figure class="review reveal"{% if forloop.index0 > 0 %} data-delay="{{ forloop.index0 }}"{% endif %} {{ block.shopify_attributes }}>
+            <div class="review__head">
+              <div class="review__stars" aria-label="{{ stars }} van 5 sterren">{% for i in (1..5) %}{% if i <= stars %}★{% else %}☆{% endif %}{% endfor %}</div>
+              {%- if block.settings.date != blank -%}<span class="review__date">{{ block.settings.date }}</span>{%- endif -%}
+            </div>
+            <blockquote class="review__quote">{{ block.settings.quote }}</blockquote>
+            <figcaption class="review__person">
+              <span class="review__avatar" aria-hidden="true">{{ block.settings.name | slice: 0 }}</span>
+              <span class="review__who">
+                <span class="review__name">{{ block.settings.name }}</span>
+                {%- if block.settings.badge != blank -%}<span class="review__badge">{{ block.settings.badge }}</span>{%- endif -%}
+              </span>
+            </figcaption>
+          </figure>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Productbeoordelingen",
+  "tag": "section",
+  "max_blocks": 24,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Voeg beoordelingen toe met 'Blok toevoegen'. Zolang je er geen toevoegt, blijft deze sectie onzichtbaar."
+    },
+    { "type": "checkbox", "id": "show_reviews", "label": "Deze sectie tonen", "default": true },
+    { "type": "text", "id": "reviews_eyebrow", "label": "Klein kopje erboven", "default": "Wat klanten zeggen" },
+    { "type": "text", "id": "reviews_heading", "label": "Kop", "default": "Beoordelingen" },
+    { "type": "checkbox", "id": "show_review_summary", "label": "Samenvatting met sterren tonen", "default": true },
+    {
+      "type": "text",
+      "id": "reviews_count_text",
+      "label": "Tekst onder het cijfer",
+      "info": "Gebruik {aantal} voor het totaal.",
+      "default": "Gebaseerd op {aantal} beoordelingen"
+    },
+    { "type": "text", "id": "reviews_outof_text", "label": "Tekst naast het cijfer", "default": "van 5" },
+    { "type": "text", "id": "reviews_recommend_text", "label": "Aanbevelingsregel" },
+    { "type": "header", "content": "Verdeling van de sterren" },
+    { "type": "number", "id": "count_5", "label": "Aantal 5 sterren", "default": 0 },
+    { "type": "number", "id": "count_4", "label": "Aantal 4 sterren", "default": 0 },
+    { "type": "number", "id": "count_3", "label": "Aantal 3 sterren", "default": 0 },
+    { "type": "number", "id": "count_2", "label": "Aantal 2 sterren", "default": 0 },
+    { "type": "number", "id": "count_1", "label": "Aantal 1 ster", "default": 0 }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Beoordeling",
+      "settings": [
+        { "type": "range", "id": "stars", "label": "Aantal sterren", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "date", "label": "Datum" },
+        { "type": "textarea", "id": "quote", "label": "Wat de klant zegt", "default": "Mijn nieuwe favoriet. De pasvorm is precies goed." },
+        { "type": "text", "id": "name", "label": "Naam", "default": "Anouk" },
+        { "type": "text", "id": "badge", "label": "Label eronder", "default": "Geverifieerde aankoop" }
+      ]
+    }
+  ]
+}
+{% endschema %}

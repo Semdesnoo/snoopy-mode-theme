@@ -1,0 +1,244 @@
+{%- comment -%}
+  Productrij — een rij producten uit een collectie ("Nieuw binnen", "Bestsellers", …).
+  Je kunt deze sectie meerdere keren op de homepage zetten, elk met een eigen
+  collectie, kop en aantal producten. Aantal en kolommen stel je apart in voor
+  laptop en mobiel.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign cols = s.columns | default: '4'
+  assign cols_mobile = s.columns_mobile | default: '2'
+  assign limit = s.products_limit | default: 8
+  assign limit_mobile = s.products_limit_mobile | default: 4
+
+  assign col = s.collection
+  if col == blank
+    assign col = collections.all
+  endif
+-%}
+{%- capture sm_class -%}{%- render 'sm-section-class', s: s -%}{%- endcapture -%}
+
+{%- style -%}
+  {%- comment -%} Op mobiel tonen we er minder, zodat de pagina licht en overzichtelijk blijft. {%- endcomment -%}
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .sm-products > *:nth-child(n + {{ limit_mobile | plus: 1 }}) { display: none; }
+  }
+{%- endstyle -%}
+
+<section class="section {{ sm_class }}">
+  <div class="container container--wide">
+    {%- if s.head_layout == 'between' -%}
+      <div class="section-head section-head--between reveal">
+        <div>
+          {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+          {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading }}</h2>{%- endif -%}
+        </div>
+        {%- if s.link_label != blank -%}
+          <a class="btn--ghost" href="{{ s.link_url | default: routes.all_products_collection_url }}">{{ s.link_label }}</a>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="section-head section-head--center reveal">
+        {%- if s.eyebrow != blank -%}<p class="eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="section-head__title">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.subtext != blank -%}<p>{{ s.subtext }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="sm-cols sm-cols-{{ cols }} sm-cols-mobile-{{ cols_mobile }} sm-products{% if s.mobile_slider %} sm-mobile-slider{% endif %}"{% if s.mobile_slider %} data-autoslide="2600"{% endif %}>
+      {%- if col.products_count > 0 -%}
+        {%- for product in col.products limit: limit -%}
+          {%- if s.mobile_slider -%}{% assign card_sizes = '(max-width: 749px) 62vw, (max-width: 989px) 31vw, 23vw' %}{%- else -%}{% assign card_sizes = '(max-width: 749px) 46vw, (max-width: 989px) 31vw, 23vw' %}{%- endif -%}{% render 'product-card', product: product, sizes: card_sizes %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Nog geen producten toegevoegd: nette voorbeeldvakjes zodat de pagina niet leeg oogt. {%- endcomment -%}
+        {%- for i in (1..limit) -%}
+          <article class="product-card reveal"{% if forloop.index0 > 0 %} data-delay="{{ forloop.index0 | modulo: 4 }}"{% endif %}>
+            <a class="product-card__media-wrap" href="{{ routes.all_products_collection_url }}">
+              <div class="media sm-ratio-{{ settings.card_image_ratio | default: 'phonefull' }}" data-label="{{ s.placeholder_label | default: 'Voorbeeldproduct' | escape }}"></div>
+            </a>
+            <p class="product-card__cat">{{ s.placeholder_category | default: 'Categorie' }}</p>
+            <h3 class="product-card__name"><a href="{{ routes.all_products_collection_url }}">{{ s.placeholder_label | default: 'Voorbeeldproduct' }}</a></h3>
+            <p class="product-card__price">{{ 0 | money }}</p>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if s.bottom_button_label != blank -%}
+      <div class="reveal" style="text-align:center; margin-top: var(--sp-2);">
+        <a class="btn btn--outline" href="{{ s.bottom_button_link | default: routes.all_products_collection_url }}">{{ s.bottom_button_label }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Productrij",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Welke producten?" },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collectie",
+      "info": "Leeg laten = alle producten uit je winkel."
+    },
+
+    { "type": "header", "content": "Koppen" },
+    {
+      "type": "select",
+      "id": "head_layout",
+      "label": "Opmaak van de kop",
+      "options": [
+        { "value": "between", "label": "Links, met knop rechts" },
+        { "value": "center", "label": "Gecentreerd" }
+      ],
+      "default": "between"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Klein kopje erboven",
+      "default": "Net binnen"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Kop",
+      "default": "Nieuw binnen"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Tekst eronder",
+      "info": "Alleen zichtbaar bij een gecentreerde kop."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Tekst van de knop rechts",
+      "default": "Bekijk alles"
+    },
+    { "type": "url", "id": "link_url", "label": "Waar die knop naartoe gaat" },
+
+    { "type": "header", "content": "Weergave op laptop & tablet" },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Aantal producten",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Aantal naast elkaar",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" }
+      ],
+      "default": "4"
+    },
+
+    { "type": "header", "content": "Weergave op mobiel" },
+    {
+      "type": "range",
+      "id": "products_limit_mobile",
+      "label": "Aantal producten",
+      "info": "Meestal minder dan op laptop, zodat de pagina snel blijft.",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Aantal naast elkaar",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_slider",
+      "label": "Op mobiel als zijwaartse swipe-rij tonen",
+      "default": false
+    },
+
+    { "type": "header", "content": "Knop onderaan" },
+    { "type": "text", "id": "bottom_button_label", "label": "Tekst op de knop" },
+    { "type": "url", "id": "bottom_button_link", "label": "Waar de knop naartoe gaat" },
+
+    { "type": "header", "content": "Ruimte & achtergrond" },
+    {
+      "type": "select",
+      "id": "space",
+      "label": "Ruimte boven en onder (laptop)",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "none", "label": "Geen" },
+        { "value": "small", "label": "Klein" },
+        { "value": "medium", "label": "Gemiddeld" },
+        { "value": "large", "label": "Groot" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "space_mobile",
+      "label": "Ruimte boven en onder (mobiel)",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "none", "label": "Geen" },
+        { "value": "small", "label": "Klein" },
+        { "value": "medium", "label": "Gemiddeld" },
+        { "value": "large", "label": "Groot" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Achtergrond",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "alt", "label": "Zachte zandtint" },
+        { "value": "white", "label": "Wit" },
+        { "value": "dark", "label": "Donker" }
+      ],
+      "default": "alt"
+    },
+
+    { "type": "header", "content": "Zolang je nog geen producten hebt" },
+    {
+      "type": "text",
+      "id": "placeholder_label",
+      "label": "Tekst in de voorbeeldvakjes",
+      "default": "Voorbeeldproduct"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_category",
+      "label": "Categorie in de voorbeeldvakjes",
+      "default": "Categorie"
+    },
+
+    { "type": "header", "content": "Zichtbaarheid" },
+    { "type": "checkbox", "id": "hide_mobile", "label": "Deze sectie verbergen op mobiel", "default": false },
+    { "type": "checkbox", "id": "hide_desktop", "label": "Deze sectie verbergen op laptop", "default": false }
+  ],
+  "presets": [
+    { "name": "Productrij" }
+  ]
+}
+{% endschema %}

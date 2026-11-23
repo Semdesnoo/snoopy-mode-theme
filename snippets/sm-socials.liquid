@@ -1,0 +1,46 @@
+{%- comment -%}
+  Rijtje sociale-media-knoppen (Instagram, TikTok, Facebook, Pinterest).
+
+  De links komen uit Thema-instellingen → Sociale media. Staat daar niets, dan
+  vallen we terug op de bekende pagina's van Snoopy Mode. Een link die nergens
+  is ingevuld, verschijnt gewoon niet.
+
+  Gebruik: {%- render 'sm-socials', label: 'Volg ons', style: 'light' -%}
+{%- endcomment -%}
+{%- liquid
+  assign ig = settings.social_instagram | default: 'https://www.instagram.com/snoopymode/'
+  assign tt = settings.social_tiktok | default: 'https://www.tiktok.com/@snoopymode'
+  assign fb = settings.social_facebook | default: 'https://www.facebook.com/snoopymode.bijlgaillard/'
+  assign pi = settings.social_pinterest
+  assign shop_name = shop.name | default: 'Snoopy Mode'
+-%}
+
+{%- if ig != blank or tt != blank or fb != blank or pi != blank -%}
+  <div class="sm-socials sm-socials--{{ style | default: 'light' }}">
+    {%- if label != blank -%}
+      <span class="sm-socials__label">{{ label }}</span>
+    {%- endif -%}
+    <div class="sm-socials__list">
+      {%- if ig != blank -%}
+        <a href="{{ ig }}" target="_blank" rel="noopener noreferrer" aria-label="{{ shop_name }} op Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
+        </a>
+      {%- endif -%}
+      {%- if tt != blank -%}
+        <a href="{{ tt }}" target="_blank" rel="noopener noreferrer" aria-label="{{ shop_name }} op TikTok" title="TikTok">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.32 2.06 1.47 3.3 3.5 3.45v2.42c-1.18.12-2.21-.27-3.41-.99l-.01 5.62c0 3.57-2.6 6.25-6.04 6.25-3.13 0-5.54-2.45-5.54-5.5 0-3.27 2.65-5.62 6.04-5.27v2.65c-.4-.13-.83-.2-1.27-.2-1.39 0-2.43 1.03-2.43 2.41 0 1.46 1.08 2.49 2.5 2.49 1.5 0 2.62-1.18 2.62-2.92V3h3.04z"/></svg>
+        </a>
+      {%- endif -%}
+      {%- if fb != blank -%}
+        <a href="{{ fb }}" target="_blank" rel="noopener noreferrer" aria-label="{{ shop_name }} op Facebook" title="Facebook">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M14 8h2V5h-2a3 3 0 0 0-3 3v2H9v3h2v6h3v-6h2.2l.4-3H14V8.5c0-.3.2-.5.5-.5z"/></svg>
+        </a>
+      {%- endif -%}
+      {%- if pi != blank -%}
+        <a href="{{ pi }}" target="_blank" rel="noopener noreferrer" aria-label="{{ shop_name }} op Pinterest" title="Pinterest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 18l1.4-5.4M9.6 10.4a2.6 2.6 0 1 1 4.8 1.5c-.4 1.6-2.3 2-3 .8"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

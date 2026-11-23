@@ -1,0 +1,84 @@
+{%- comment -%}
+  Maat-adviseur: het venster dat opent via de link bij de maatkeuze.
+  De teksten komen binnen via de variabele sf, met een terugval per veld.
+{%- endcomment -%}
+<div class="sizefinder" data-sizefinder hidden>
+  <div class="sizefinder__overlay" data-sizefinder-close></div>
+  <div class="sizefinder__dialog" role="dialog" aria-modal="true" aria-labelledby="sizefinder-title">
+    <button class="sizefinder__close" type="button" aria-label="{{ sf.sf_close_label | default: 'Sluiten' | escape }}" data-sizefinder-close>&times;</button>
+
+    {%- if sf.sf_eyebrow != blank -%}
+      <p class="eyebrow">{{ sf.sf_eyebrow }}</p>
+    {%- endif -%}
+    <h2 id="sizefinder-title" class="sizefinder__title">{{ sf.sf_title | default: 'Vind jouw perfecte maat' }}</h2>
+    {%- if sf.sf_intro != blank -%}
+      <p class="sizefinder__intro">{{ sf.sf_intro }}</p>
+    {%- endif -%}
+
+    <form class="sizefinder__form" data-sizefinder-form novalidate>
+      <div class="sizefinder__row">
+        <div class="field">
+          <label for="sf-length">{{ sf.sf_length_label | default: 'Lengte (cm)' }}</label>
+          <input id="sf-length" name="lengte" type="number" inputmode="numeric" autocomplete="off" min="140" max="210" step="1" placeholder="{{ sf.sf_length_placeholder | default: 'bijv. 170' | escape }}" required>
+        </div>
+        <div class="field">
+          <label for="sf-weight">{{ sf.sf_weight_label | default: 'Gewicht (kg)' }}</label>
+          <input id="sf-weight" name="gewicht" type="number" inputmode="numeric" autocomplete="off" min="40" max="150" step="1" placeholder="{{ sf.sf_weight_placeholder | default: 'bijv. 65' | escape }}" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="sf-fit">{{ sf.sf_fit_label | default: 'Gewenste pasvorm' }}</label>
+        <select id="sf-fit" name="pasvorm">
+          <option value="fitted">{{ sf.sf_fit_fitted | default: 'Aansluitend of getailleerd' }}</option>
+          <option value="regular" selected>{{ sf.sf_fit_regular | default: 'Normaal, zoals bedoeld' }}</option>
+          <option value="relaxed">{{ sf.sf_fit_relaxed | default: 'Ruim of relaxed' }}</option>
+        </select>
+      </div>
+
+      <p class="sizefinder__error" data-sizefinder-error hidden>{{ sf.sf_error | default: 'Vul een geldige lengte (140 tot 210 cm) en gewicht (40 tot 150 kg) in.' }}</p>
+      <button class="btn sizefinder__submit" type="submit">{{ sf.sf_submit | default: 'Bereken mijn maat' }}</button>
+    </form>
+
+    {%- assign sf_word = sf.sf_word_size | default: 'Maat' -%}
+    {%- assign sf_zin = sf.sf_explain | default: 'Op basis van [lengte] cm, [gewicht] kg en een [pasvorm] pasvorm raden we maat [maat] aan.' -%}
+    <div class="sizefinder__result" data-sizefinder-result tabindex="-1" hidden data-word-size="{{ sf_word | escape }}" data-explain-template="{{ sf_zin | escape }}">
+      <p class="sizefinder__result-label">{{ sf.sf_result_label | default: 'Onze aanbeveling' }}</p>
+      <p class="sizefinder__size" data-sizefinder-size>{{ sf_word }} M</p>
+      <p class="sizefinder__explain" data-sizefinder-explain></p>
+      <button class="btn" type="button" data-sizefinder-apply>{{ sf.sf_apply | default: 'Kies deze maat' }}</button>
+      {%- if sf.sf_disclaimer != blank -%}
+        <p class="sizefinder__disclaimer">{{ sf.sf_disclaimer }}</p>
+      {%- endif -%}
+      <button class="sizefinder__edit" type="button" data-sizefinder-edit>{{ sf.sf_edit | default: 'Pas je gegevens aan' }}</button>
+    </div>
+
+    <details class="sizefinder__table">
+      <summary>{{ sf.sf_table_summary | default: 'Of bekijk de volledige maattabel' }}</summary>
+      <table>
+        <thead>
+          <tr>
+            <th>{{ sf.sf_col_1 | default: 'Maat' }}</th>
+            <th>{{ sf.sf_col_2 | default: 'NL' }}</th>
+            <th>{{ sf.sf_col_3 | default: 'Borst (cm)' }}</th>
+            <th>{{ sf.sf_col_4 | default: 'Taille (cm)' }}</th>
+            <th>{{ sf.sf_col_5 | default: 'Heup (cm)' }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- assign maten = 'XS|34|80-84|62-66|88-92,S|36|84-88|66-70|92-96,M|38|88-92|70-74|96-100,L|40|92-96|74-78|100-104,XL|42|96-102|78-84|104-110,XXL|44|102-108|84-90|110-116' | split: ',' -%}
+          {%- for regel in maten -%}
+            {%- assign kolom = regel | split: '|' -%}
+            <tr>
+              <td>{{ kolom[0] }}</td>
+              <td>{{ kolom[1] }}</td>
+              <td>{{ kolom[2] }}</td>
+              <td>{{ kolom[3] }}</td>
+              <td>{{ kolom[4] }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </details>
+  </div>
+</div>

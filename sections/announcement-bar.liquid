@@ -1,0 +1,83 @@
+{%- comment -%}
+  Aankondigingsbalk — de smalle balk helemaal bovenaan met wisselende zinnen.
+  Elke zin is een blok; leeg laten = de balk verdwijnt.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+{%- if s.enabled -%}
+  <div class="announcement{% if s.hide_mobile %} sm-hide-mobile{% endif %}{% if s.hide_desktop %} sm-hide-desktop{% endif %}" data-announcement>
+    <div class="announcement__viewport">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.link != blank -%}
+            <span class="announcement__item{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}><a href="{{ block.settings.link }}">{{ block.settings.text }}</a></span>
+          {%- else -%}
+            <span class="announcement__item{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Nog geen eigen zinnen toegevoegd: deze drie staan er alvast in. {%- endcomment -%}
+        {%- if s.fallback_1 != blank -%}<span class="announcement__item is-active">{{ s.fallback_1 }}</span>{%- endif -%}
+        {%- if s.fallback_2 != blank -%}<span class="announcement__item{% if s.fallback_1 == blank %} is-active{% endif %}">{{ s.fallback_2 }}</span>{%- endif -%}
+        {%- if s.fallback_3 != blank -%}<span class="announcement__item{% if s.fallback_1 == blank and s.fallback_2 == blank %} is-active{% endif %}">{{ s.fallback_3 }}</span>{%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Aankondigingsbalk",
+  "tag": "section",
+  "class": "announcement-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Balk tonen",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "Pas de drie zinnen hieronder aan. Wil je er meer of wil je een link toevoegen? Gebruik dan 'Blok toevoegen' — die blokken vervangen de zinnen hieronder."
+    },
+    { "type": "text", "id": "fallback_1", "label": "Zin 1", "default": "Gratis verzending vanaf €75" },
+    { "type": "text", "id": "fallback_2", "label": "Zin 2", "default": "Voor 17:00 besteld, morgen in huis" },
+    { "type": "text", "id": "fallback_3", "label": "Zin 3", "default": "14 dagen bedenktijd" },
+    { "type": "header", "content": "Zichtbaarheid" },
+    { "type": "checkbox", "id": "hide_mobile", "label": "Balk verbergen op mobiel", "default": false },
+    { "type": "checkbox", "id": "hide_desktop", "label": "Balk verbergen op laptop", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Zin",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Tekst",
+          "default": "Gratis verzending vanaf €75"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optioneel)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Aankondigingsbalk",
+      "blocks": [
+        { "type": "message", "settings": { "text": "Gratis verzending vanaf €75" } },
+        { "type": "message", "settings": { "text": "Voor 17:00 besteld, morgen in huis" } },
+        { "type": "message", "settings": { "text": "14 dagen bedenktijd" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

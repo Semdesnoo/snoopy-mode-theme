@@ -1,0 +1,260 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "heading": "Jouw favoriete winkel, nu online",
+        "text": "Met wekelijks de nieuwste collectie.",
+        "button_1_label": "Shop de collectie",
+        "height": "tall",
+        "height_mobile": "tall",
+        "text_position": "bottom",
+        "text_position_mobile": "bottom",
+        "align": "left",
+        "align_mobile": "left",
+        "overlay_strength": 30,
+        "overlay_strength_mobile": 35,
+        "show_overlay": true
+      }
+    },
+    "usp_bar": {
+      "type": "usp-bar",
+      "blocks": {
+        "usp_1": {
+          "type": "usp",
+          "settings": {
+            "icon": "truck",
+            "title": "Gratis verzending",
+            "subtitle": "Vanaf €75 in NL & BE"
+          }
+        },
+        "usp_2": {
+          "type": "usp",
+          "settings": {
+            "icon": "return",
+            "title": "14 dagen bedenktijd",
+            "subtitle": "Retour binnen 14 dagen na aanmelding"
+          }
+        },
+        "usp_3": {
+          "type": "usp",
+          "settings": {
+            "icon": "shield",
+            "title": "Veilig betalen",
+            "subtitle": "iDEAL, Klarna & meer"
+          }
+        },
+        "usp_4": {
+          "type": "usp",
+          "settings": {
+            "icon": "chat",
+            "title": "Persoonlijk advies",
+            "subtitle": "Wij denken graag met je mee"
+          }
+        }
+      },
+      "block_order": [
+        "usp_1",
+        "usp_2",
+        "usp_3",
+        "usp_4"
+      ],
+      "settings": {
+        "columns_mobile": "2",
+        "mobile_autoslide": true,
+        "autoslide_seconds": 3,
+        "mobile_width": 66,
+        "mobile_style": "marquee",
+        "marquee_speed": 30
+      }
+    },
+    "categorie_tegels": {
+      "type": "collection-tiles",
+      "blocks": {
+        "tile_1": {
+          "type": "tile",
+          "settings": {
+            "label": "Jurken"
+          }
+        },
+        "tile_2": {
+          "type": "tile",
+          "settings": {
+            "label": "Tops & blouses"
+          }
+        },
+        "tile_3": {
+          "type": "tile",
+          "settings": {
+            "label": "Broeken & rokken"
+          }
+        },
+        "tile_4": {
+          "type": "tile",
+          "settings": {
+            "label": "Accessoires"
+          }
+        }
+      },
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3",
+        "tile_4"
+      ],
+      "settings": {
+        "eyebrow": "Ontdek per categorie",
+        "heading": "Vind jouw stijl",
+        "tile_cta": "Shop nu",
+        "columns": "4",
+        "columns_mobile": "2",
+        "mobile_slider": true,
+        "mobile_autoslide": true,
+        "image_ratio": "phonefull",
+        "bg": "default"
+      }
+    },
+    "productrij_nieuw": {
+      "type": "featured-products",
+      "settings": {
+        "head_layout": "between",
+        "eyebrow": "Net binnen",
+        "heading": "Nieuw binnen",
+        "link_label": "Bekijk alles",
+        "products_limit": 8,
+        "products_limit_mobile": 4,
+        "columns": "4",
+        "columns_mobile": "2",
+        "bg": "alt"
+      }
+    },
+    "productrij_bestsellers": {
+      "type": "featured-products",
+      "settings": {
+        "head_layout": "center",
+        "eyebrow": "Geliefd door velen",
+        "heading": "Onze bestsellers",
+        "subtext": "De stukken waar onze klanten keer op keer naar teruggrijpen.",
+        "products_limit": 4,
+        "products_limit_mobile": 2,
+        "columns": "4",
+        "columns_mobile": "2",
+        "bg": "alt"
+      }
+    },
+    "tiktok": {
+      "type": "instagram",
+      "blocks": {
+        "clip_1": {
+          "type": "clip",
+          "settings": {
+            "label": "Nieuw binnen"
+          }
+        },
+        "clip_2": {
+          "type": "clip",
+          "settings": {
+            "label": "Styling"
+          }
+        },
+        "clip_3": {
+          "type": "clip",
+          "settings": {
+            "label": "In de winkel"
+          }
+        },
+        "clip_4": {
+          "type": "clip",
+          "settings": {
+            "label": "Behind the scenes"
+          }
+        },
+        "clip_5": {
+          "type": "clip",
+          "settings": {
+            "label": "Jouw look"
+          }
+        }
+      },
+      "block_order": [
+        "clip_1",
+        "clip_2",
+        "clip_3",
+        "clip_4",
+        "clip_5"
+      ],
+      "settings": {
+        "eyebrow": "Volg ons",
+        "heading": "@snoopymode op TikTok",
+        "text": "Bekijk onze nieuwste looks en de sfeer in de winkel op TikTok.",
+        "button_label": "Volg @snoopymode",
+        "columns": 5,
+        "mobile_width": 62,
+        "bg": "default"
+      }
+    },
+    "beoordelingen": {
+      "type": "testimonials",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "\"Eindelijk kleding die past én jaren meegaat. De stoffen voelen luxe en de pasvorm is precies goed.\"",
+            "author": "Sanne uit Utrecht"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "\"Snelle levering en prachtig ingepakt. Mijn linnen blazer is een vast onderdeel van mijn garderobe geworden.\"",
+            "author": "Marieke uit Den Haag"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "\"Het persoonlijke advies was goud waard. Ik voel me zelfverzekerd in alles wat ik bestel.\"",
+            "author": "Esther uit Eindhoven"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {
+        "eyebrow": "Wat klanten zeggen",
+        "heading": "Geliefd om de kwaliteit",
+        "columns": "3",
+        "mobile_slider": true,
+        "mobile_autoslide": true,
+        "bg": "default"
+      }
+    },
+    "nieuwsbrief": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "Blijf op de hoogte",
+        "heading": "Word lid van de Snoopy Mode-club",
+        "text": "Ontvang als eerste nieuwe collecties, stijltips en exclusieve aanbiedingen.",
+        "field_placeholder": "Je e-mailadres",
+        "button_label": "Inschrijven",
+        "disclaimer": "Je kunt je op elk moment uitschrijven."
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "usp_bar",
+    "categorie_tegels",
+    "productrij_nieuw",
+    "tiktok",
+    "productrij_bestsellers",
+    "beoordelingen",
+    "nieuwsbrief"
+  ]
+}

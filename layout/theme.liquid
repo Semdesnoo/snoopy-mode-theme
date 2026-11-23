@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1C1A17">
+  <script>document.documentElement.classList.add('js');</script>
+
+  {%- comment -%}
+    Eén verbinding vooraf openen: die naar de lettertypebestanden. Shopify opent
+    de verbinding met zijn eigen CDN al zelf, en meer dan een paar van deze regels
+    maakt een pagina juist trager (dat meldt de snelheidstest ook).
+  {%- endcomment -%}
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- else -%}
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231C1A17'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='18' fill='%23FAF8F4' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+  {%- endif -%}
+
+  <title>{{ page_title }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; Pagina {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  {%- comment -%}
+    Lettertypes: de eigenaar kiest een combinatie in Thema-instellingen → Lettertypes.
+    We bouwen hier de juiste Google-Fonts-link en de bijbehorende font-families.
+  {%- endcomment -%}
+  {%- liquid
+    assign font_choice = settings.font_pair | default: 'fraunces_jost'
+    case font_choice
+      when 'cormorant_jost'
+        assign font_families = 'family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500'
+        assign font_display_stack = '"Cormorant Garamond", Georgia, serif'
+        assign font_body_stack = '"Jost", system-ui, -apple-system, "Segoe UI", sans-serif'
+      when 'playfair_inter'
+        assign font_families = 'family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500'
+        assign font_display_stack = '"Playfair Display", Georgia, serif'
+        assign font_body_stack = '"Inter", system-ui, -apple-system, "Segoe UI", sans-serif'
+      when 'marcellus_karla'
+        assign font_families = 'family=Marcellus&family=Karla:wght@300;400;500'
+        assign font_display_stack = '"Marcellus", Georgia, serif'
+        assign font_body_stack = '"Karla", system-ui, -apple-system, "Segoe UI", sans-serif'
+      when 'dmserif_dmsans'
+        assign font_families = 'family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500'
+        assign font_display_stack = '"DM Serif Display", Georgia, serif'
+        assign font_body_stack = '"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif'
+      when 'jost_only'
+        assign font_families = 'family=Jost:wght@300;400;500;600'
+        assign font_display_stack = '"Jost", system-ui, -apple-system, "Segoe UI", sans-serif'
+        assign font_body_stack = '"Jost", system-ui, -apple-system, "Segoe UI", sans-serif'
+      else
+        assign font_families = 'family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Jost:wght@300;400;500'
+        assign font_display_stack = '"Fraunces", Georgia, serif'
+        assign font_body_stack = '"Jost", system-ui, -apple-system, "Segoe UI", sans-serif'
+    endcase
+    assign google_fonts_url = 'https://fonts.googleapis.com/css2?' | append: font_families | append: '&display=swap'
+  -%}
+
+  {%- comment -%} Fonts niet render-blocking laden, met font-display: swap (geen onzichtbare tekst) {%- endcomment -%}
+  <link rel="preload" as="style" href="{{ google_fonts_url }}">
+  <link rel="stylesheet" href="{{ google_fonts_url }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ google_fonts_url }}"></noscript>
+
+  {%- comment -%} Hoofd-CSS: vroeg laten ophalen en niet-blokkerend renderen {%- endcomment -%}
+  <link rel="preload" as="style" href="{{ 'base.css' | asset_url }}">
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+
+  {%- comment -%}
+    Kleuren, lettergroottes en vormgeving uit de Thema-instellingen.
+    Staat NA base.css, zodat de keuzes van de eigenaar altijd winnen.
+  {%- endcomment -%}
+  {%- liquid
+    assign body_size = settings.font_size_base | default: 16
+    assign body_size_mobile = settings.font_size_base_mobile | default: 15
+    assign heading_scale = settings.heading_scale | default: 100
+    assign heading_scale_mobile = settings.heading_scale_mobile | default: 100
+    assign space_scale = settings.section_spacing | default: 100 | times: 0.01
+    assign radius = settings.corner_radius | default: 2
+  -%}
+  {%- style -%}
+    :root {
+      --bg: {{ settings.color_bg | default: '#FAF8F4' }};
+      --bg-alt: {{ settings.color_bg_alt | default: '#F1EBE2' }};
+      --surface: {{ settings.color_surface | default: '#FFFFFF' }};
+      --ink: {{ settings.color_ink | default: '#1C1A17' }};
+      --ink-soft: {{ settings.color_ink_soft | default: '#4A453E' }};
+      --muted: {{ settings.color_muted | default: '#837B70' }};
+      --line: {{ settings.color_line | default: '#E4DBCE' }};
+      --accent: {{ settings.color_accent | default: '#A07E5E' }};
+      --accent-deep: {{ settings.color_accent_deep | default: '#6E5337' }};
+      --sale: {{ settings.color_sale | default: '#9A3B2E' }};
+
+      --font-display: {{ font_display_stack }};
+      --font-body: {{ font_body_stack }};
+
+      --radius: {{ radius }}px;
+      --section-y: clamp({{ 5 | times: space_scale }}rem, {{ 9 | times: space_scale }}vw, {{ 8 | times: space_scale }}rem);
+    }
+    {%- comment -%}
+      Koppen en witruimte rekenen in "rem" (dus mee met de basis van de pagina),
+      de lopende tekst staat los in pixels. Zo kan de eigenaar allebei apart regelen.
+    {%- endcomment -%}
+    html { font-size: {{ heading_scale }}%; }
+    body { font-size: {{ body_size }}px; }
+    @media (max-width: 749px) {
+      html { font-size: {{ heading_scale_mobile }}%; }
+      body { font-size: {{ body_size_mobile }}px; }
+    }
+  {%- endstyle -%}
+
+  {{ content_for_header }}
+</head>
+<body class="template-{{ request.page_type | handle }}">
+  <a class="skip-link" href="#main">Direct naar inhoud</a>
+
+  {% section 'announcement-bar' %}
+  {% section 'header' %}
+
+  <main id="main">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+
+  {%- comment -%}
+    Pop-ups en de cookiemelding. Ze staan standaard UIT; je zet ze aan in de
+    Thema-editor (linkerkolom, onderaan). Zolang ze uit staan, laadt er niets.
+  {%- endcomment -%}
+  {% section 'popup-newsletter' %}
+  {% section 'popup-announcement' %}
+  {% section 'cookie-notice' %}
+
+  {%- comment -%} Toon afbeeldingen pas zacht zodra ze VOLLEDIG geladen zijn (placeholder tijdens laden). Zelfstandig + met vangnet, zodat foto's nooit onzichtbaar blijven. {%- endcomment -%}
+  <script>
+    (function () {
+      var SEL = ".media > img, .media > picture > img, .about-hero__media img, .team-grid img, .product-gallery__main img, .product-gallery__thumb img";
+      function show(img) { img.classList.add("is-loaded"); }
+      function run() {
+        document.querySelectorAll(SEL).forEach(function (img) {
+          if (img.complete && img.naturalWidth > 0) { show(img); }
+          else {
+            img.addEventListener("load", function () { show(img); }, { once: true });
+            img.addEventListener("error", function () { show(img); }, { once: true });
+          }
+        });
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", run);
+      } else { run(); }
+      /* Vangnet: zodra de pagina volledig geladen is, sowieso elke foto tonen. */
+      window.addEventListener("load", function () {
+        document.querySelectorAll(SEL).forEach(show);
+      });
+    })();
+  </script>
+
+  <script src="{{ 'global.js' | asset_url }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+{%- comment -%}
+  Overzicht van alle collecties: grid met .media-tegel + titel, link naar collection.url.
+  Hergebruikt de .category-tile-stijl uit base.css.
+{%- endcomment -%}
+{%- liquid
+  comment
+    De vorm van de tegels volgt de themabrede keuze bij
+    Themainstellingen → Productkaarten, zodat alle foto's op de winkel
+    dezelfde vorm hebben.
+  endcomment
+  assign tile_ratio = settings.card_image_ratio | default: 'phonefull'
+  assign tile_class = 'media sm-ratio-' | append: tile_ratio
+  comment
+    De klasse mét "volledig tonen" alleen op tegels die echt een foto hebben:
+    op een lege tegel zou hij de sierlijke verloop-achtergrond uitzetten.
+  endcomment
+  assign tile_fit = tile_class
+  if settings.card_image_contain
+    assign tile_fit = tile_class | append: ' sm-fit-contain'
+  endif
+
+  comment
+    Breedte die een tegel echt inneemt, zodat de browser geen onnodig grote
+    foto ophaalt. Let op: base.css zet dit raster onder 900 px altijd op twee
+    kolommen, ongeacht de keuze hieronder. at_least: 1 voorkomt een deling
+    door nul als de instelling ooit leeg is.
+  endcomment
+  assign cols = section.settings.columns_desktop | default: '3' | times: 1 | at_least: 1
+  assign desk_vw = 92 | divided_by: cols
+  assign tile_sizes = '(max-width: 899px) 46vw, ' | append: desk_vw | append: 'vw'
+-%}
+
+<section class="section section--tight collection-hero">
+  <div class="container container--wide">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <ul>
+        <li><a href="{{ routes.root_url }}">Home</a></li>
+        <li><span aria-current="page">{{ section.settings.title | default: 'Collecties' }}</span></li>
+      </ul>
+    </nav>
+
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="eyebrow reveal">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h1 class="display-2 reveal" data-delay="1">{{ section.settings.title | default: 'Collecties' }}</h1>
+    {%- if section.settings.intro != blank -%}
+      <div class="collection-hero__intro lead reveal" data-delay="2">{{ section.settings.intro }}</div>
+    {%- endif -%}
+  </div>
+</section>
+
+<section class="section section--tight" style="padding-top:0;">
+  <div class="container container--wide">
+    {%- paginate collections by section.settings.collections_per_page -%}
+      {%- if collections.size > 0 -%}
+        <div class="grid grid--{{ section.settings.columns_desktop }}">
+          {%- for collection in collections -%}
+            <a class="category-tile reveal" href="{{ collection.url }}">
+              {%- if collection.featured_image -%}
+                <div class="{{ tile_fit }}">
+                  {{ collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: collection.title, widths: '300, 400, 600, 800', sizes: tile_sizes }}
+                </div>
+              {%- else -%}
+                <div class="{{ tile_class }}" data-label="{{ collection.title | escape }}"></div>
+              {%- endif -%}
+              <div class="category-tile__label">
+                <h3>{{ collection.title }}</h3>
+                <span>{{ collection.products_count }} artikelen</span>
+              </div>
+            </a>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination" aria-label="Paginering">
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                {%- if part.title == '&raquo;' -%}
+                  <a class="pagination__next" href="{{ part.url }}" aria-label="{{ section.settings.next_label | default: 'Volgende' | escape }}">{{ section.settings.next_label | default: 'Volgende' }}</a>
+                {%- elsif part.title == '&laquo;' -%}
+                  <a href="{{ part.url }}" aria-label="Vorige pagina">&laquo;</a>
+                {%- else -%}
+                  <a href="{{ part.url }}">{{ part.title }}</a>
+                {%- endif -%}
+              {%- else -%}
+                {%- if part.title == '&hellip;' -%}
+                  <span class="pagination__dots" aria-hidden="true">…</span>
+                {%- else -%}
+                  <span class="is-current" aria-current="page">{{ part.title }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <p data-no-results>{{ section.settings.empty_text | default: 'Er zijn nog geen collecties.' }}</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collectie-overzicht",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Bovenkop (eyebrow)",
+      "default": "Ontdek"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titel",
+      "default": "Collecties"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Introductietekst",
+      "default": "<p>Blader door alle collecties van Snoopy Mode.</p>"
+    },
+    {
+      "type": "range",
+      "id": "collections_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "label": "Collecties per pagina",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Kolommen op desktop",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    { "type": "select", "id": "columns_mobile", "label": "Kolommen op mobiel", "options": [{ "value": "1", "label": "1" }, { "value": "2", "label": "2" }], "default": "2" },
+    { "type": "textarea", "id": "empty_text", "label": "Tekst als er nog geen collecties zijn", "default": "Er zijn nog geen collecties." },
+    { "type": "text", "id": "next_label", "label": "Volgende pagina", "default": "Volgende" }
+  ]
+}
+{% endschema %}

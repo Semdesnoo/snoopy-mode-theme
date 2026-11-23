@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "card_badge": "Aanbieding",
+        "card_badge_style": "sale",
+        "products_per_page": 24,
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "show_sorting": true,
+        "sort_label": "Sorteer op",
+        "filters_title": "Filteren",
+        "filters_apply_label": "Toon resultaten",
+        "no_results_text": "Er staan op dit moment geen artikelen in de sale. Kom snel weer eens kijken!",
+        "next_page_label": "Volgende"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

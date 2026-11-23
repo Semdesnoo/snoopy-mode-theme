@@ -1,0 +1,118 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-betaalmethoden",
+      "settings": {
+        "eyebrow": "Klantenservice",
+        "heading": "Betaalmethoden",
+        "intro": "<p>Veilig en gemakkelijk betalen. Kies bij het afrekenen de betaalmethode die het beste bij je past — vertrouwd, snel en zonder gedoe.</p>"
+      },
+      "blocks": {
+        "head_methods": {
+          "type": "heading",
+          "settings": {
+            "eyebrow": "Onze betaalmethoden",
+            "heading": "Betaal zoals jij dat wilt",
+            "text": "Bij Snoopy Mode reken je af met de meest gebruikte en betrouwbare betaalmethoden van Nederland en België."
+          }
+        },
+        "method_ideal": {
+          "type": "method",
+          "settings": {
+            "label": "iDEAL",
+            "heading": "iDEAL",
+            "text": "<p>Betaal direct via je eigen bank. Je rekent in een paar tikken af in je vertrouwde bankomgeving — de snelste en populairste manier in Nederland.</p>",
+            "note": "Direct & vertrouwd"
+          }
+        },
+        "method_creditcard": {
+          "type": "method",
+          "settings": {
+            "label": "Creditcard",
+            "heading": "Creditcard",
+            "text": "<p>Betaal eenvoudig met je creditcard. We accepteren Visa en Mastercard, met een veilige verificatie van je betaling.</p>",
+            "note": "Visa & Mastercard"
+          }
+        },
+        "method_paypal": {
+          "type": "method",
+          "settings": {
+            "label": "PayPal",
+            "heading": "PayPal",
+            "text": "<p>Reken snel en beschermd af met je PayPal-account, zonder je kaart- of bankgegevens met ons te delen.</p>",
+            "note": "Met kopersbescherming"
+          }
+        },
+        "method_klarna": {
+          "type": "method",
+          "settings": {
+            "label": "Klarna",
+            "heading": "Klarna — achteraf betalen",
+            "text": "<p>Bestel nu, betaal later. Met Klarna betaal je je bestelling achteraf binnen 14 dagen na ontvangst. Eerst passen, dan pas betalen.</p>",
+            "note": "Binnen 14 dagen, voorwaarden van toepassing"
+          }
+        },
+        "method_applepay": {
+          "type": "method",
+          "settings": {
+            "label": "Apple Pay",
+            "heading": "Apple Pay",
+            "text": "<p>Betaal in één beweging met je iPhone, iPad of Mac. Veilig bevestigd met Face ID of Touch ID — geen gegevens invullen.</p>",
+            "note": "Snel op je Apple-apparaat"
+          }
+        },
+        "method_bancontact": {
+          "type": "method",
+          "settings": {
+            "label": "Bancontact",
+            "heading": "Bancontact",
+            "text": "<p>Voor onze klanten in België: reken direct af via Bancontact, de vertrouwde Belgische betaalmethode.</p>",
+            "note": "Voor België"
+          }
+        },
+        "info_veilig": {
+          "type": "list",
+          "settings": {
+            "eyebrow": "Veilig betalen",
+            "heading": "Je betaling is in goede handen",
+            "text": "<p>De veiligheid van je gegevens staat bij ons voorop. Elke betaling verloopt via een beveiligde, vertrouwde omgeving.</p>",
+            "items": "<ul><li>Alle gegevens worden verzonden via een SSL-versleutelde verbinding.</li><li>Betalingen lopen via een gecertificeerde betaalprovider (PCI-DSS).</li><li>Wij slaan zelf nooit je kaart- of bankgegevens op.</li></ul>"
+          }
+        },
+        "info_facturen": {
+          "type": "list",
+          "settings": {
+            "eyebrow": "Facturen & btw",
+            "heading": "Altijd een nette factuur",
+            "text": "<p>Na je bestelling ontvang je automatisch een factuur, zodat je administratie altijd op orde is.</p>",
+            "items": "<ul><li>Je ontvangt je factuur per e-mail, samen met de orderbevestiging.</li><li>Alle prijzen in onze webshop zijn inclusief 21% btw.</li><li>Vragen over je factuur? Mail gerust naar <a href=\"mailto:info@snoopy-mode.nl\">info@snoopy-mode.nl</a>.</li></ul>"
+          }
+        },
+        "cta": {
+          "type": "text",
+          "settings": {
+            "content": "<p class=\"eyebrow\">Klaar om te shoppen?</p><p>Vind jouw nieuwe favoriet. Ontdek tijdloze stukken voor elke gelegenheid en reken veilig af met de betaalmethode die jij het fijnst vindt.</p>",
+            "button_label": "Shop de collectie",
+            "button_url": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "head_methods",
+        "method_ideal",
+        "method_creditcard",
+        "method_paypal",
+        "method_klarna",
+        "method_applepay",
+        "method_bancontact",
+        "info_veilig",
+        "info_facturen",
+        "cta"
+      ]
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": ["main", "newsletter"]
+}

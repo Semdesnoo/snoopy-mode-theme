@@ -1,0 +1,167 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-levering",
+      "settings": {
+        "eyebrow": "Klantenservice",
+        "heading": "Verzending & retour",
+        "intro": "<p>Bestellen bij Snoopy Mode moet zorgeloos zijn. Hieronder vind je rustig op een rij wat je kunt verwachten — van levering tot het terugsturen van een artikel.</p>"
+      },
+      "blocks": {
+        "verzending_tekst": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "Verzending",
+            "heading": "Snel en netjes bij je thuis",
+            "text": "<p>Je bestelling wordt met zorg ingepakt en bezorgd door PostNL. Bestel je op een werkdag voor 17:00 uur, dan ligt je pakket de volgende dag in huis. Zodra je bestelling onderweg is, ontvang je automatisch een track &amp; trace-code per e-mail, zodat je je pakket altijd kunt volgen.</p><p>Verzendkosten binnen Nederland zijn <strong>gratis vanaf €75</strong>. Bestel je voor een lager bedrag, dan rekenen we €6,95. Ook naar België bezorgen we graag.</p>"
+          }
+        },
+        "verzendoverzicht": {
+          "type": "rows",
+          "settings": {
+            "title": "Verzendoverzicht",
+            "label_1": "Nederland — vanaf €75",
+            "value_1": "Gratis",
+            "free_1": true,
+            "label_2": "Nederland — onder €75",
+            "value_2": "€6,95",
+            "free_2": false,
+            "label_3": "Levertijd Nederland",
+            "value_3": "1–2 werkdagen",
+            "free_3": false,
+            "label_4": "België",
+            "value_4": "€6,95",
+            "free_4": false,
+            "label_5": "Levertijd België",
+            "value_5": "2–3 werkdagen",
+            "free_5": false,
+            "label_6": "Besteld voor 17:00",
+            "value_6": "Morgen in huis",
+            "free_6": false
+          }
+        },
+        "retour_kop": {
+          "type": "heading",
+          "settings": {
+            "eyebrow": "Retourneren",
+            "heading": "Iets terugsturen? Zo werkt het",
+            "text": "<p>Past iets toch niet zoals je hoopte? Geen zorgen, dat kan gebeuren. Je hebt 14 dagen bedenktijd. Meld je retour bij ons aan en stuur het artikel daarna per omgaande terug — uiterlijk binnen 14 dagen na je aanmelding. Zodra we de artikelen in goede staat en mét factuur hebben ontvangen, storten we het bedrag terug op je rekening.</p>"
+          }
+        },
+        "stap_1": {
+          "type": "step",
+          "settings": {
+            "number": "1",
+            "heading": "Meld je retour aan",
+            "text": "Laat ons even weten dat je iets terugstuurt, via je account of per e-mail naar info@snoopy-mode.nl met je bestelnummer."
+          }
+        },
+        "stap_2": {
+          "type": "step",
+          "settings": {
+            "number": "2",
+            "heading": "Vul de factuur in",
+            "text": "Bij je bestelling zit een factuur. Geef daarop aan waarom je het artikel wilt retourneren en doe de factuur samen met het artikel in het pakket."
+          }
+        },
+        "stap_3": {
+          "type": "step",
+          "settings": {
+            "number": "3",
+            "heading": "Stuur het pakket terug",
+            "text": "Stuur het pakket naar ons retouradres. De kosten voor het terugsturen zijn voor eigen rekening. We raden je aan met track & trace te verzenden, zodat je pakket altijd te volgen is."
+          }
+        },
+        "retour_voorwaarden": {
+          "type": "list",
+          "settings": {
+            "heading": "Voorwaarden voor retour",
+            "content": "<ul><li>Het artikel gaat per omgaande terug en is uiterlijk binnen 14 dagen na je aanmelding bij ons binnen.</li><li>Het artikel is onbeschadigd, ongebruikt en ongedragen.</li><li>De originele kledinglabels en het prijskaartje zitten nog aan het artikel.</li><li>De ingevulde factuur gaat mee in het pakket.</li><li>Artikelen uit de Sale kunnen niet retour.</li></ul>"
+          }
+        },
+        "retourkosten": {
+          "type": "rows",
+          "settings": {
+            "title": "Retouradres & kosten",
+            "label_1": "Retouradres",
+            "value_1": "Snoopy Mode, Groene Hilledijk 165 B, 3073 AB Rotterdam",
+            "free_1": false,
+            "label_2": "Kosten terugsturen",
+            "value_2": "Voor eigen rekening",
+            "free_2": false,
+            "label_3": "Terugsturen binnen",
+            "value_3": "14 dagen na aanmelding",
+            "free_3": false,
+            "label_4": "Terugbetaling",
+            "value_4": "Na ontvangst & controle",
+            "free_4": false
+          }
+        },
+        "ruilen": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "Ruilen",
+            "heading": "Een andere maat of kleur?",
+            "text": "<p>We werken niet met een aparte ruilprocedure, en dat houdt het juist eenvoudig. Wil je een ander item, een andere maat of een andere kleur? Stuur dan het artikel dat niet bevalt terug als retour en plaats meteen een nieuwe bestelling voor het gewenste artikel. Zo heb je je nieuwe favoriet het snelst in huis en verloopt je terugbetaling gewoon volgens de retourstappen hierboven.</p>"
+          }
+        },
+        "faq_kop": {
+          "type": "heading",
+          "settings": {
+            "eyebrow": "Veelgestelde vragen",
+            "heading": "Goed om te weten",
+            "text": "<p>De vragen die we het vaakst krijgen over verzending en retour.</p>"
+          }
+        },
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "Wanneer krijg ik mijn geld terug?",
+            "answer": "<p>Zodra we de artikelen in goede staat en mét de ingevulde factuur hebben ontvangen, storten we het aankoopbedrag terug op je rekening, via dezelfde betaalmethode als waarmee je hebt betaald. Je ontvangt hiervan een bevestiging per e-mail.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Kan ik mijn bestelling nog wijzigen?",
+            "answer": "<p>Omdat we bestellingen snel verwerken, kunnen we ze meestal niet meer aanpassen nadat je hebt afgerekend. Neem zo snel mogelijk contact met ons op via <a href=\"mailto:info@snoopy-mode.nl\">info@snoopy-mode.nl</a> — is je pakket nog niet verzonden, dan kijken we graag wat mogelijk is.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Hoe weet ik dat mijn pakket onderweg is?",
+            "answer": "<p>Zodra je bestelling is verzonden, ontvang je automatisch een e-mail met een track &amp; trace-code van PostNL. Daarmee volg je je pakket en zie je wanneer het bezorgd wordt.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "Verzenden jullie ook naar België?",
+            "answer": "<p>Ja. Naar België rekenen we €6,95 verzendkosten en is je bestelling doorgaans binnen 2 tot 3 werkdagen bij je thuis.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "verzending_tekst",
+        "verzendoverzicht",
+        "retour_kop",
+        "stap_1",
+        "stap_2",
+        "stap_3",
+        "retour_voorwaarden",
+        "retourkosten",
+        "ruilen",
+        "faq_kop",
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4"
+      ]
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": ["main", "newsletter"]
+}

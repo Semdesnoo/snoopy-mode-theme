@@ -1,0 +1,213 @@
+{%- comment -%}
+  USP-balk — de smalle balk met pluspunten (gratis verzending, retour, enz.).
+  Iconen kies je uit een lijst; tekst en aantal regel je met blokken.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign slide_ms = s.autoslide_seconds | default: 3 | times: 1000
+  assign motion = s.mobile_style | default: 'marquee'
+-%}
+{%- capture sm_class -%}{%- render 'sm-section-class', s: section.settings -%}{%- endcapture -%}
+
+<section class="usp-bar {{ sm_class }}">
+  <div class="container container--wide">
+    <div
+      class="usp-bar__grid sm-cols sm-cols-{{ section.blocks.size | at_most: 4 }} sm-cols-mobile-{{ s.columns_mobile | default: '2' }}{% if motion == 'marquee' %} sm-marquee{% elsif motion == 'slider' %} sm-mobile-slider{% endif %}"
+      {% if motion != 'grid' %}style="--sm-slide-w: {{ s.mobile_width | default: 66 }}%;"{% endif %}
+      {% if motion == 'marquee' %}data-autoslide="continuous" data-speed="{{ s.marquee_speed | default: 30 }}"{% elsif motion == 'slider' and s.mobile_autoslide %}data-autoslide="{{ slide_ms }}"{% endif %}
+    >
+      {%- for block in section.blocks -%}
+        <div class="usp{% if block.settings.hide_mobile %} sm-hide-mobile{% endif %}" {{ block.shopify_attributes }}>
+          {%- if block.settings.icon_svg != blank -%}
+            {{ block.settings.icon_svg }}
+          {%- else -%}
+            {%- render 'sm-icon', icon: block.settings.icon -%}
+          {%- endif -%}
+          <div>
+            {%- if block.settings.title != blank -%}<p class="usp__title">{{ block.settings.title }}</p>{%- endif -%}
+            {%- if block.settings.subtitle != blank -%}<p class="usp__sub">{{ block.settings.subtitle }}</p>{%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+
+      {%- if motion == 'marquee' -%}
+        {%- comment -%}
+          De pluspunten staan er een tweede keer in. Dat is wat de band eindeloos
+          laat rondlopen: het script springt bij de helft onzichtbaar terug naar
+          het begin. Deze kopie wordt overgeslagen door voorleessoftware en is
+          alleen op mobiel zichtbaar.
+        {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          <div class="usp sm-marquee__copy{% if block.settings.hide_mobile %} sm-hide-mobile{% endif %}" aria-hidden="true">
+            {%- if block.settings.icon_svg != blank -%}
+              {{ block.settings.icon_svg }}
+            {%- else -%}
+              {%- render 'sm-icon', icon: block.settings.icon -%}
+            {%- endif -%}
+            <div>
+              {%- if block.settings.title != blank -%}<p class="usp__title">{{ block.settings.title }}</p>{%- endif -%}
+              {%- if block.settings.subtitle != blank -%}<p class="usp__sub">{{ block.settings.subtitle }}</p>{%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "USP-balk",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Voeg pluspunten toe met 'Blok toevoegen'. Sleep ze om de volgorde te wijzigen."
+    },
+    { "type": "header", "content": "Weergave op mobiel" },
+    {
+      "type": "select",
+      "id": "mobile_style",
+      "label": "Hoe worden de pluspunten getoond?",
+      "options": [
+        { "value": "marquee", "label": "Doorlopende band (schuift rustig door)" },
+        { "value": "slider", "label": "Swipe-rij die per stap verspringt" },
+        { "value": "grid", "label": "Gewoon naast elkaar, zonder beweging" }
+      ],
+      "default": "marquee"
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "label": "Snelheid van de doorlopende band",
+      "info": "Pixels per seconde. Lager = rustiger meelezen.",
+      "min": 10,
+      "max": 90,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_autoslide",
+      "label": "Swipe-rij vanzelf laten doorschuiven",
+      "info": "Alleen van toepassing bij de swipe-rij.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoslide_seconds",
+      "label": "Om de hoeveel seconden verspringen",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "mobile_width",
+      "label": "Breedte van een pluspunt",
+      "info": "Percentage van de schermbreedte. Lager = meer tegelijk zichtbaar.",
+      "min": 40,
+      "max": 100,
+      "step": 2,
+      "unit": "%",
+      "default": 66
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Aantal naast elkaar (als de swipe-rij uit staat)",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Achtergrond",
+      "options": [
+        { "value": "default", "label": "Standaard" },
+        { "value": "alt", "label": "Zachte zandtint" },
+        { "value": "white", "label": "Wit" },
+        { "value": "dark", "label": "Donker" }
+      ],
+      "default": "default"
+    },
+    { "type": "header", "content": "Zichtbaarheid" },
+    { "type": "checkbox", "id": "hide_mobile", "label": "Deze sectie verbergen op mobiel", "default": false },
+    { "type": "checkbox", "id": "hide_desktop", "label": "Deze sectie verbergen op laptop", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "Pluspunt",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icoon",
+          "options": [
+            { "value": "truck", "label": "Bezorgwagen" },
+            { "value": "return", "label": "Retour / pijl rond" },
+            { "value": "shield", "label": "Schild (veilig)" },
+            { "value": "chat", "label": "Tekstballon (advies)" },
+            { "value": "heart", "label": "Hartje" },
+            { "value": "star", "label": "Ster" },
+            { "value": "gift", "label": "Cadeau" },
+            { "value": "clock", "label": "Klok" },
+            { "value": "card", "label": "Betaalkaart" },
+            { "value": "store", "label": "Winkel" },
+            { "value": "hanger", "label": "Kledinghanger" },
+            { "value": "leaf", "label": "Blaadje" },
+            { "value": "phone", "label": "Telefoon" },
+            { "value": "mail", "label": "Envelop" },
+            { "value": "none", "label": "Geen icoon" }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titel",
+          "default": "Gratis verzending"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Tekst eronder",
+          "default": "Vanaf €75 in NL & BE"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_mobile",
+          "label": "Dit pluspunt verbergen op mobiel",
+          "default": false
+        },
+        {
+          "type": "html",
+          "id": "icon_svg",
+          "label": "Eigen icoon (voor gevorderden)",
+          "info": "Alleen invullen als je een eigen SVG-code wilt gebruiken. Laat dit anders leeg."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "USP-balk",
+      "blocks": [
+        { "type": "usp", "settings": { "icon": "truck", "title": "Gratis verzending", "subtitle": "Vanaf €75 in NL & BE" } },
+        { "type": "usp", "settings": { "icon": "return", "title": "14 dagen bedenktijd", "subtitle": "Retour binnen 14 dagen na aanmelding" } },
+        { "type": "usp", "settings": { "icon": "shield", "title": "Veilig betalen", "subtitle": "iDEAL, Klarna & meer" } },
+        { "type": "usp", "settings": { "icon": "chat", "title": "Persoonlijk advies", "subtitle": "Wij denken graag met je mee" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

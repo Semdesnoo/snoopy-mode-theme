@@ -1,0 +1,92 @@
+{%- comment -%}
+  Productkaart (.product-card)
+  Gebruik: {% render 'product-card', product: product %}
+  Verwacht: een 'product' object.
+  De labels, de vorm van de foto en de knop stel je in bij
+  Thema-instellingen → Productkaarten.
+
+  Optioneel:
+    force_badge       — tekst die op élke foto komt (bijv. "Aanbieding" op de
+                        Sale-pagina), ongeacht of er een korting is ingevuld.
+    force_badge_style — 'sale' (terracotta), 'dark' (bijna zwart) of 'soft' (licht).
+{%- endcomment -%}
+{%- liquid
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+  assign is_new = false
+  if product.tags contains 'nieuw' or product.tags contains 'Nieuw'
+    assign is_new = true
+  endif
+  assign ratio = settings.card_image_ratio | default: 'phonefull'
+  comment
+    Staat "foto's volledig tonen" aan, dan wordt er niets van de foto
+    afgesneden en past hij helemaal in het vlak.
+  endcomment
+  assign fit_class = ''
+  if settings.card_image_contain
+    assign fit_class = ' sm-fit-contain'
+  endif
+  assign badge_new = settings.badge_new_label | default: 'Nieuw'
+  assign badge_sale = settings.badge_sale_label | default: 'Sale'
+
+  comment
+    Hoe breed de foto écht op het scherm staat. De browser kiest hiermee het
+    kleinste bestand dat nog scherp is. Stond dit te hoog, dan haalde een
+    telefoon een foto op die twee keer te groot was.
+  endcomment
+  assign card_sizes = sizes | default: '(max-width: 749px) 46vw, (max-width: 989px) 31vw, 23vw'
+-%}
+<article class="product-card reveal" data-card>
+  <a class="product-card__media-wrap" href="{{ product.url }}">
+    {%- if force_badge != blank -%}
+      {%- liquid
+        case force_badge_style
+          when 'dark'
+            assign forced_class = 'badge'
+          when 'soft'
+            assign forced_class = 'badge badge--soft'
+          else
+            assign forced_class = 'badge badge--sale'
+        endcase
+      -%}
+      <span class="{{ forced_class }}">{{ force_badge }}</span>
+    {%- elsif is_new and badge_new != blank -%}
+      <span class="badge">{{ badge_new }}</span>
+    {%- elsif on_sale and badge_sale != blank -%}
+      <span class="badge badge--sale">{{ badge_sale }}</span>
+    {%- endif -%}
+    {%- if product.featured_media -%}
+      <div class="media sm-ratio-{{ ratio }}{{ fit_class }}">
+        {{ product.featured_media | image_url: width: 800 | image_tag: loading: 'lazy', alt: product.title, widths: '300, 400, 600, 800', sizes: card_sizes }}
+      </div>
+    {%- else -%}
+      <div class="media sm-ratio-{{ ratio }}" data-label="{{ product.title | escape }}"></div>
+    {%- endif -%}
+    {%- if settings.show_quick_view and settings.quick_view_label != blank -%}
+      {%- comment -%}
+        Een <span> en geen <button>: dit zit binnen de link naar het product.
+        Een knop in een link is ongeldige HTML en gedraagt zich onvoorspelbaar
+        op mobiel. Zo opent een tik gewoon netjes de productpagina.
+      {%- endcomment -%}
+      <div class="product-card__quick">
+        <span class="btn btn--light btn--sm btn--block">{{ settings.quick_view_label }}</span>
+      </div>
+    {%- endif -%}
+  </a>
+  {%- if settings.show_product_type and product.type != blank -%}
+    <p class="product-card__cat">{{ product.type }}</p>
+  {%- endif -%}
+  <h3 class="product-card__name"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+  {%- if settings.show_price -%}
+    <p class="product-card__price">
+      {%- if on_sale -%}
+        <span class="price-old">{{ product.compare_at_price | money }}</span>
+        <span class="price-sale">{{ product.price | money }}</span>
+      {%- else -%}
+        {{ product.price | money }}
+      {%- endif -%}
+    </p>
+  {%- endif -%}
+</article>

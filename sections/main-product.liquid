@@ -1,0 +1,496 @@
+{%- comment -%}
+  Productpagina — galerij, prijs, varianten, bestelknop, pluspunten en uitklapblokken.
+  De vormgeving staat in assets/product.css, het script in assets/product.js.
+  "Combineer met", de beoordelingen en de maat-adviseur zijn aparte secties.
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign eyebrow_text = ''
+  if section.settings.show_vendor and product.vendor != blank
+    assign eyebrow_text = shop.name | append: ' · ' | append: product.vendor
+  elsif product.type != blank
+    assign eyebrow_text = shop.name | append: ' · ' | append: product.type
+  else
+    assign eyebrow_text = shop.name
+  endif
+-%}
+
+<!-- BREADCRUMB -->
+<nav class="container container--wide breadcrumb" aria-label="Kruimelpad">
+  <ul>
+    <li><a href="{{ routes.root_url }}">Home</a></li>
+    {%- if collection.url != blank -%}
+      <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
+    {%- else -%}
+      <li><a href="{{ routes.all_products_collection_url }}">Collectie</a></li>
+    {%- endif -%}
+    <li><span aria-current="page">{{ product.title }}</span></li>
+  </ul>
+</nav>
+
+<!-- PRODUCTDETAIL: tweekoloms (galerij + info) -->
+<section class="container container--wide product">
+
+  <!-- LINKS: productgalerij. Loopt product.media; valt terug op .media-placeholder als er geen media is. -->
+  <div class="product-gallery reveal">
+    <figure>
+      {%- comment -%}
+        De foto's op de productpagina volgen dezelfde vorm-instelling als de
+        productkaarten (Themainstellingen → Productkaarten), zodat een staande
+        telefoonfoto overal dezelfde vorm heeft.
+      {%- endcomment -%}
+      {%- liquid
+        assign gallery_ratio = settings.card_image_ratio | default: 'phonefull'
+        assign gallery_fit = ''
+        if settings.card_image_contain
+          assign gallery_fit = ' sm-fit-contain'
+        endif
+        comment
+          De alt-tekst vooraf bepalen. Een pipe binnen een filter-argument
+          sluit de argumentenlijst af, dus 'alt: x | default: y' zou de rest
+          van de argumenten (waaronder class:) laten vervallen.
+        endcomment
+        assign main_alt = product.featured_media.alt | default: product.title
+      -%}
+      {%- if product.featured_media != blank -%}
+        <div class="product-gallery__main sm-ratio-{{ gallery_ratio }}{{ gallery_fit }}" data-gallery-main>
+          {{ product.featured_media | image_url: width: 1000 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '400, 600, 800, 1000, 1200', sizes: '(max-width: 900px) 100vw, 50vw', alt: main_alt, class: 'product-gallery__main-img' }}
+        </div>
+      {%- else -%}
+        <div class="media product-gallery__main sm-ratio-{{ gallery_ratio }}" data-gallery-main data-label="{{ product.title | escape }}"
+             role="img" aria-label="{{ product.title | escape }}"></div>
+      {%- endif -%}
+      <figcaption class="visually-hidden">{{ product.title }}</figcaption>
+    </figure>
+
+    {%- if product.media.size > 1 -%}
+      <div class="product-gallery__thumbs">
+        {%- for media in product.media -%}
+          {%- assign thumb_alt = media.alt | default: product.title -%}
+          <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }}{{ gallery_fit }}{% if forloop.first %} is-active{% endif %}" data-gallery-thumb
+                  data-media-id="{{ media.id }}"
+                  data-full="{{ media | image_url: width: 1200 }}"
+                  aria-label="Toon afbeelding {{ forloop.index }}">
+            {{ media | image_url: width: 300 | image_tag: loading: 'lazy', alt: thumb_alt, widths: '150, 200, 300', sizes: '(max-width: 900px) 22vw, 11vw' }}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- elsif product.media.size == 0 -%}
+      {%- comment -%} Fallback-thumbs in de stijl van de blauwdruk wanneer er nog geen foto's zijn {%- endcomment -%}
+      <div class="product-gallery__thumbs">
+        <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }} is-active" data-gallery-thumb
+                data-label="{{ product.title | escape }} · vooraanzicht" aria-label="Toon vooraanzicht">
+          <div class="media" data-label="Voor"></div>
+        </button>
+        <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }}" data-gallery-thumb
+                data-label="{{ product.title | escape }} · achteraanzicht" aria-label="Toon achteraanzicht">
+          <div class="media" data-label="Achter"></div>
+        </button>
+        <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }}" data-gallery-thumb
+                data-label="{{ product.title | escape }} · detail" aria-label="Toon detail">
+          <div class="media" data-label="Detail"></div>
+        </button>
+        <button class="product-gallery__thumb sm-ratio-{{ gallery_ratio }}" data-gallery-thumb
+                data-label="{{ product.title | escape }} · gedragen" aria-label="Toon gedragen">
+          <div class="media" data-label="Gedragen"></div>
+        </button>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- RECHTS: productinfo (sticky op desktop) -->
+  <div class="product-info reveal" data-delay="1">
+    <p class="eyebrow product-info__eyebrow">{{ eyebrow_text }}</p>
+    <h1 class="product-info__title">{{ product.title }}</h1>
+    <p class="product-info__price">
+      <span data-product-price>{{ current_variant.price | money }}</span>
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        <span class="price-sale"><s>{{ current_variant.compare_at_price | money }}</s></span>
+      {%- endif -%}
+    </p>
+    {%- if product.description != blank -%}
+      <div class="product-info__desc rte">{{ product.description | strip_html | truncatewords: 55 }}</div>
+    {%- endif -%}
+
+    <hr />
+
+    {%- comment -%}
+      Visuele varianten in de stijl van de blauwdruk (swatches/maat-knoppen).
+      Elke knop draagt data-opt-position (1/2) en data-opt-value, zodat de inline
+      JS de juiste variant kan bepalen en het verborgen veld name="id" kan zetten.
+      Kleur-swatches gebruiken de echte Shopify-kleur (swatch.color/.image) met
+      terugval op een NL naam->kleur-map.
+    {%- endcomment -%}
+    {%- for option in product.options_with_values -%}
+      {%- assign opt_name_down = option.name | downcase -%}
+      {%- if opt_name_down contains 'kleur' or opt_name_down contains 'color' -%}
+        <div class="option-block" data-option-block data-opt-position="{{ forloop.index }}">
+          <div class="option-label">
+            <span>{{ option.name }}</span>
+            <span class="option-value" data-color-value>{{ option.selected_value }}</span>
+          </div>
+          <div class="swatches">
+            {%- for value in option.values -%}
+              {%- comment -%} Naam betrouwbaar ophalen (werkt voor strings én option-value-objecten) {%- endcomment -%}
+              {%- capture v_name -%}{{ value }}{%- endcapture -%}{%- assign v_name = v_name | strip -%}
+              {%- comment -%} Selectie betrouwbaar bepalen via string-vergelijking of value.selected {%- endcomment -%}
+              {%- capture sel_name -%}{{ option.selected_value }}{%- endcapture -%}{%- assign sel_name = sel_name | strip -%}
+              {%- assign is_sel = false -%}
+              {%- if value.selected -%}{%- assign is_sel = true -%}{%- elsif v_name == sel_name -%}{%- assign is_sel = true -%}{%- endif -%}
+              {%- comment -%} Kleur/afbeelding bepalen volgens contract-volgorde {%- endcomment -%}
+              {%- assign swatch_color = '' -%}
+              {%- assign swatch_image = '' -%}
+              {%- if value.swatch.color -%}
+                {%- assign swatch_color = value.swatch.color -%}
+              {%- elsif value.swatch.image -%}
+                {%- assign swatch_image = value.swatch.image | image_url: width: 80 -%}
+              {%- else -%}
+                {%- capture v_hex -%}{%- render 'sm-color-hex', name: v_name -%}{%- endcapture -%}{%- assign v_hex = v_hex | strip -%}
+                {%- if v_hex != blank -%}{%- assign swatch_color = v_hex -%}{%- endif -%}
+              {%- endif -%}
+              {%- comment -%} (Bijna-)witte kleuren krijgen swatch--light voor zichtbaarheid {%- endcomment -%}
+              {%- assign is_light = false -%}
+              {%- if swatch_color != blank -%}
+                {%- assign sc_down = swatch_color | downcase -%}
+                {%- if sc_down == '#ffffff' or sc_down == '#fff' or sc_down == '#f3efe7' -%}{%- assign is_light = true -%}{%- endif -%}
+              {%- endif -%}
+              <button class="swatch{% if is_sel %} is-selected{% endif %}{% if is_light %} swatch--light{% endif %}" type="button"
+                      data-opt-button data-opt-position="{{ forloop.parentloop.index }}" data-opt-value="{{ v_name | escape }}"
+                      aria-pressed="{% if is_sel %}true{% else %}false{% endif %}"
+                      aria-label="{{ option.name }} {{ v_name }}"
+                      {%- if swatch_image != blank %} style="background-image:url({{ swatch_image }});background-size:cover;"{% elsif swatch_color != blank %} style="background:{{ swatch_color }};"{% else %} style="background:var(--bg-alt);"{% endif %}><span></span></button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="option-block" data-option-block data-opt-position="{{ forloop.index }}">
+          <div class="option-label">
+            <span>{{ option.name }}</span>
+            {%- if opt_name_down contains 'maat' or opt_name_down contains 'size' -%}
+              <a class="link-accent sizefinder-link" href="#maatadvies" data-sizefinder-open>
+                <svg class="sizefinder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <rect x="2" y="8" width="20" height="8" rx="1" />
+                  <path d="M6 8v3.5M10 8v4.5M14 8v3.5M18 8v4.5" />
+                </svg>
+                Maat-adviseur
+              </a>
+            {%- else -%}
+              <span class="option-value">{{ option.selected_value }}</span>
+            {%- endif -%}
+          </div>
+          <div class="size-grid"{% if opt_name_down contains 'maat' or opt_name_down contains 'size' %} data-size-grid{% endif %}>
+            {%- for value in option.values -%}
+              <button class="size-btn{% if value == option.selected_value %} is-selected{% endif %}" type="button"
+                      data-opt-button data-opt-position="{{ forloop.parentloop.index }}" data-opt-value="{{ value | escape }}"
+                      aria-pressed="{% if value == option.selected_value %}true{% else %}false{% endif %}">{{ value }}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <!-- WERKEND PRODUCTFORMULIER: variant-select + aantal + in winkelmand -->
+    {%- form 'product', product, id: 'product-form', class: 'product-form' -%}
+      {%- comment -%} De variant wordt via de kleur-/maat-knoppen bepaald; geen zichtbare dropdown meer. {%- endcomment -%}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
+      <script type="application/json" data-variant-json>{{ product.variants | json }}</script>
+
+      <div class="product-actions">
+        <div class="qty" data-qty>
+          <button type="button" data-qty-minus aria-label="Aantal verlagen">−</button>
+          <label class="visually-hidden" for="qty-input">Aantal</label>
+          <input id="qty-input" name="quantity" type="number" inputmode="numeric" value="1" min="1" />
+          <button type="button" data-qty-plus aria-label="Aantal verhogen">+</button>
+        </div>
+        <button class="btn" type="submit" name="add" {% unless current_variant.available %}disabled{% endunless %}
+                data-label-available="{{ section.settings.add_label | default: 'In winkelmand' | escape }}"
+                data-label-soldout="{{ section.settings.soldout_label | default: 'Uitverkocht' | escape }}"
+                data-label-unavailable="{{ section.settings.unavailable_label | default: 'Niet beschikbaar' | escape }}">
+          {%- if current_variant.available -%}{{ section.settings.add_label | default: 'In winkelmand' }}{%- else -%}{{ section.settings.soldout_label | default: 'Uitverkocht' }}{%- endif -%}
+        </button>
+        <!-- VERLANGLIJST = alleen een hart-icoon (UI-only, geen add-to-cart) -->
+        <button class="wishlist-heart" type="button" data-wishlist data-name="{{ product.title | escape }}" data-image="{{ product.featured_image | image_url: width: 200 }}" data-url="{{ product.url }}" aria-label="Voeg toe aan verlanglijst">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 20s-7-4.3-9.2-8.4C1.3 8.7 2.7 5.5 5.8 5.1 7.6 4.9 9.2 5.9 12 8c2.8-2.1 4.4-3.1 6.2-2.9 3.1.4 4.5 3.6 3 6.5C19 15.7 12 20 12 20z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- NU KOPEN: direct naar de kassa (global.js handelt af) -->
+      {%- if section.settings.buy_now_label != blank -%}
+        <button class="btn btn--outline btn--block" type="button" data-buy-now {% unless current_variant.available %}disabled{% endunless %}>{{ section.settings.buy_now_label }}</button>
+      {%- endif -%}
+    {%- endform -%}
+
+    <!-- USP-regeltjes — instelbaar via blokken "Pluspunt" -->
+    {%- assign usp_blocks = section.blocks | where: 'type', 'usp' -%}
+    {%- if usp_blocks.size > 0 -%}
+      <ul class="product-usps">
+        {%- for block in usp_blocks -%}
+          <li {{ block.shopify_attributes }}>
+            {%- render 'sm-icon', icon: block.settings.icon -%}
+            {{ block.settings.text }}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      {%- comment -%}
+        Nog geen eigen pluspunten toegevoegd: deze drie staan er alvast in.
+        De teksten pas je aan onder "Pluspunten (standaard)".
+      {%- endcomment -%}
+      {%- assign fb_usp_1 = section.settings.fallback_usp_1 -%}
+      {%- assign fb_usp_2 = section.settings.fallback_usp_2 -%}
+      {%- assign fb_usp_3 = section.settings.fallback_usp_3 -%}
+      {%- if fb_usp_1 != blank or fb_usp_2 != blank or fb_usp_3 != blank -%}
+        <ul class="product-usps">
+          {%- if fb_usp_1 != blank -%}<li>{%- render 'sm-icon', icon: 'truck' -%}{{ fb_usp_1 }}</li>{%- endif -%}
+          {%- if fb_usp_2 != blank -%}<li>{%- render 'sm-icon', icon: 'return' -%}{{ fb_usp_2 }}</li>{%- endif -%}
+          {%- if fb_usp_3 != blank -%}<li>{%- render 'sm-icon', icon: 'clock' -%}{{ fb_usp_3 }}</li>{%- endif -%}
+        </ul>
+      {%- endif -%}
+    {%- endif -%}
+
+    <!-- PRODUCTDETAILS via uitklapbare blokken -->
+    {%- assign accordion_blocks = section.blocks | where: 'type', 'accordion' -%}
+    {%- if accordion_blocks.size == 0 -%}
+      {%- comment -%}
+        Nog geen eigen uitklapblokken: de vier standaardblokken. De omschrijving
+        komt uit het product zelf; de rest pas je aan onder "Uitklapblokken (standaard)".
+        Een metaveld op het product wint altijd van deze tekst.
+      {%- endcomment -%}
+      <div class="product-accordions">
+        {%- assign desc_body = product.description | default: section.settings.fallback_desc -%}
+        {%- if desc_body != blank -%}
+          <details class="accordion" open>
+            <summary>{{ section.settings.fallback_desc_title | default: 'Omschrijving' }}</summary>
+            <div class="accordion__body rte">{{ desc_body }}</div>
+          </details>
+        {%- endif -%}
+
+        {%- assign mat_body = product.metafields.custom.materiaal | default: section.settings.fallback_material -%}
+        {%- if mat_body != blank -%}
+          <details class="accordion">
+            <summary>{{ section.settings.fallback_material_title | default: 'Materiaal & onderhoud' }}</summary>
+            <div class="accordion__body rte">{{ mat_body }}</div>
+          </details>
+        {%- endif -%}
+
+        {%- assign ship_body = product.metafields.custom.verzending | default: section.settings.fallback_shipping -%}
+        {%- if ship_body != blank -%}
+          <details class="accordion">
+            <summary>{{ section.settings.fallback_shipping_title | default: 'Verzending & retour' }}</summary>
+            <div class="accordion__body rte">{{ ship_body }}</div>
+          </details>
+        {%- endif -%}
+
+        {%- assign size_body = product.metafields.custom.maatadvies | default: section.settings.fallback_sizing -%}
+        {%- if size_body != blank -%}
+          <details class="accordion" id="maatadvies">
+            <summary>{{ section.settings.fallback_sizing_title | default: 'Maatadvies' }}</summary>
+            <div class="accordion__body rte">{{ size_body }}</div>
+          </details>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="product-accordions">
+        {%- for block in accordion_blocks -%}
+          {%- liquid
+            assign body = ''
+            case block.settings.content_source
+              when 'description'
+                assign body = product.description
+              when 'metafield'
+                assign mf_key = block.settings.metafield_key | strip
+                assign body = product.metafields.custom[mf_key]
+            endcase
+            if body == blank
+              assign body = block.settings.content
+            endif
+          -%}
+          <details class="accordion"{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id }}"{% endif %}{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
+            <summary>{{ block.settings.title }}</summary>
+            <div class="accordion__body rte">{{ body }}</div>
+          </details>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<!-- STICKY 'IN WINKELMAND'-BALK -->
+<div class="sticky-atc" data-sticky-atc aria-hidden="true">
+  <div class="sticky-atc__inner container container--wide">
+    <div class="sticky-atc__info">
+      {%- if product.featured_image != blank -%}
+        <img class="sticky-atc__thumb" src="{{ product.featured_image | image_url: width: 120 }}" alt="" width="44" height="56" loading="lazy">
+      {%- endif -%}
+      <div class="sticky-atc__text">
+        <span class="sticky-atc__name">{{ product.title }}</span>
+        <span class="sticky-atc__price" data-product-price>{{ current_variant.price | money }}</span>
+      </div>
+    </div>
+    <button class="btn sticky-atc__btn" type="submit" name="add" form="product-form"{% unless current_variant.available %} disabled{% endunless %}
+            data-label-available="{{ section.settings.add_label | default: 'In winkelmand' | escape }}"
+            data-label-soldout="{{ section.settings.soldout_label | default: 'Uitverkocht' | escape }}"
+            data-label-unavailable="{{ section.settings.unavailable_label | default: 'Niet beschikbaar' | escape }}">
+      {%- if current_variant.available -%}{{ section.settings.add_label | default: 'In winkelmand' }}{%- else -%}{{ section.settings.soldout_label | default: 'Uitverkocht' }}{%- endif -%}
+    </button>
+  </div>
+</div>
+
+{%- comment -%} Maat-adviseur: het venster dat opent via de link bij de maatkeuze. {%- endcomment -%}
+{%- render 'sm-maatadviseur', sf: section.settings -%}
+
+{% schema %}
+{
+  "name": "Productpagina",
+  "tag": "section",
+  "class": "section-main-product",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "header", "content": "Productinfo" },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Merk tonen in plaats van producttype boven de titel",
+      "default": false
+    },
+
+    { "type": "header", "content": "Knoppen" },
+    { "type": "text", "id": "add_label", "label": "Tekst op de bestelknop", "default": "In winkelmand" },
+    { "type": "text", "id": "soldout_label", "label": "Tekst bij uitverkocht", "default": "Uitverkocht" },
+    { "type": "text", "id": "unavailable_label", "label": "Tekst bij een niet-bestaande combinatie", "default": "Niet beschikbaar" },
+    {
+      "type": "text",
+      "id": "buy_now_label",
+      "label": "Tekst op de directe-afrekenknop",
+      "info": "Leeg laten = die knop verdwijnt.",
+      "default": "Nu kopen"
+    },
+
+    { "type": "header", "content": "Maat-adviseur" },
+    {
+      "type": "paragraph",
+      "content": "Het venster dat opent via de link 'Maat-adviseur' bij de maatkeuze. Laat een veld leeg om de standaardtekst te gebruiken."
+    },
+    { "type": "text", "id": "sf_eyebrow", "label": "Klein kopje erboven", "default": "Maat-adviseur" },
+    { "type": "text", "id": "sf_title", "label": "Titel", "default": "Vind jouw perfecte maat" },
+    { "type": "textarea", "id": "sf_intro", "label": "Introtekst", "default": "Vul je lengte, gewicht en gewenste pasvorm in. Wij adviseren de maat die het beste bij je past." },
+    { "type": "text", "id": "sf_submit", "label": "Tekst op de rekenknop", "default": "Bereken mijn maat" },
+    { "type": "text", "id": "sf_apply", "label": "Tekst op de kies-knop", "default": "Kies deze maat" },
+    { "type": "textarea", "id": "sf_disclaimer", "label": "Kleine tekst onderaan", "default": "Dit is een indicatie. Twijfel je tussen twee maten? Kies dan de grotere voor extra comfort." },
+    { "type": "text", "id": "sf_table_summary", "label": "Tekst om de maattabel te openen", "default": "Of bekijk de volledige maattabel" },
+
+    { "type": "header", "content": "Pluspunten (standaard)" },
+    {
+      "type": "paragraph",
+      "content": "Deze drie regels staan onder de bestelknop zolang je zelf geen blokken 'Pluspunt' hebt toegevoegd. Leeg laten = niet tonen."
+    },
+    { "type": "text", "id": "fallback_usp_1", "label": "Regel 1", "default": "Gratis verzending vanaf €75" },
+    { "type": "text", "id": "fallback_usp_2", "label": "Regel 2", "default": "14 dagen bedenktijd om te retourneren" },
+    { "type": "text", "id": "fallback_usp_3", "label": "Regel 3", "default": "Voor 17:00 besteld, morgen in huis" },
+
+    { "type": "header", "content": "Uitklapblokken (standaard)" },
+    {
+      "type": "paragraph",
+      "content": "Deze vier blokken verschijnen zolang je zelf geen blokken 'Uitklapblok' hebt toegevoegd. Vul je op een product een metaveld in (materiaal, verzending of maatadvies), dan wint dat altijd."
+    },
+    { "type": "text", "id": "fallback_desc_title", "label": "Titel 1", "default": "Omschrijving" },
+    {
+      "type": "richtext",
+      "id": "fallback_desc",
+      "label": "Tekst 1",
+      "info": "Alleen gebruikt als het product zelf geen omschrijving heeft.",
+      "default": "<p>Een tijdloos stuk uit onze collectie, met zorg voor je uitgekozen.</p>"
+    },
+    { "type": "text", "id": "fallback_material_title", "label": "Titel 2", "default": "Materiaal & onderhoud" },
+    {
+      "type": "richtext",
+      "id": "fallback_material",
+      "label": "Tekst 2",
+      "default": "<p>Was op een fijn programma op 30°C met een mild wasmiddel. Niet in de droger; hang op een vormvaste hanger en strijk indien gewenst op lage temperatuur.</p>"
+    },
+    { "type": "text", "id": "fallback_shipping_title", "label": "Titel 3", "default": "Verzending & retour" },
+    {
+      "type": "richtext",
+      "id": "fallback_shipping",
+      "label": "Tekst 3",
+      "default": "<p>Gratis verzending binnen Nederland en België vanaf €75. Voor 17:00 besteld op werkdagen betekent morgen in huis. Onder €75 rekenen we €6,95 verzendkosten.</p><p>Niet helemaal naar wens? Je hebt 14 dagen bedenktijd. Meld je retour bij ons aan en stuur het artikel daarna per omgaande terug, uiterlijk binnen 14 dagen na je aanmelding. De kosten voor het terugsturen zijn voor eigen rekening. Artikelen uit de Sale kunnen niet retour.</p>"
+    },
+    { "type": "text", "id": "fallback_sizing_title", "label": "Titel 4", "default": "Maatadvies" },
+    {
+      "type": "richtext",
+      "id": "fallback_sizing",
+      "label": "Tekst 4",
+      "default": "<p>Twijfel je tussen twee maten? Kies dan de kleinste voor een nettere pasvorm, of de grootste als je het kledingstuk graag losser draagt.</p><p>Persoonlijk maatadvies nodig? We helpen je graag — neem gerust contact met ons op.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "Pluspunt",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icoon",
+          "options": [
+            { "value": "truck", "label": "Bezorgwagen" },
+            { "value": "return", "label": "Retour" },
+            { "value": "clock", "label": "Klok" },
+            { "value": "shield", "label": "Schild" },
+            { "value": "chat", "label": "Tekstballon" },
+            { "value": "heart", "label": "Hartje" },
+            { "value": "gift", "label": "Cadeau" },
+            { "value": "card", "label": "Betaalkaart" },
+            { "value": "store", "label": "Winkel" },
+            { "value": "hanger", "label": "Kledinghanger" },
+            { "value": "none", "label": "Geen icoon" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "text", "label": "Tekst", "default": "Gratis verzending vanaf 75 euro" }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Uitklapblok",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titel", "default": "Omschrijving" },
+        {
+          "type": "select",
+          "id": "content_source",
+          "label": "Waar komt de tekst vandaan?",
+          "options": [
+            { "value": "text", "label": "Eigen tekst hieronder" },
+            { "value": "description", "label": "De omschrijving van het product" },
+            { "value": "metafield", "label": "Een metaveld van het product" }
+          ],
+          "default": "text"
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Naam van het metaveld",
+          "info": "Alleen nodig bij de keuze metaveld. Bijvoorbeeld: materiaal."
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Eigen tekst",
+          "info": "Wordt ook gebruikt als de omschrijving of het metaveld leeg is.",
+          "default": "<p>Vul hier de tekst in.</p>"
+        },
+        { "type": "checkbox", "id": "open", "label": "Standaard opengeklapt", "default": false },
+        {
+          "type": "text",
+          "id": "anchor_id",
+          "label": "Anker (voor gevorderden)",
+          "info": "Gebruik het woord maatadvies bij het maatblok."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

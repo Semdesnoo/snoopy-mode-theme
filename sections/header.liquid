@@ -1,0 +1,580 @@
+{%- comment -%}
+  Koptekst — logo, menu, zoeken, account en winkelmand.
+  Alle teksten en het logo (apart voor laptop en mobiel) stel je hier in.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign menu = linklists[s.menu]
+  assign brand_name = s.brand_text | default: shop.name
+
+  comment
+    Eén menu-item mag opvallen (bijvoorbeeld "Sale"). We vergelijken in kleine
+    letters, zodat "Sale", "sale" en "SALE" allemaal werken.
+  endcomment
+  assign highlight = s.highlight_link | downcase | strip
+
+  comment
+    Link naar de Sale-collectie. Bestaat die nog niet, dan wijst hij voorlopig
+    naar alle producten, zodat er nooit een dode link in het menu staat.
+  endcomment
+  assign sale_collection = collections["sale"]
+  if sale_collection != blank
+    assign sale_url = sale_collection.url
+  else
+    assign sale_url = routes.all_products_collection_url
+  endif
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .brand__logo,
+  .mobile-nav .brand__logo {
+    --sm-logo-w: {{ s.logo_width | default: 180 }}px;
+    --sm-logo-w-mobile: {{ s.logo_width_mobile | default: 130 }}px;
+  }
+  {%- unless s.overlay_on_home -%}
+    {%- comment -%} Header niet transparant: de hero begint dan gewoon onder de balk. {%- endcomment -%}
+    .hero { margin-top: 0; }
+  {%- endunless -%}
+{%- endstyle -%}
+
+<header class="site-header{% if request.page_type == 'index' and s.overlay_on_home %} header--overlay{% endif %}" data-header-section="{{ section.id }}">
+  <div class="container container--wide header-inner">
+    <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="mobile-nav" aria-label="{{ s.label_menu_open | default: 'Menu openen' | escape }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <line x1="3" y1="7" x2="21" y2="7" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="17" x2="21" y2="17" />
+      </svg>
+    </button>
+
+    <a class="brand" href="{{ routes.root_url }}" aria-label="{{ brand_name }} home">
+      {%- if s.logo != blank -%}
+        {%- render 'sm-picture',
+          image: s.logo,
+          image_mobile: s.logo_mobile,
+          alt: brand_name,
+          class: 'brand__logo',
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '120, 180, 240, 360, 480',
+          sizes: '180px' -%}
+      {%- else -%}
+        {{ brand_name }}
+      {%- endif -%}
+    </a>
+
+    <nav class="main-nav" aria-label="Hoofdnavigatie">
+      <ul>
+        {%- if menu.links.size > 0 -%}
+          {%- for link in menu.links -%}
+            {%- liquid
+              assign link_key = link.title | downcase | strip
+              assign is_highlight = false
+              if highlight != blank and link_key == highlight
+                assign is_highlight = true
+              endif
+            -%}
+            {%- if link.links != blank -%}
+              <li class="nav-item-dropdown" data-dropdown>
+                <button class="nav-dropdown-toggle{% if is_highlight %} nav-highlight{% endif %}" type="button" aria-expanded="false" aria-haspopup="true" data-dropdown-toggle>{{ link.title }}
+                  <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
+                </button>
+                <div class="nav-dropdown" data-dropdown-menu>
+                  <ul>
+                    {%- for childlink in link.links -%}
+                      <li><a href="{{ childlink.url }}"{% if childlink.active %} class="is-active" aria-current="page"{% endif %}>{{ childlink.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                  {%- if s.label_all_products != blank -%}
+                    <a class="nav-dropdown__all" href="{{ link.url }}">{{ s.label_all_products }}</a>
+                  {%- endif -%}
+                </div>
+              </li>
+            {%- else -%}
+              <li><a href="{{ link.url }}" class="{% if link.active %}is-active {% endif %}{% if is_highlight %}nav-highlight{% endif %}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- comment -%} Nog geen menu gekoppeld: dit standaardmenu verschijnt zolang dat niet gebeurd is. {%- endcomment -%}
+          <li><a href="{{ sale_url }}" class="{% if highlight == 'sale' %}nav-highlight{% endif %}">Sale</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Collectie</a></li>
+          <li class="nav-item-dropdown" data-dropdown>
+            <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true" data-dropdown-toggle>Producten
+              <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
+            </button>
+            <div class="nav-dropdown" data-dropdown-menu>
+              <ul>
+                {%- comment -%} Beperkt tot 12 zodat de pagina snel blijft als je veel collecties hebt. {%- endcomment -%}
+                {%- for collection in collections limit: 12 -%}
+                  {%- unless collection.handle == 'frontpage' or collection.handle == 'home-page' -%}
+                    <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
+                  {%- endunless -%}
+                {%- endfor -%}
+              </ul>
+              {%- if s.label_all_products != blank -%}
+                <a class="nav-dropdown__all" href="{{ routes.all_products_collection_url }}">{{ s.label_all_products }}</a>
+              {%- endif -%}
+            </div>
+          </li>
+          {%- comment -%} Alleen tonen als de pagina in Shopify bestaat, anders krijg je een dode link. {%- endcomment -%}
+          {%- assign about_page = pages["over-ons"] -%}
+          {%- if about_page != blank -%}<li><a href="{{ about_page.url }}">{{ about_page.title }}</a></li>{%- endif -%}
+          {%- assign contact_page = pages["contact"] -%}
+          {%- if contact_page != blank -%}<li><a href="{{ contact_page.url }}">{{ contact_page.title }}</a></li>{%- endif -%}
+        {%- endif -%}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      {%- if s.show_search -%}
+        <button class="icon-btn header-actions__desktop" data-search-open aria-label="{{ s.label_search | default: 'Zoeken' | escape }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.5" y2="16.5" />
+          </svg>
+        </button>
+      {%- endif -%}
+      {%- if s.show_account -%}
+        <a class="icon-btn header-actions__desktop" href="{{ routes.account_url }}" aria-label="{{ s.label_account | default: 'Account' | escape }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
+          </svg>
+        </a>
+      {%- endif -%}
+      <button class="icon-btn" data-cart-open aria-label="{{ s.label_cart | default: 'Winkelmand' | escape }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <path d="M6 8h12l-1 12H7L6 8z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" />
+        </svg>
+        <span class="cart-count" data-cart-count{% if cart.item_count == 0 %} data-empty="true"{% endif %}>{{ cart.item_count }}</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="overlay" data-overlay></div>
+
+<nav class="mobile-nav" id="mobile-nav" data-mobile-nav aria-label="Mobiele navigatie" aria-hidden="true">
+  <div class="mobile-nav__head">
+    {%- if s.logo != blank -%}
+      <span class="brand">
+        {{ s.logo_mobile | default: s.logo | image_url: width: 360 | image_tag: alt: brand_name, class: 'brand__logo', widths: '120, 180, 240, 360', sizes: '130px' }}
+      </span>
+    {%- else -%}
+      <span class="brand">{{ brand_name }}</span>
+    {%- endif -%}
+    <button class="icon-btn" data-menu-close aria-label="{{ s.label_menu_close | default: 'Menu sluiten' | escape }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
+      </svg>
+    </button>
+  </div>
+  <div class="mobile-nav__links">
+    {%- if menu.links.size > 0 -%}
+      {%- for link in menu.links -%}
+        {%- liquid
+          assign link_key = link.title | downcase | strip
+          assign is_highlight = false
+          if highlight != blank and link_key == highlight
+            assign is_highlight = true
+          endif
+        -%}
+        {%- if link.links != blank -%}
+          <details class="mobile-nav__group">
+            <summary{% if is_highlight %} class="nav-highlight"{% endif %}>{{ link.title }}</summary>
+            <div class="mobile-nav__sub">
+              {%- for childlink in link.links -%}
+                <a href="{{ childlink.url }}"{% if childlink.active %} class="is-active" aria-current="page"{% endif %}>{{ childlink.title }}</a>
+              {%- endfor -%}
+              {%- if s.label_all_products != blank -%}
+                <a href="{{ link.url }}">{{ s.label_all_products }}</a>
+              {%- endif -%}
+            </div>
+          </details>
+        {%- else -%}
+          <a href="{{ link.url }}" class="{% if link.active %}is-active {% endif %}{% if is_highlight %}nav-highlight{% endif %}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      <a href="{{ sale_url }}" class="{% if highlight == 'sale' %}nav-highlight{% endif %}">Sale</a>
+      <a href="{{ routes.all_products_collection_url }}">Collectie</a>
+      <details class="mobile-nav__group">
+        <summary>Producten</summary>
+        <div class="mobile-nav__sub">
+          {%- for collection in collections limit: 12 -%}
+            {%- unless collection.handle == 'frontpage' or collection.handle == 'home-page' -%}
+              <a href="{{ collection.url }}">{{ collection.title }}</a>
+            {%- endunless -%}
+          {%- endfor -%}
+          {%- if s.label_all_products != blank -%}
+            <a href="{{ routes.all_products_collection_url }}">{{ s.label_all_products }}</a>
+          {%- endif -%}
+        </div>
+      </details>
+      {%- assign about_page = pages["over-ons"] -%}
+      {%- if about_page != blank -%}<a href="{{ about_page.url }}">{{ about_page.title }}</a>{%- endif -%}
+      {%- assign contact_page = pages["contact"] -%}
+      {%- if contact_page != blank -%}<a href="{{ contact_page.url }}">{{ contact_page.title }}</a>{%- endif -%}
+    {%- endif -%}
+  </div>
+  <div class="mobile-nav__utils">
+    {%- if s.show_search -%}
+      <button class="mobile-nav__util" type="button" data-search-open>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.5" y2="16.5" />
+        </svg>
+        <span>{{ s.label_search | default: 'Zoeken' }}</span>
+      </button>
+    {%- endif -%}
+    {%- if s.show_account -%}
+      <a class="mobile-nav__util" href="{{ routes.account_url }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+          <circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
+        </svg>
+        <span>{{ s.label_account | default: 'Account' }}</span>
+      </a>
+    {%- endif -%}
+
+    {%- comment -%} Knoppen naar Instagram, TikTok en Facebook, onder Account. {%- endcomment -%}
+    {%- if s.show_mobile_socials -%}
+      <div class="mobile-nav__socials">
+        {%- render 'sm-socials', label: s.mobile_socials_label, style: 'light' -%}
+      </div>
+    {%- endif -%}
+  </div>
+  <div class="mobile-nav__foot">
+    {%- if s.mobile_foot_text != blank -%}<p>{{ s.mobile_foot_text }}</p>{%- endif -%}
+    {%- assign foot_email = settings.company_email | default: shop.email -%}
+    {%- if foot_email != blank -%}<p>{{ foot_email }}</p>{%- endif -%}
+  </div>
+</nav>
+
+{%- liquid
+  comment
+    Gratis-verzendbalk en de verzendkostenregel. De bedragen zijn in centen,
+    want zo rekent Shopify. free_shipping_threshold en shipping_cost staan in
+    hele euro's in de instellingen.
+  endcomment
+  assign vrij_vanaf = settings.free_shipping_threshold | default: 75 | times: 100 | round
+  assign verzendkosten = settings.shipping_cost | default: 6.95 | times: 100 | round
+  assign nog_nodig = vrij_vanaf | minus: cart.total_price
+  assign gratis_verzending = false
+  if nog_nodig <= 0
+    assign gratis_verzending = true
+    assign nog_nodig = 0
+  endif
+  if gratis_verzending or cart.item_count == 0
+    assign verzend_bedrag = 0
+  else
+    assign verzend_bedrag = verzendkosten
+  endif
+  comment
+    Subtotaal = de optelsom van de artikelen die je in de lade ziet
+    (items_subtotal_price), zodat het scherm altijd klopt. Het eindtotaal gaat
+    uit van total_price, want daar zit een eventuele kortingscode al in.
+  endcomment
+  assign artikelen_totaal = cart.items_subtotal_price
+  assign korting = artikelen_totaal | minus: cart.total_price
+  assign eind_totaal = cart.total_price | plus: verzend_bedrag
+  assign voortgang = 0
+  if vrij_vanaf > 0
+    assign voortgang = cart.total_price | times: 100.0 | divided_by: vrij_vanaf | round
+    if voortgang > 100
+      assign voortgang = 100
+    endif
+  endif
+-%}
+<aside class="cart-drawer" data-cart
+       data-money-format="{{ shop.money_format | escape }}"
+       data-free-shipping="{% if settings.free_shipping_enabled %}true{% else %}false{% endif %}"
+       data-free-threshold="{{ vrij_vanaf }}"
+       data-shipping-cost="{{ verzendkosten }}"
+       data-progress-text="Voeg nog [bedrag] toe voor gratis verzending"
+       data-progress-done="Gelukt — je bestelling wordt gratis verzonden"
+       data-free-label="Gratis"
+       data-empty-label="{{ s.cart_subtotal_empty | default: 'Berekend bij afrekenen' | escape }}"
+       aria-label="{{ s.cart_title | default: 'Winkelmand' | escape }}" aria-hidden="true">
+  <div class="cart-drawer__head">
+    <h2>{{ s.cart_title | default: 'Winkelmand' }}</h2>
+    <button class="icon-btn" data-cart-close aria-label="{{ s.label_cart_close | default: 'Winkelmand sluiten' | escape }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
+      </svg>
+    </button>
+  </div>
+  {%- comment -%} Voortgang naar gratis verzending. {%- endcomment -%}
+  {%- if settings.free_shipping_enabled -%}
+    <div class="cart-progress" data-cart-progress{% if cart.item_count == 0 %} hidden{% endif %}>
+      <p class="cart-progress__text" data-cart-progress-text>
+        {%- if gratis_verzending -%}
+          Gelukt — je bestelling wordt gratis verzonden
+        {%- else -%}
+          {%- assign nog_tekst = nog_nodig | money -%}
+          Voeg nog {{ nog_tekst }} toe voor gratis verzending
+        {%- endif -%}
+      </p>
+      <div class="cart-progress__track" role="presentation">
+        <span class="cart-progress__bar" data-cart-progress-bar style="width:{{ voortgang }}%"></span>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="cart-drawer__body">
+    {%- comment -%}
+      Let op: allebei de vakken staan er ALTIJD, ook als de winkelmand leeg is.
+      Het script vult na "In winkelmand" namelijk het vak data-cart-items; bestond
+      dat vak niet, dan verscheen een toegevoegd product niet in de lade.
+    {%- endcomment -%}
+    <div class="cart-empty" data-cart-empty{% if cart.item_count > 0 %} hidden{% endif %}>
+      <p>{{ s.cart_empty_text | default: 'Je winkelmand is nog leeg.' }}</p>
+      <button class="btn btn--outline btn--sm" data-cart-close>{{ s.cart_empty_button | default: 'Verder winkelen' }}</button>
+    </div>
+
+    <div data-cart-items aria-live="polite"
+         data-quantity-label="{{ s.cart_quantity_label | default: 'Aantal' | escape }}"
+         data-remove-label="Verwijderen"
+         data-less-label="Eén minder"
+         data-more-label="Eén meer">
+      {%- for item in cart.items -%}
+        <div class="cart-item" data-line="{{ forloop.index }}">
+          <a class="cart-item__media" href="{{ item.url }}">
+            {%- if item.image != blank -%}
+              {{ item.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: item.product.title, widths: '100, 150, 200', sizes: '76px' }}
+            {%- else -%}
+              <div class="media media--portrait" data-label="{{ item.product.title | escape }}"></div>
+            {%- endif -%}
+          </a>
+          <div class="cart-item__info">
+            <p class="cart-item__name"><a href="{{ item.url }}">{{ item.product.title }}</a></p>
+            {%- unless item.product.has_only_default_variant -%}
+              <p class="cart-item__meta">{{ item.variant.title }}</p>
+            {%- endunless -%}
+            <div class="cart-item__row">
+              <div class="qty-step" data-qty role="group" aria-label="{{ s.cart_quantity_label | default: 'Aantal' | escape }}">
+                <button class="qty-step__btn" type="button" data-qty-down aria-label="Eén minder">&minus;</button>
+                <span class="qty-step__value" data-qty-value>{{ item.quantity }}</span>
+                <button class="qty-step__btn" type="button" data-qty-up aria-label="Eén meer">+</button>
+              </div>
+              <p class="cart-item__price">{{ item.final_line_price | money }}</p>
+            </div>
+          </div>
+          <button class="cart-item__remove" type="button" data-line-remove aria-label="Verwijderen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" width="14" height="14">
+              <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
+            </svg>
+          </button>
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="cart-saved" data-saved hidden>
+      <p class="cart-saved__title">{{ s.cart_saved_title | default: 'Bewaard voor later' }}</p>
+      <div data-saved-items></div>
+      <p class="cart-saved__hint">{{ s.cart_saved_hint | default: 'Maak een account aan om je verlanglijst te bewaren.' }}</p>
+    </div>
+  </div>
+  <div class="cart-drawer__foot">
+    <div class="row">
+      <span>{{ s.cart_subtotal_label | default: 'Subtotaal' }}</span>
+      {%- if cart.item_count == 0 -%}
+        <span class="text-muted" data-cart-subtotal>{{ s.cart_subtotal_empty | default: 'Berekend bij afrekenen' }}</span>
+      {%- else -%}
+        <span data-cart-subtotal>{{ artikelen_totaal | money }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="row row--sub" data-cart-discount-row{% if korting <= 0 %} hidden{% endif %}>
+      <span>Korting</span>
+      <span data-cart-discount>&minus;{{ korting | money }}</span>
+    </div>
+
+    <div class="row row--sub" data-cart-shipping-row{% unless cart.requires_shipping %} hidden{% endunless %}{% if cart.item_count == 0 %} hidden{% endif %}>
+      <span>Verzendkosten</span>
+      <span data-cart-shipping>
+        {%- if gratis_verzending -%}
+          Gratis
+        {%- else -%}
+          {{ verzend_bedrag | money }}
+        {%- endif -%}
+      </span>
+    </div>
+
+    <div class="row row--total" data-cart-total-row{% if cart.item_count == 0 %} hidden{% endif %}>
+      <span>Totaal</span>
+      <span data-cart-total>{{ eind_totaal | money }}</span>
+    </div>
+
+    <p class="cart-drawer__note">Kies je &lsquo;afhalen in de winkel&rsquo;? Dan vervallen de verzendkosten bij het afrekenen.</p>
+    {%- comment -%}
+      Afrekenen gaat via een formulier naar de kassa (niet via een gewone link
+      naar de winkelmandpagina). Zo doet de knop echt wat er op staat.
+    {%- endcomment -%}
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      <button class="btn btn--block" type="submit" name="checkout" data-cart-checkout{% if cart.item_count == 0 %} disabled{% endif %}>
+        {{ s.cart_button_label | default: 'Afrekenen' }}
+      </button>
+    </form>
+    {%- if s.cart_view_label != blank -%}
+      <a class="cart-drawer__view" href="{{ routes.cart_url }}">{{ s.cart_view_label }}</a>
+    {%- endif -%}
+  </div>
+</aside>
+
+<div class="toast-stack" data-toast aria-live="polite" aria-atomic="true"></div>
+
+<div class="search-overlay" data-search aria-label="{{ s.label_search | default: 'Zoeken' | escape }}" aria-hidden="true">
+  <div class="container search-overlay__inner">
+    <button class="icon-btn search-close" data-search-close aria-label="{{ s.label_search_close | default: 'Zoeken sluiten' | escape }}" style="margin-bottom:1rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
+      </svg>
+    </button>
+    <form class="search-form" role="search" action="{{ routes.search_url }}" method="get">
+      <label class="visually-hidden" for="search-input">{{ s.search_placeholder | default: 'Waar ben je naar op zoek?' }}</label>
+      <input id="search-input" name="q" type="search" placeholder="{{ s.search_placeholder | default: 'Waar ben je naar op zoek?' | escape }}" autocomplete="off" />
+      <button class="btn btn--sm" type="submit">{{ s.search_button_label | default: 'Zoek' }}</button>
+    </form>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Koptekst",
+  "settings": [
+    { "type": "header", "content": "Logo & naam" },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo — laptop & tablet",
+      "info": "Bij voorkeur een PNG met doorzichtige achtergrond."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mobile",
+      "label": "Logo — mobiel",
+      "info": "Leeg laten = hetzelfde logo als op laptop. Handig voor een korter/vierkanter logo op de telefoon."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Breedte logo — laptop",
+      "min": 80,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "default": 180
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "label": "Breedte logo — mobiel",
+      "min": 70,
+      "max": 240,
+      "step": 10,
+      "unit": "px",
+      "default": 130
+    },
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Winkelnaam in tekst",
+      "info": "Wordt gebruikt zolang je geen logo hebt geüpload.",
+      "default": "SNOOPY MODE"
+    },
+
+    { "type": "header", "content": "Menu" },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu",
+      "info": "Beheer dit menu in Shopify → Content → Menu's. Voeg een item 'Producten' toe en sleep je collecties eronder voor een uitklapmenu. Koppel je niets, dan tonen we automatisch al je collecties."
+    },
+    {
+      "type": "text",
+      "id": "label_all_products",
+      "label": "Tekst onderaan het uitklapmenu",
+      "info": "Leeg laten = geen extra link.",
+      "default": "Bekijk alle producten"
+    },
+    {
+      "type": "text",
+      "id": "highlight_link",
+      "label": "Menu-item dat mag opvallen",
+      "info": "Typ hier precies de naam van een menu-item, bijvoorbeeld Sale. Dat item krijgt dan de sale-kleur. Leeg laten = alles even opvallend.",
+      "default": "Sale"
+    },
+
+    { "type": "header", "content": "Weergave" },
+    {
+      "type": "checkbox",
+      "id": "overlay_on_home",
+      "label": "Doorzichtige balk over de hero op de homepage",
+      "info": "Uitzetten als je de hero niet bovenaan zet.",
+      "default": true
+    },
+    { "type": "checkbox", "id": "show_search", "label": "Zoekknop tonen", "default": true },
+    { "type": "checkbox", "id": "show_account", "label": "Accountknop tonen", "default": true },
+
+    { "type": "header", "content": "Zoeken" },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Tekst in het zoekveld",
+      "default": "Waar ben je naar op zoek?"
+    },
+    {
+      "type": "text",
+      "id": "search_button_label",
+      "label": "Tekst op de zoekknop",
+      "default": "Zoek"
+    },
+
+    { "type": "header", "content": "Winkelmand-lade" },
+    { "type": "text", "id": "cart_title", "label": "Titel", "default": "Winkelmand" },
+    { "type": "text", "id": "cart_empty_text", "label": "Tekst bij een lege winkelmand", "default": "Je winkelmand is nog leeg." },
+    { "type": "text", "id": "cart_empty_button", "label": "Knop bij een lege winkelmand", "default": "Verder winkelen" },
+    { "type": "text", "id": "cart_quantity_label", "label": "Woord voor aantal", "default": "Aantal" },
+    { "type": "text", "id": "cart_subtotal_label", "label": "Woord voor subtotaal", "default": "Subtotaal" },
+    { "type": "text", "id": "cart_subtotal_empty", "label": "Tekst bij leeg subtotaal", "default": "Berekend bij afrekenen" },
+    { "type": "text", "id": "cart_button_label", "label": "Tekst op de afrekenknop", "default": "Afrekenen" },
+    {
+      "type": "text",
+      "id": "cart_view_label",
+      "label": "Tekst van het linkje naar de winkelmandpagina",
+      "info": "Leeg laten = alleen de afrekenknop.",
+      "default": "Bekijk winkelmand"
+    },
+    { "type": "text", "id": "cart_saved_title", "label": "Titel 'bewaard voor later'", "default": "Bewaard voor later" },
+    { "type": "text", "id": "cart_saved_hint", "label": "Tekst eronder", "default": "Maak een account aan om je verlanglijst te bewaren." },
+
+    { "type": "header", "content": "Sociale media in het mobiele menu" },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_socials",
+      "label": "Knoppen naar Instagram, TikTok en Facebook tonen",
+      "info": "Verschijnen onder 'Account'. De links stel je in bij Thema-instellingen → Sociale media.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "mobile_socials_label",
+      "label": "Tekstje erboven",
+      "info": "Leeg laten = alleen de icoontjes.",
+      "default": "Volg ons"
+    },
+
+    { "type": "header", "content": "Onderaan het mobiele menu" },
+    {
+      "type": "text",
+      "id": "mobile_foot_text",
+      "label": "Tekst",
+      "default": "Gratis verzending vanaf €75"
+    },
+
+    { "type": "header", "content": "Voorleesteksten (toegankelijkheid)" },
+    { "type": "text", "id": "label_menu_open", "label": "Menu openen", "default": "Menu openen" },
+    { "type": "text", "id": "label_menu_close", "label": "Menu sluiten", "default": "Menu sluiten" },
+    { "type": "text", "id": "label_search", "label": "Zoeken", "default": "Zoeken" },
+    { "type": "text", "id": "label_search_close", "label": "Zoeken sluiten", "default": "Zoeken sluiten" },
+    { "type": "text", "id": "label_account", "label": "Account", "default": "Account" },
+    { "type": "text", "id": "label_cart", "label": "Winkelmand openen", "default": "Winkelmand openen" },
+    { "type": "text", "id": "label_cart_close", "label": "Winkelmand sluiten", "default": "Winkelmand sluiten" }
+  ]
+}
+{% endschema %}
